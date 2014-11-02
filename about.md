@@ -4,12 +4,10 @@ title: About
 permalink: /about/
 ---
 
-Some information about you!
+我是伊兹桑（yzyzsun），目前就读于浙江大学计算机科学专业，主要使用 C 语言，目前正在学习 iOS 应用开发与 Python 网络编程。
 
-### More Information
+我正在学习日语，对日本动画、日剧、推理小说很感兴趣。
 
-A place to include any other types of information that you'd like to include about yourself. 
-
-### Contact me
-
-[email@domain.com](mailto:email@domain.com)
+![wikipedia](/assets/wikipedia.ico) [中文维基百科](https://zh.wikipedia.org/wiki/User:Yzyzsun) |
+![douban](/assets/douban.ico) [豆瓣](http://www.douban.com/people/yzyzsun/) |
+![bangumi](/assets/bangumi.ico) [番组计划](http://bgm.tv/user/yzyzsun)
