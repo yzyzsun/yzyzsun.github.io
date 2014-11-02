@@ -11,6 +11,8 @@ category: Diary
 
 前几天，我偶然接触到了 Markdown 这个轻量级标记语言，发现其与维基百科所使用的 MediaWiki 语言非常相似——比 HTML 简单很多，但同时也能满足日常文本编辑的需要。自然而然地，我萌生了用 Markdown 写博客的想法。对于一个程序员来说，GitHub Pages 当然是免费独立博客的首选，简单起见，我选择了 GitHub 原生支持的 Jekyll 来生成博客。
 
+
+
 Jekyll 的官方文档写得非常清楚，有时间的话完全可以从零开始自己设计，而我是直接 fork 了 [Jekyll Now](https://github.com/barryclark/jekyll-now) 项目<s>（主要是因为懒）</s>。网上的相关资料非常多，我觉得以下几个网址很有帮助：
 
 * [GitHub Pages](https://pages.github.com)
