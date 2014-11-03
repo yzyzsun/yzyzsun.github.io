@@ -15,7 +15,7 @@ avatar: https://avatars.githubusercontent.com/u/9464981
 # Flags below are optional
 #
 
-excerpt_separator: "\n\n\n"
+excerpt_separator: "<!--more-->"
 
 # Includes an icon in the footer for each username you enter
 footer-links:
