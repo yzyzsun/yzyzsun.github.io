@@ -32,7 +32,6 @@ Sublime Text 作为一个轻量级的代码编辑器，对于单文件编程非�
     ]
 } {% endhighlight %}
 
-![](/images/sublime-text-for-mac-01.png) 
 实际上这就是一个 JSON 文件，相关资料可以参阅 [Sublime Text Unofficial Documentation](http://docs.sublimetext.info/en/latest/reference/build_systems.html)。相应地，C++ 的配置文件将所有的 `Clang` 替换为 `Clang++` 即可。 
 ## Python
 
@@ -40,7 +39,7 @@ Python 也存在上述的内置控制台无法输入的问题，这时有比自�
 
 首先需要安装 Package Control，这是 Sublime Text 的插件包管理器，安装方法见 [Installation - Package Control](https://sublime.wbond.net/installation)。接着按 ⇧⌘P 调出 `Command Palette`，键入「install」打开 `Package Control: Install Package`，找到 `SublimeREPL` 即可安装。
 
-![](/images/sublime-text-for-mac-02.png)
+![](/images/sublime-text-for-mac-01.png)
 
 安装完成后，可以通过 `Tools > SublimeREPL > Python > Python` 在新窗口中打开交互式开发环境，或是通过同菜单下的 `Python - RUN current file` 运行当前文件。除此之外，也有其他简便的办法，其一是按 ⇧⌘P 并输入「python」，可以在列表中看到 SublimeREPL 的相关命令。其二是为这些命令设置快捷键，这里以 `Python - RUN current file` 为例，为其跟 Python IDLE 相同的快捷键 F5。
 
@@ -60,13 +59,11 @@ Python 也存在上述的内置控制台无法输入的问题，这时有比自�
 ]
 {% endhighlight %}
 
-![](/images/sublime-text-for-mac-03.png)
+![](/images/sublime-text-for-mac-02.png)
 
 同样地，**Ruby** 等脚本语言的代码也能通过 SublimeREPL 运行了。
 
 ## HTML
-
-![](/images/sublime-text-for-mac-04.png)
 
 若是做网页设计，当然有 [Coda 2](http://www.panic.com/coda/)、[WebStorm](http://www.jetbrains.com/webstorm/)、[Brackets](http://brackets.io) 这些更专业的选择，不过用 Sublime Text 写 HTML / CSS 也未尝不可。ST 本身支持 HTML 代码着色、补全结束标签，但不具备预览网页的功能，我们仍可以照 C / C++ 的办法自定义 Build System。如果这样写 `HTML.sublime-build`：
 
@@ -81,7 +78,7 @@ Python 也存在上述的内置控制台无法输入的问题，这时有比自�
     ]
 } {% endhighlight %}
 
-![](/images/sublime-text-for-mac-05.png)
+![](/images/sublime-text-for-mac-03.png)
 
 按下 `⌘B` 和 `⇧⌘B` 会分别在 Safari 和 Chrome 中打开当前 HTML 文件，这样便可以快捷地预览设计中的页面。
 
