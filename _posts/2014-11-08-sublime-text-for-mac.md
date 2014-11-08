@@ -17,44 +17,48 @@ Sublime Text 作为一个轻量级的代码编辑器，对于单文件编程非�
 
 ## C / C++
 
-在 Sublime Text 中，预设的 Build System 只有 C++ 而没有 C，虽然没什么大碍但会弹出警告 `this behavior is deprecated`；最不科学的地方是，下方内置的控制台竟然不能输入数据。
+在 Sublime Text 中，预设的 Build System 只有 C++ 而没有 C，虽然没什么大碍但会弹出警告「this behavior is deprecated」；最不科学的地方是，下方内置的控制台竟然不能输入数据。
 
 ![](/images/sublime-text-for-mac-00.png)  解决这两个问题需要创建两个自定义的 Build System，分别用于 C 和 C++，并设置其在运行程序时不使用内置控制台，而是直接调用终端运行。找到 `Tools > Build System > New Build System...`，将其命名为`Clang.sublime-build`，内容为：
 
-    {
-        "cmd": ["clang", "${file}", "-o", "${ file_path }/${ file_base_name }"],
-        "selector": "source.c",
-        "variants": [
-            { "name": "Run",
-              "cmd": ["bash", "-c", "clang '${file}' -o '${file_path}/${file_base_name}' && open -a Terminal.app '${file_path}/${file_base_name}'"]
-            }
-        ]
-    } 
+{% highlight json %}
+{
+    "cmd": ["clang", "${ file }", "-o", "${ file_path }/${ file_base_name }"],
+    "selector": "source.c",
+    "variants": [
+        { "name": "Run",
+          "cmd": ["bash", "-c", "clang '${ file }' -o '${ file_path }/${ file_base_name }' && open -a Terminal.app '${ file_path }/${ file_base_name }'"]
+        }
+    ]
+} {% endhighlight %}
+
 ![](/images/sublime-text-for-mac-01.png) 
 实际上这就是一个 JSON 文件，相关资料可以参阅 [Sublime Text Unofficial Documentation](http://docs.sublimetext.info/en/latest/reference/build_systems.html)。相应地，C++ 的配置文件将所有的 `Clang` 替换为 `Clang++` 即可。 
 ## Python
 
 Python 也存在上述的内置控制台无法输入的问题，这时有比自己重写 Build System 更方便的解决方案。[GitHub](https://github.com/wuub/SublimeREPL) 上有一个项目 **SublimeREPL**，支持在 Sublime 中运行交互式开发环境（即 REPL）。
 
-首先需要安装 Package Control，这是 Sublime Text 的插件包管理器，安装方法见 [Installation - Package Control](https://sublime.wbond.net/installation)。接着按 `⇧⌘P` 调出 `Command Palette`，键入「install」打开 `Package Control: Install Package`，找到 `SublimeREPL` 即可安装。
+首先需要安装 Package Control，这是 Sublime Text 的插件包管理器，安装方法见 [Installation - Package Control](https://sublime.wbond.net/installation)。接着按 ⇧⌘P 调出 `Command Palette`，键入「install」打开 `Package Control: Install Package`，找到 `SublimeREPL` 即可安装。
 
 ![](/images/sublime-text-for-mac-02.png)
 
-安装完成后，可以通过 `Tools > SublimeREPL > Python > Python` 在新窗口中打开交互式开发环境，或是通过同菜单下的 `Python - RUN current file` 运行当前文件。除此之外，也有其他简便的办法，其一是按 `⇧⌘P` 并输入「python」，可以在列表中看到 SublimeREPL 的相关命令。其二是为这些命令设置快捷键，这里以 `Python - RUN current file` 为例，为其跟 Python IDLE 相同的快捷键 `F5`。
+安装完成后，可以通过 `Tools > SublimeREPL > Python > Python` 在新窗口中打开交互式开发环境，或是通过同菜单下的 `Python - RUN current file` 运行当前文件。除此之外，也有其他简便的办法，其一是按 ⇧⌘P 并输入「python」，可以在列表中看到 SublimeREPL 的相关命令。其二是为这些命令设置快捷键，这里以 `Python - RUN current file` 为例，为其跟 Python IDLE 相同的快捷键 F5。
 
 打开 `Sublime Text > Preferences > Key Bindings - User`，在文件中输入：
 
-    [
-        {
-            "keys": ["f5"],
-            "caption": "SublimeREPL: Python - RUN current file",
-            "command": "run_existing_window_command",
-            "args": {
-                "id": "repl_python_run",
-                "file": "config/Python/Main.sublime-menu"
-            }
+{% highlight json %}
+[
+    {
+        "keys": ["f5"],
+        "caption": "SublimeREPL: Python - RUN current file",
+        "command": "run_existing_window_command",
+        "args": {
+            "id": "repl_python_run",
+            "file": "config/Python/Main.sublime-menu"
         }
-    ]
+    }
+]
+{% endhighlight %}
 
 ![](/images/sublime-text-for-mac-03.png)
 
@@ -66,15 +70,16 @@ Python 也存在上述的内置控制台无法输入的问题，这时有比自�
 
 若是做网页设计，当然有 [Coda 2](http://www.panic.com/coda/)、[WebStorm](http://www.jetbrains.com/webstorm/)、[Brackets](http://brackets.io) 这些更专业的选择，不过用 Sublime Text 写 HTML / CSS 也未尝不可。ST 本身支持 HTML 代码着色、补全结束标签，但不具备预览网页的功能，我们仍可以照 C / C++ 的办法自定义 Build System。如果这样写 `HTML.sublime-build`：
 
-    {
-        "cmd": ["open", "-a", "Safari.app", "${file}"],
-        "selector": "source.html",
-        "variants": [
-            { "name": "Run",
-              "cmd": ["open", "-a", "/Applications/Google Chrome.app", "${file}"]
-            }
-        ]
-    }
+{% highlight json %}
+{
+    "cmd": ["open", "-a", "Safari.app", "${ file }"],
+    "selector": "source.html",
+    "variants": [
+        { "name": "Run",
+          "cmd": ["open", "-a", "/Applications/Google Chrome.app", "${ file }"]
+        }
+    ]
+} {% endhighlight %}
 
 ![](/images/sublime-text-for-mac-05.png)
 
