@@ -62,8 +62,6 @@ Python 也存在上述的内置控制台无法输入的问题，这时有比自�
 
 ![](/images/sublime-text-for-mac-02.png)
 
-同样地，**Ruby** 等脚本语言的代码也能通过 SublimeREPL 运行了。
-
 
 ## HTML
 
