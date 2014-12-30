@@ -109,6 +109,4 @@ SublimeREPL 当然也支持 Ruby，不过非常坑爹的是，它不提供运行
 
 按下 `⌘B` 和 `⇧⌘B` 会分别在 Safari 和 Chrome 中打开当前 HTML 文件，这样便可以快捷地预览设计中的页面。
 
-![](/images/sublime-text-for-mac-03.png)
-
 以上便是对 Sublime Text 配置的个人经验，希望对大家有所帮助。
