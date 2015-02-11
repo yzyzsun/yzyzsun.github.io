@@ -1,7 +1,7 @@
 ---
 layout: post
 title: Sublime Text for Mac 配置指南
-category: Program
+category: Tech
 ---
 
 Mac OS X 从不缺乏优秀的代码编辑器，从 Vim 和 Emacs 到 Xcode、Eclipse、IntelliJ IDEA，都有着为数甚多的忠实用户。然而大多数的代码编辑器都是为软件工程而设计的，若只是写写算法题，那么只需要简单的命令行程序，用这些面向工程的 IDE 堪比杀鸡用牛刀了。
