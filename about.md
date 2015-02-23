@@ -8,6 +8,8 @@ permalink: /about/
 
 我正在学习日语，对日本动画、日剧、推理小说很感兴趣。
 
+如无特殊声明，本站文章采用 [CC BY-NC-SA 4.0](http://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh) 进行许可。
+
 ![wikipedia](/images/wikipedia.ico) [中文维基百科](https://zh.wikipedia.org/wiki/User:Yzyzsun) |
 ![zhihu](/images/zhihu.ico) [知乎](http://www.zhihu.com/people/yzyzsun) |
 ![douban](/images/douban.ico) [豆瓣](http://www.douban.com/people/yzyzsun/) |
