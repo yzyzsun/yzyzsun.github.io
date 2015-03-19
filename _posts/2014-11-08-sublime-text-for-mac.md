@@ -1,6 +1,6 @@
 ---
 layout: post
-title: Sublime Text for Mac 配置指南
+title: Sublime Text for Mac 使用配置
 category: Tech
 ---
 
@@ -16,25 +16,30 @@ Sublime Text 作为一个轻量级的代码编辑器，对于单文件编程非�
 
 ## C / C++
 
-在 Sublime Text 中，预设的 Build System 只有 C++ 而没有 C，虽然没什么大碍但会弹出警告「this behavior is deprecated」；最不科学的地方是，下方内置的控制台竟然不能输入数据。
+在 Sublime Text 中最不科学的地方是，下方内置的控制台竟然不能输入数据，即程序无法完成正常的 stdin 输入。其次预设的 Build System 只有 C++ 而没有 C，虽然没什么大碍但会弹出警告「this behavior is deprecated」。
 
 ![](/images/sublime-text-for-mac-00.png)
 
-  解决这两个问题需要创建两个自定义的 Build System，分别用于 C 和 C++，并设置其在运行程序时不使用内置控制台，而是直接调用终端运行。找到 `Tools > Build System > New Build System...`，将其命名为`Clang.sublime-build`，内容为：
+ 解决这两个问题需要创建自定义 Build System，设置其在运行程序时不使用内置控制台，而是直接调用终端运行。我们可以修改内置的 Package，也可以直接点击 `Tools > Build System > New Build System...` 新建自己的配置文件。C++ 的包位于 `/Applications/Sublime Text.app/Contents/MacOS/Packages/C++.sublime-package`，它可以作为归档文件打开，修改其中的 `C++.sublime-build` 即可。修改后的内容为：
 
 ```json
 {
-    "cmd": ["clang", "${ file }", "-o", "${ file_path }/${ file_base_name }"],
-    "selector": "source.c",
-    "variants": [
-        { "name": "Run",
-          "cmd": ["bash", "-c", "clang '${ file }' -o '${ file_path }/${ file_base_name }' -Wall && open -a Terminal.app '${ file_path }/${ file_base_name }'"]
+    "shell_cmd": "g++ \"${file}\" -o \"${file_path}/${file_base_name}\"",
+    "file_regex": "^(..[^:]*):([0-9]+):?([0-9]+)?:? (.*)$",
+    "working_dir": "${file_path}",
+    "selector": "source.c++",
+
+    "variants":
+    [
+        {
+            "name": "Run",
+            "shell_cmd": "g++ \"${file}\" -o \"${file_path}/${file_base_name}\" && open \"${file_path}/${file_base_name}\" -a Terminal.app"
         }
     ]
 }
 ```
 
-实际上这就是一个 JSON 文件，相关资料可以参阅 [Sublime Text Unofficial Documentation](http://docs.sublimetext.info/en/latest/reference/build_systems.html)。相应地，C++ 的配置文件将所有的 `Clang` 替换为 `Clang++` 即可。 
+实际上这就是一个 JSON 文件，相关资料可以参阅 [Sublime Text Unofficial Documentation](http://docs.sublimetext.info/en/latest/reference/build_systems.html)。相应地，C 的配置文件将所有的 `g++` 或 `clang++` 替换为 `gcc` 或 `clang` 即可。 
 
 ## Python
 

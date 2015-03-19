@@ -18,12 +18,12 @@ html {
 }
 
 body {
-//	background: #fdfdfd;
+//	background: $white;
 //  font: 18px/1.4 $helvetica;
   color: $darkGray;
-  background-color: #fdfdfd;
+  background-color: $lighterGray;
   line-height: 1.5;
-  font-family: "Helvetica Neue", Arial, "Hiragino Sans GB", "Microsoft Yahei", Sans-serif;
+  font-family: "Helvetica Neue", Helvetica, Arial, "Hiragino Sans GB", "Microsoft Yahei", Sans-serif;
 }
 
 .container {
@@ -34,7 +34,7 @@ body {
 }
 
 h1, h2, h3, h4, h5, h6 {
-  font-family: $helveticaNeue;
+//  font-family: $helveticaNeue;
   color: $darkerGray;
   font-weight: bold;
 
@@ -126,14 +126,14 @@ img {
 }
 
 // Specify the color of the selection
-::-moz-selection {
-  color: $black;
-  background: $lightGray;
-}
-::selection {
-  color: $black;
-  background: $lightGray;
-}
+//::-moz-selection {
+//  color: $black;
+//  background: $lightGray;
+//}
+//::selection {
+//  color: $black;
+//  background: $lightGray;
+//}
 
 // Nicolas Gallagher's micro clearfix hack
 // http://nicolasgallagher.com/micro-clearfix-hack/
@@ -199,7 +199,7 @@ img {
   margin: 0;
   color: $darkGray;
   cursor: pointer;
-  font-family: $helveticaNeue;
+//  font-family: $helveticaNeue;
   font-weight: 300;
   font-size: 28px;
   letter-spacing: 1px;
@@ -218,7 +218,7 @@ img {
 nav {
   float: right;
   margin-top: 23px; // @TODO: Vertically middle align
-  font-family: $helveticaNeue;
+//  font-family: $helveticaNeue;
   font-size: 18px;
 
   @include mobile {
