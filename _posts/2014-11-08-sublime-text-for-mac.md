@@ -112,7 +112,7 @@ SublimeREPL 当然也支持 Ruby，不过非常坑爹的是，它不提供运行
     [
         {
             "name": "Run",
-            "cmd": "open -a /Applications/Google\ Chrome.app \"${file}\""
+            "cmd": "open -a \"/Applications/Google Chrome.app\" \"${file}\""
         }
     ]
 }
