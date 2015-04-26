@@ -4,9 +4,9 @@ title: Sublime Text for Mac 使用配置
 category: Tech
 ---
 
-Mac OS X 从不缺乏优秀的代码编辑器，从 Vim 和 Emacs 到 Xcode、Eclipse、IntelliJ IDEA，都有着为数甚多的忠实用户。然而大多数的代码编辑器都是为软件工程而设计的，若只是写写算法题，那么只需要简单的命令行程序，用这些面向工程的 IDE 堪比杀鸡用牛刀了。
+Mac OS X 从不缺乏优秀的代码编辑器，从 Vim 和 Emacs 到 Xcode、IntelliJ IDEA、Eclipse，都有着为数甚多的忠实用户。然而大多数的 IDE 是为软件工程而设计的，若只是写写算法题，那么只需要简单的命令行程序，用这些面向工程的 IDE 堪比杀鸡用牛刀了。
 
-Sublime Text 作为一个轻量级的代码编辑器，对于单文件编程非常友好，原生支持不少主流语言的编译运行。它吸收了前辈 TextMate 的优点，并在可扩展性方面更胜一筹。
+Sublime Text 作为一个轻量级的代码编辑器，对于单文件编程非常友好，原生支持不少主流语言的编译运行。它吸收了前辈 TextMate 的优点，并在可扩展性方面更胜一筹。通过各种插件包，我们可以定制包括主题、配色方案、编译选项在内的方方面面。
 
 即便如此，Sublime Text 还是有一些不尽如人意的地方需要进一步配置，以下便是 C/C++、Python、Ruby、HTML 的几处配置技巧。
 
@@ -16,7 +16,7 @@ Sublime Text 作为一个轻量级的代码编辑器，对于单文件编程非�
 
 ## C / C++
 
-在 Sublime Text 中最不科学的地方是，下方内置的控制台竟然不能输入数据，即程序无法完成正常的 stdin 输入。其次预设的 Build System 只有 C++ 而没有 C，虽然没什么大碍但会弹出警告「this behavior is deprecated」。
+在 Sublime Text 中最头疼的地方是，下方内置的控制台竟然不能输入数据，即程序无法从 stdin 读入用户输入，这个问题在 TextMate 中也一直存在。其次预设的 Build System 只有 C++ 而没有 C，虽然没什么大碍但会弹出警告 `this behavior is deprecated`。
 
 ![](/images/sublime-text-for-mac-00.png)
 
@@ -24,7 +24,7 @@ Sublime Text 作为一个轻量级的代码编辑器，对于单文件编程非�
 
 ```json
 {
-    "shell_cmd": "g++ \"${file}\" -o \"${file_path}/${file_base_name}\"",
+    "shell_cmd": "g++ -o \"${file_path}/${file_base_name}\" \"${file}\"",
     "file_regex": "^(..[^:]*):([0-9]+):?([0-9]+)?:? (.*)$",
     "working_dir": "${file_path}",
     "selector": "source.c++",
@@ -33,13 +33,14 @@ Sublime Text 作为一个轻量级的代码编辑器，对于单文件编程非�
     [
         {
             "name": "Run",
-            "shell_cmd": "g++ \"${file}\" -o \"${file_path}/${file_base_name}\" && open \"${file_path}/${file_base_name}\" -a Terminal.app"
+            "shell_cmd": "g++ -o \"${file_path}/${file_base_name}\" \"${file}\" && open -a Terminal.app \"${file_path}/${file_base_name}\""
         }
     ]
 }
 ```
 
-实际上这就是一个 JSON 文件，相关资料可以参阅 [Sublime Text Unofficial Documentation](http://docs.sublimetext.info/en/latest/reference/build_systems.html)。相应地，C 的配置文件将所有的 `g++` 或 `clang++` 替换为 `gcc` 或 `clang` 即可。 
+实际上这就是一个 JSON 文件，相关资料可以参阅 [Sublime Text Unofficial Documentation](http://docs.sublimetext.info/en/latest/reference/build_systems.html)。相应地，C 的配置文件将所有的 `g++` 替换为 `gcc` 即可。 
+
 
 ## Python
 
@@ -69,11 +70,12 @@ Python 也存在上述的内置控制台无法输入的问题，这时有比自�
 
 ![](/images/sublime-text-for-mac-02.png)
 
+
 ## Ruby
 
 SublimeREPL 当然也支持 Ruby，不过非常坑爹的是，它不提供运行当前文件的功能，只提供交互式界面，而在高版本的 Pry 下默认的这个交互式界面还没法用。
 
-还好 GitHub 上已经有人提出了修复的方法：[Fix ruby Pry helper for Pry version >= 0.10.0](https://github.com/wuub/SublimeREPL/pull/372)。至于运行单个文件的功能，还是需要自己添加。打开文件`~/Library/Application Support/Sublime Text 3/Packages/SublimeREPL/config/Ruby/Main.sublime-menu`，在与 `Ruby - IRB (deprecated)` 同级的位置加入以下代码：
+还好 GitHub 上已经有人提出了修复的方法：[Fix ruby Pry helper for Pry version >= 0.10.0](https://github.com/wuub/SublimeREPL/pull/372)。至于运行单个文件的功能，还是需要自己添加。打开文件 `~/Library/Application Support/Sublime Text 3/Packages/SublimeREPL/config/Ruby/Main.sublime-menu`，在与 `Ruby - IRB (deprecated)` 同级的位置加入以下代码：
 
 ```json
 {
@@ -96,22 +98,27 @@ SublimeREPL 当然也支持 Ruby，不过非常坑爹的是，它不提供运行
 
 同样地，可以在 `Key Bindings - User` 为其设置快捷键。
 
+
 ## HTML
 
-若是做 Web 开发，当然有 [Brackets](http://brackets.io)、[Coda](http://www.panic.com/coda/)、[Espresso](http://www.macrabbit.com/espresso/)、[WebStorm](http://www.jetbrains.com/webstorm/) 这些更专业的选择，不过用 Sublime Text 写 HTML / CSS 也算凑合。ST 本身支持 HTML 代码着色、补全结束标签，但不具备预览网页的功能，我们仍可以照 C / C++ 的办法自定义 Build System。如果这样写 `HTML.sublime-build`：
+若是做 Web 开发，当然有 [Brackets](http://brackets.io)、[Coda](http://www.panic.com/coda/)、[Espresso](http://www.macrabbit.com/espresso/)、[WebStorm](http://www.jetbrains.com/webstorm/) 这些更专业的选择，不过偶尔也会有用 Sublime Text 写 HTML / CSS 的时候。ST 本身支持 HTML 代码着色、补全结束标签，但不具备预览网页的功能，我们仍可以照 C / C++ 的办法自定义 Build System。如果这样写 `HTML.sublime-build`：
 
 ```json
 {
-    "cmd": ["open", "-a", "Safari.app", "${ file }"],
+    "shell_cmd": "open -a Safari.app \"${file}\"",
+    "working_dir": "${file_path}",
     "selector": "source.html",
-    "variants": [
-        { "name": "Run",
-          "cmd": ["open", "-a", "/Applications/Google Chrome.app", "${ file }"]
+    "variants":
+    [
+        {
+            "name": "Run",
+            "cmd": "open -a /Applications/Google\ Chrome.app \"${file}\""
         }
     ]
 }
 ```
 
 按下 `⌘B` 和 `⇧⌘B` 会分别在 Safari 和 Chrome 中打开当前 HTML 文件，这样便可以快捷地预览设计中的页面。
+
 
 以上便是对 Sublime Text 配置的个人经验，希望对大家有所帮助。
