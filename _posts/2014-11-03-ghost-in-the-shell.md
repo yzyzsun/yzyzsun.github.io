@@ -1,7 +1,7 @@
 ---
 layout: post
 title: 动画介绍：攻壳机动队
-category: Anime
+category: Otaku
 ---
 若是谈论科幻，就不得不提**赛博朋克**（*Cyberpunk*）；提及赛博朋克，一定不会少了《**攻壳机动队**》（*Ghost in the Shell*）。![](/images/ghost-in-the-shell-00.png)
 

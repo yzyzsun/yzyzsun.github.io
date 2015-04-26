@@ -4,9 +4,9 @@ title: About
 permalink: /about/
 ---
 
-我是伊兹桑（yzyzsun），出生于江苏扬州，目前就读于浙江大学计算机科学专业。主要使用 C 语言，基本会写 Ruby / Python，目前正在学习 iOS 应用开发与 Rails 网络编程。
+我是伊兹桑（yzyzsun），目前就读于浙江大学计算机科学专业。主要使用 C 语言，基本会写 Ruby / Python，目前正在学习 iOS 应用开发与 Rails 网络开发。
 
-我正在学习日语，对日本动画、日剧、推理小说很感兴趣。
+我正在学习日语，对日本动画、日剧、48G 很感兴趣。
 
 如无特殊声明，本站文章采用 [CC BY-NC-SA 4.0](http://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh) 进行许可。
 
