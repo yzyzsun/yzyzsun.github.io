@@ -52,6 +52,7 @@ var assumedString: String! = "666"
 println(assumedString)
 ```
 
+<!--more-->
 
 ## 运算符
 
