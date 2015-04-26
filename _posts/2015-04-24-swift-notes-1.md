@@ -31,6 +31,8 @@ let http200Status = (statusCode: 200, description: "OK")
 println("Code: \(http200Status.statusCode), message: \(http200Status.description)")
 ```
 
+<!--more-->
+
 ### 可选类型（Optionals）
 
 * 可选类型相当于一个特殊的枚举类型：`None` 则值为 `nil`；`Some` 则可以通过 `!` 来**强制解析**（forced unwrapping）获取值。对 `nil` 进行强制解析会抛出异常 `EXC_BAD_INSTRUCTION`。
@@ -52,7 +54,6 @@ var assumedString: String! = "666"
 println(assumedString)
 ```
 
-<!--more-->
 
 ## 运算符
 
