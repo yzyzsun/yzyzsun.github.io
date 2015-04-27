@@ -55,7 +55,7 @@ baseurl: ""
 
 markdown: redcarpet
 redcarpet:
-  extensions: ["fenced_code_blocks", "footnotes", "highlight", "strikethrough", "superscript", "tables"]
+  extensions: ["fenced_code_blocks", "footnotes", "highlight", "strikethrough", "tables"]
 highlighter: pygments
 permalink: /:title/
 
