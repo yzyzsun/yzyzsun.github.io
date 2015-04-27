@@ -35,7 +35,7 @@ println("Code: \(http200Status.statusCode), message: \(http200Status.description
 
 ### 可选类型（Optionals）
 
-* 可选类型相当于一个特殊的枚举类型：`None` 则值为 `nil`；`Some` 则可以通过 `!` 来**强制解析**（forced unwrapping）获取值。对 `nil` 进行强制解析会抛出异常 `EXC_BAD_INSTRUCTION`。
+* 可选类型相当于一个特殊的枚举类型：成员 `None` 表示值为 `nil`；成员 `Some` 则可以通过 `!` 来**强制解析**（forced unwrapping）获取值，或是通过 `?` 构成一个**可选链**（optional chaining）。对 `nil` 进行强制解析会抛出异常 `EXC_BAD_INSTRUCTION`，而可选链不会。
 * 使用**可选绑定**（optional binding）可以判断可选类型是否包含值，若包含则将值赋给一个临时常量或变量，可用于 `if` 和 `while` 语句。
 
 ```swift
@@ -68,8 +68,10 @@ println(assumedString)
 
 ### 求余
 
-* 求余运算 `a % b` 的结果跟 `a` 的符号相同，而跟 `b` 的符号无关。这与 C / Java / Pascal 等语言是一致的，一般称这样的运算为**求余**（rem）；而 Python / Ruby 等语言 `%` 运算结果的符号只与 `b` 相同，一般称其为**求模**（mod）。
+* 求余运算 `a % b` 的结果跟 `a` 的符号相同，而跟 `b` 的符号无关。这与 C / Java / Pascal 等语言是一致的，一般称这样的运算为**求余**（remainder）；而 Python / Ruby 等语言 `%` 运算结果的符号只与 `b` 相同，一般称其为**求模**（modulo）。[^modulo]
 * Swift 中也可以对浮点数进行求余运算。
+
+[^modulo]: [Modulo operation - Wikipedia](https://en.wikipedia.org/wiki/Modulo_operation)
 
 ### 空合运算符（Nil Coalescing Operator）
 
@@ -95,8 +97,9 @@ a != nil ? a! : b
 * 在字符串字面量中，**Unicode 标量值**（Unicode scalar value）可以表示为 `\u{n}`，其中 `n` 可以为 1-8 位的十六进制数。Unicode 编码共 21 位，从 `U+0000` 到 `U+10FFFF`。
 * 分别可以通过字符串的 `utf8` / `utf16` / `unicodeScalars` 属性来访问其 UTF-8 / UTF-16 / Unicode Scalars 表示。
 * 调用全局函数 `count()` 可以获得字符串中的字符数，但需注意 Swift 的字符类型表示一个**扩展字形集群**（extended grapheme cluster），例如一对 Unicode 标量 `"\u{65}\u{301}"` 与单个 Unicode 标量 `\u{E9}` 均表示单个字符 é。
-* 而 NSString 其实是用 UTF-16 编码的码元（code units）组成的数组，相应地 `length` 属性的值是其包含的码元个数，而不是字符个数。因此在 Swift 的 String 类型中这个属性名为 `utf16Count`。
-* 相关参考：[NSString 与 Unicode - objc中国](http://objccn.io/issue-9-1/)
+* 而 NSString 其实是用 UTF-16 编码的码元（code units）组成的数组，相应地 `length` 属性的值是其包含的码元个数，而不是字符个数。[^unicode] 因此在 Swift 的 String 类型中这个属性名为 `utf16Count`。
+
+[^unicode]: [NSString 与 Unicode - objc中国](http://objccn.io/issue-9-1/)
 
 
 ## 集合类型
@@ -277,22 +280,24 @@ let possiblePlanet = Planet(rawValue: 7)
 
 ### 共同点
 
-* 定义**属性**用于存储值
-* 定义**方法**用于提供功能
-* 定义**附属脚本**用于访问值
-* 定义**构造器**用于生成初始值
-* 通过**扩展**以增加默认实现的功能
-* 遵守**协议**以提供某类标准功能
+* 定义**属性**（properties）用于存储值
+* 定义**方法**（methods）用于提供功能
+* 定义**附属脚本**（subscripts）用于访问值
+* 定义**构造器**（initializers）用于生成初始值
+* 通过**扩展**（extensions）以增加默认实现的功能
+* 遵守**协议**（protocols）以提供某类标准功能
 
-### 类的独有特性
+### 类的特性
 
-* **继承**允许一个类继承另一个类的特性
-* **类型转换**允许在运行时检查和解释实例的类型
-* **析构器**允许实例释放其被分配的资源
-* **引用计数**允许对一个类多次引用  
-* 类是**引用类型**，可通过 `===` / `!==` 判断是否同一实例。而结构体是**值类型**，相关参考：[结构体和值类型 - objc中国](http://objccn.io/issue-16-2/)
+* **继承**（Inheritance）允许一个类继承另一个类的特性
+* **类型转换**（Type casting）允许在运行时检查和解释实例的类型
+* **析构器**（Deinitializers）允许实例释放其被分配的资源
+* **自动引用计数**（ARC）允许对一个类多次引用
+* 类是**引用类型**，可通过 `===` / `!==` 判断是否同一实例
 
-### 定义
+### 结构体的特性
 
-* 在类或结构体中存储的常量或变量即为存储属性（stored properties），可通过点语法（dot syntax）访问和赋值。
-* 可通过构造器语法来生成新的实例，即在类或结构体名后加一对括号。同时结构体有自动生成的成员逐一构造器（memberwise initializers），如 `Monitor(width: 1440, height: 900)`，而类没有这一特性。
+* 结构体有自动生成的**成员逐一构造器**（memberwise initializers），如 `Monitor(width: 1440, height: 900)`。
+* 结构体是**值类型**，集合类型便是通过结构体实现。[^valuetype]
+
+[^valuetype]: [结构体和值类型 - objc中国](http://objccn.io/issue-16-2/)
