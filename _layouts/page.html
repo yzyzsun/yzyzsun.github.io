@@ -3,12 +3,11 @@ layout: default
 ---
 
 <article class="page">
-
   <h1>{{ page.title }}</h1>
 
   <div class="entry">
     {{ content }}
   </div>
 
-  {% include disqus.html disqus_identifier=page.disqus_identifier %}
+  {% include disqus.html disqus_identifier=page.disqus_identifier if page.title != "404 - Page not found" %}
 </article>
