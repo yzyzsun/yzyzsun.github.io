@@ -8,6 +8,8 @@ layout: default
   <div class="entry">
     {{ content }}
   </div>
-
-  {% include disqus.html disqus_identifier=page.disqus_identifier if page.title != "404 - Page not found" %}
+  
+  {% if page.title != "404 - Page not found" %}
+    {% include disqus.html disqus_identifier=page.disqus_identifier %}
+  {% endif %}
 </article>
