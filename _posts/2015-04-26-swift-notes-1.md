@@ -128,7 +128,7 @@ a != nil ? a! : b
 
 ## 控制流
 
-* 所有控制流不需要条件外侧的圆括号，但不可以省略语句体的大括号。
+* 所有控制流不需要条件外侧的圆括号，但不可以省略语句体的花括号。
 
 ### 循环语句
 
@@ -275,29 +275,4 @@ let earthsOrder = Planet.Earth.rawValue
 let possiblePlanet = Planet(rawValue: 7)
 ```
 
-
-## 类和结构体
-
-### 共同点
-
-* 定义**属性**（properties）用于存储值
-* 定义**方法**（methods）用于提供功能
-* 定义**附属脚本**（subscripts）用于访问值
-* 定义**构造器**（initializers）用于生成初始值
-* 通过**扩展**（extensions）以增加默认实现的功能
-* 遵守**协议**（protocols）以提供某类标准功能
-
-### 类的特性
-
-* **继承**（Inheritance）允许一个类继承另一个类的特性
-* **类型转换**（Type casting）允许在运行时检查和解释实例的类型
-* **析构器**（Deinitializers）允许实例释放其被分配的资源
-* **自动引用计数**（ARC）允许对一个类多次引用
-* 类是**引用类型**，可通过 `===` / `!==` 判断是否同一实例
-
-### 结构体的特性
-
-* 结构体有自动生成的**成员逐一构造器**（memberwise initializers），如 `Monitor(width: 1440, height: 900)`。
-* 结构体是**值类型**，集合类型便是通过结构体实现。[^valuetype]
-
-[^valuetype]: [结构体和值类型 - objc中国](http://objccn.io/issue-16-2/)
+[Swift 学习笔记（二）→ Next](/swift-notes-2/)
