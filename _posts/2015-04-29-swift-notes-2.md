@@ -6,8 +6,8 @@ category: Tech
 
 ## 类和结构体
 
-* 类和结构体有以下共同点：**属性**（Properties）、**方法**（methods）、**下标**（subscripts）、**构造器**（initializers）、**扩展**（extensions）、**协议**（protocols）。
-* 另外类有以下独有特性：**继承**（Inheritance）、**类型转换**（Type casting）、**析构器**（Deinitializers）、**自动引用计数**（ARC）。
+* 类和结构体有以下共同点：属性（Properties）、方法（methods）、下标（subscripts）、构造器（initializers）、扩展（extensions）、协议（protocols）。
+* 另外类有以下独有特性：继承（Inheritance）、类型转换（Type casting）、析构器（Deinitializers）、自动引用计数（ARC）。
 * 类是**引用类型**，可通过 `===` / `!==` 判断是否同一实例；而结构体是**值类型**。[^valuetype]
 
 [^valuetype]: [结构体和值类型 - objc中国](http://objccn.io/issue-16-2/)
@@ -26,6 +26,8 @@ category: Tech
 * 计算属性不直接存储值，而是提供一个 getter 来获取值，一个可选的 setter 来间接设置其他属性的值，亦通过点语法来访问和赋值。
 * 如果 `set` 没有提供参数名，则可以使用默认名称 `newValue`。
 * 只读计算属性的声明可以去掉 `get` 关键字和花括号，但仍需要被声明为变量属性。
+
+<!--more-->
 
 ```swift
 struct AlternativeRect {
