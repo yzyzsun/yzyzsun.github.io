@@ -6,8 +6,8 @@ category: Tech
 
 ## 类和结构体
 
-* 类和结构体有以下共同点：属性（Properties）、方法（methods）、下标（subscripts）、构造器（initializers）、扩展（extensions）、协议（protocols）。
-* 另外类有以下独有特性：继承（Inheritance）、类型转换（Type casting）、析构器（Deinitializers）、自动引用计数（ARC）。
+* 类和结构体有以下共同点：属性（properties）、方法（methods）、下标（subscripts）、构造器（initializers）、扩展（extensions）、协议（protocols）。
+* 另外类有以下独有特性：继承（inheritance）、类型转换（type casting）、析构器（deinitializers）、自动引用计数（ARC）。
 * 类是**引用类型**，可通过 `===` / `!==` 判断是否同一实例；而结构体是**值类型**。[^valuetype]
 
 [^valuetype]: [结构体和值类型 - objc中国](http://objccn.io/issue-16-2/)
