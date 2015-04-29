@@ -23,8 +23,8 @@ Swift 吸收了不少动态语言的语法，比如类型推导、元组、闭�
 ### 元组（Tuples）
 
 * 元组内的值可以是任意不同类型。
-* 可以通过下标来访问元组中的单个元素，下标从零开始，如 `tuple.0`。
-* 在定义时可以给元素命名，命名后可以通过名字来获取元素的值。
+* 可以通过点语法来访问元组中的单个元素，下标从零开始，如 `tuple.0`。
+* 在定义时可以给元素命名，命名后便可通过名字来获取元素的值。
 
 ```swift
 let http200Status = (statusCode: 200, description: "OK")
@@ -35,16 +35,18 @@ println("Code: \(http200Status.statusCode), message: \(http200Status.description
 
 ### 可选类型（Optionals）
 
-* 可选类型相当于一个特殊的枚举类型：成员 `None` 表示值为 `nil`；成员 `Some` 则可以通过 `!` 来**强制解析**（forced unwrapping）获取值，或是通过 `?` 构成一个**可选链**（optional chaining）。对 `nil` 进行强制解析会抛出异常 `EXC_BAD_INSTRUCTION`，而可选链不会。
-* 使用**可选绑定**（optional binding）可以判断可选类型是否包含值，若包含则将值赋给一个临时常量或变量，可用于 `if` 和 `while` 语句。
+* 可选类型相当于一个特殊的枚举类型：成员 `None` 表示值为 `nil`；成员 `Some` 则可以通过 `!` 来**强制解析**（forced unwrapping）获取值，或是通过 `?` 构成一个**可选链**（optional chaining）。对 `nil` 进行强制解析会触发运行时错误 `EXC_BAD_INSTRUCTION`，而可选链不会。
+* 在 `if` 和 `while` 语句中使用**可选绑定**（optional binding）可以判断可选类型是否包含值，若包含则将值赋给临时常量或变量，可使用 `where` 来判断额外条件。[^binding]
+
+[^binding]: 从 [Swift 1.2](https://developer.apple.com/library/ios/releasenotes/DeveloperTools/RN-Xcode/Chapters/xc6_release_notes.html#//apple_ref/doc/uid/TP40001051-CH4-SW6) 开始，`if-let` / `while-let` 语句支持多个可选绑定，且可选绑定可以接在布尔条件后面用 `,` 隔开。
 
 ```swift
-if let constant1 = optional1, constant2 = optional2 {
+if let a = foo(), b = bar() where a < b {
     statements
 }
 ```
 
-* 如果在第一次被赋值之后可以确定一个可选类型总会有值，可以采用**隐式解析可选类型**（implicitly unwrapped optionals），声明时将类型后面的 `?` 改为 `!` 即可，之后将不需要解析来获取值。
+* 如果在第一次被赋值之后可以确定一个可选类型总会有值，可以采用**隐式解析可选类型**（implicitly unwrapped optionals），声明时将类型后面的 `?` 改为 `!`，则之后获取值时将不需要解析。
 
 ```swift
 var optionalString: String? // nil
@@ -59,12 +61,14 @@ println(assumedString)
 
 ### 赋值
 
-* 赋值运算不返回任何值，以防止赋值号被错用成等于号，但同时也导致 `x = y = z` 是不合法的。
+* 赋值运算不返回任何值，以防止赋值号被错用为等号，但同时也导致 `x = y = z` 是不合法的。
 * 如果赋值的右边是一个元组，其元素可以被分解开来，如 `(x, y, _) = (1, 2, 3)`。
 
 ### 溢出
 
-* 整数溢出会抛出异常，但如果要像 C 一样允许溢出，可以使用溢出运算符 `&+ &- &*`。
+* 整数溢出会触发运行时错误，但如果要像 C 一样允许溢出，可以使用溢出运算符 `&+ &- &*`。[^overflow]
+
+[^overflow]: 移除运算符 `&/ &%` 在 [Swift 1.2](https://developer.apple.com/library/ios/releasenotes/DeveloperTools/RN-Xcode/Chapters/xc6_release_notes.html#//apple_ref/doc/uid/TP40001051-CH4-SW3) 中被移除。
 
 ### 求余
 
@@ -94,7 +98,7 @@ a != nil ? a! : b
 
 ### Unicode
 
-* 在字符串字面量中，**Unicode 标量值**（Unicode scalar value）可以表示为 `\u{n}`，其中 `n` 可以为 1-8 位的十六进制数。Unicode 编码共 21 位，从 `U+0000` 到 `U+10FFFF`。
+* 在字符串字面量中，**Unicode 标量值**（Unicode scalar value）可以表示为 `\u{n}`，其中 `n` 可以为 1-8 位的十六进制数。目前 Unicode 编码共 21 位，从 `U+0000` 到 `U+10FFFF`。
 * 分别可以通过字符串的 `utf8` / `utf16` / `unicodeScalars` 属性来访问其 UTF-8 / UTF-16 / Unicode Scalars 表示。
 * 调用全局函数 `count()` 可以获得字符串中的字符数，但需注意 Swift 的字符类型表示一个**扩展字形集群**（extended grapheme cluster），例如一对 Unicode 标量 `"\u{65}\u{301}"` 与单个 Unicode 标量 `\u{E9}` 均表示单个字符 é。
 * 而 NSString 其实是用 UTF-16 编码的码元（code units）组成的数组，相应地 `length` 属性的值是其包含的码元个数，而不是字符个数。[^unicode] 因此在 Swift 的 String 类型中这个属性名为 `utf16Count`。
@@ -104,9 +108,11 @@ a != nil ? a! : b
 
 ## 集合类型
 
-* 集合类型（collection types）包括数组（Array）、集合（Set）和字典（Dictionary），其存储值类型必须相同，由泛型（generic）实现。
+* 集合类型（collection types）包括数组（Array）、集合（Set）[^set] 和字典（Dictionary），其存储值类型必须相同，由泛型（generic）实现。
 * 集合类型均由结构体实现，为**值类型**。
 * 获取元素个数可访问其 `count` 属性。
+
+[^set]: [Swift 1.2](https://developer.apple.com/library/ios/releasenotes/DeveloperTools/RN-Xcode/Chapters/xc6_release_notes.html#//apple_ref/doc/uid/TP40001051-CH4-SW6) 引入了原生的 `Set` 类型，与原先的 `NSSet` 桥接。
 
 ### 数组
 
@@ -132,7 +138,7 @@ a != nil ? a! : b
 
 ### 循环语句
 
-* 若不需要知道循环变量的值，可用下划线代替变量名。
+* 若不需要知道循环变量的值，可用 `_` 代替变量名。
 * 除了 `for-in` 循环，Swift 仍提供 C 样式 `for` 循环，三个表达式用分号隔开，但不需要加圆括号。`while` 和 `do-while` 循环仍然存在。
 
 ```swift
@@ -172,7 +178,7 @@ case let (x, y):
 ### 控制转移语句
 
 * 可以在循环语句和 `switch` 语句前放置一个标签 `label:`，则可以用 `continue label` 或 `break label` 来跳过特定的循环。
-* 在 `switch` 中可以用 `fallthrough` 继续执行下一个 `case` 的代码，这和 C 语言中该语句的特性相似。
+* 在 `switch` 中可以用 `fallthrough` 继续执行下一个 `case` 的代码，这和 C 语言的特性相似。
 
 
 ## 函数
@@ -264,7 +270,9 @@ case let .QRCode(productCode):
 ### 原始值（Raw Values）
 
 * 枚举成员也可以被预先填充为同一类型的原始值，当整型被用于原始值时，如果其他枚举成员没有值整数会自动递增。
-* 枚举成员的 `rawValue` 属性可以获取其原始值，而枚举的构造函数接受 `rawValue` 参数并返回一个可选类型。
+* 枚举成员的 `rawValue` 属性可以获取其原始值，而枚举的可失败构造器接受 `rawValue` 参数并返回一个可选类型。[^rawvalue]
+
+[^rawvalue]: 原来的 `fromRaw()` / `toRaw()` 方法在 [Swift 1.1](https://developer.apple.com/library/ios/releasenotes/DeveloperTools/RN-Xcode/Chapters/xc6_release_notes.html#//apple_ref/doc/uid/TP40001051-CH4-DontLinkElementID_60) 中被现在的新语法取代。
 
 ```swift
 enum Plant: Int {
