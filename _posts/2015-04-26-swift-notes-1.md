@@ -4,7 +4,7 @@ title: Swift 学习笔记（一）
 category: Tech
 ---
 
-Swift 吸收了不少动态语言的语法，比如类型推导、元组、闭包等等；不过能够看出它本身还是建立在 Objective-C 的基础上的，Foundation / Cocoa / UIKit 的 API 基本是共通的。Swift 的语法目前仍在不断改进，从 [The Swift Programming Language: Document Revision History](https://developer.apple.com/library/ios/documentation/Swift/Conceptual/Swift_Programming_Language/RevisionHistory.html#//apple_ref/doc/uid/TP40014097-CH40-ID459) 可见一斑。
+Swift 吸收了不少动态语言的语法，比如类型推断、元组、闭包等等；不过能够看出它本身还是建立在 Objective-C 的基础上的，Foundation / Cocoa / UIKit 的 API 基本是共通的。Swift 的语法目前仍在不断改进，从 [The Swift Programming Language: Document Revision History](https://developer.apple.com/library/ios/documentation/Swift/Conceptual/Swift_Programming_Language/RevisionHistory.html#//apple_ref/doc/uid/TP40014097-CH40-ID459) 可见一斑。
 
 
 ## 数据类型
@@ -36,6 +36,7 @@ println("Code: \(http200Status.statusCode), message: \(http200Status.description
 ### 可选类型（Optionals）
 
 * 可选类型相当于一个特殊的枚举类型：成员 `None` 表示值为 `nil`；成员 `Some` 则可以通过 `!` 来**强制解析**（forced unwrapping）获取值，或是通过 `?` 构成一个**可选链**（optional chaining）。对 `nil` 进行强制解析会触发运行时错误 `EXC_BAD_INSTRUCTION`，而可选链不会。
+* 当可选链中有可选值为 `nil` 时整条链失败并返回 `nil`，但不会触发运行时错误；若成功则返回一个相应的可选类型。
 * 在 `if` 和 `while` 语句中使用**可选绑定**（optional binding）可以判断可选类型是否包含值，若包含则将值赋给临时常量或变量，可使用 `where` 来判断额外条件。[^binding]
 
 [^binding]: 从 [Swift 1.2](https://developer.apple.com/library/ios/releasenotes/DeveloperTools/RN-Xcode/Chapters/xc6_release_notes.html#//apple_ref/doc/uid/TP40001051-CH4-SW6) 开始，`if-let` / `while-let` 语句支持多个可选绑定，且可选绑定可以接在布尔条件后面用 `,` 隔开。
@@ -80,7 +81,7 @@ println(assumedString)
 ### 空合运算符（Nil Coalescing Operator）
 
 ```swift
-a ?? b // a 必须是 Optional，b 要与 a 存储值的类型一致
+a ?? b // a 必须是可选类型，b 要与 a 存储值的类型一致
 a != nil ? a! : b
 ```
 
@@ -282,5 +283,6 @@ enum Plant: Int {
 let earthsOrder = Planet.Earth.rawValue
 let possiblePlanet = Planet(rawValue: 7)
 ```
+
 
 [Swift 学习笔记（二）→ Next](/swift-notes-2/)
