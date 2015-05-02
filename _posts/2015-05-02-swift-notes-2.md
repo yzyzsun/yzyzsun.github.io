@@ -86,7 +86,7 @@ struct AlternativeRect {
 * 下标的参数可以使用可变参数和变量参数，但不允许输入输出参数和设置参数默认值。
 
 ```swift
-subscript(index: Int) -&gt; Int {
+subscript(index: Int) -> Int {
     get {
         return values[index]
     }
@@ -127,7 +127,7 @@ subscript(index: Int) -&gt; Int {
 * 可失败构造器可以调用一个不可失败构造器，但反过来不行。
 * 子类可以将父类的可失败构造器重写为不可失败构造器，但反过来不行。
 
-[^failable]: 可失败构造器于 [Swift 1.1](https://developer.apple.com/library/ios/releasenotes/DeveloperTools/RN-Xcode/Chapters/xc6_release_notes.html#//apple_ref/doc/uid/TP40001051-CH4-DontLinkElementID_60) 后被引入。
+[^failable]: 可失败构造器于 [Swift 1.1](https://developer.apple.com/swift/blog/?id=17) 后被引入。
 
 ## 析构器
 
@@ -141,5 +141,88 @@ subscript(index: Int) -&gt; Int {
 * 为解决强引用循环，可以使用关键字 `weak` 声明一个**弱引用**，或使用 `unowned` 声明**无主引用**，它们都不会阻止 ARC 释放实例。
 * 弱引用必须是一个可选类型的变量，当其引用的实例被销毁后会被赋值为 `nil`。而无主引用的值不会被改变，但在实例被销毁后访问它会触发运行时错误。
 * 为解决闭包和类实例之间的强引用循环，可以定义闭包的捕获列表。捕获列表形如 `[unowned self, weak instance]`，放置在闭包开始处。
+
+
+## 类型转换
+
+* 在用类实例初始化集合类型时，将自动推断出其类型为它们共同的父类。
+* 用类型检查操作符 `is` 可以检查是否为某类型（或其父类）的实例，抑或是否遵循某协议。
+* 使用 `as?` 或者 `as!` 可以尝试将实例向下转型（downcast）为原类型的子类。
+* `AnyObject` 可以表示任何类（class）的实例，`Any` 可以表示任何类型（包括函数类型）的实例。
+* 可以在 `switch` 语句中使用 `is` 和 `as` 来判断 `AnyObject` 或 `Any` 类型的值。
+
+```swift
+switch thing {
+case 0 as Int:
+   println("zero as an Int")
+case 0 as Double:
+   println("zero as a Double")
+case let someDouble as Double where someDouble > 0:
+   println("a positive double value of \(someDouble)")
+case is Double:
+   println("some other double value that I don't want to print")
+case let stringConverter as String -> String:
+   println(stringConverter("Michael"))
+default:
+   println("something else")
+}
+```
+
+## 嵌套类型
+
+* 可以在类型定义的花括号内嵌套定义类、结构体和枚举，甚至可以多级嵌套，访问时使用点语法。
+
+
+## 扩展
+
+* 扩展即向一个已有的类、结构体或枚举类型添加新功能，包括在没有权限获取源代码的情况下进行扩展（retroactive modeling）。扩展与 Objective-C 中的分类（category）相似，但不同的是扩展没有名字。使用 `extension Type: Protocol {...}` 来声明一个扩展。
+* 扩展可以向已有类型添加计算型的实例属性和类型属性，但不可以添加存储属性或属性观察器。
+* 对于所有属性已提供默认值且未定义构造器的结构体，扩展构造器时可以调用其默认构造器和成员逐一构造器；对于已有的类，可以添加新的便利构造器，但不可以添加指定构造器和析构器。
+* 另外，扩展也可以添加新的实例方法、类型方法、下标和嵌套类型。
+
+
+## 协议
+
+* 协议用于声明其遵守者必须实现的属性、方法、下标、构造器等，协议通过 `protocol InheritingProtocol: SomeProtocol {...}` 定义，类通过 `class SomeClass: SuperClass, SomeProtocal, AnotherProtocol {...}` 来声明其遵守协议。
+* 协议中声明的属性需要指定其只读还是可读写：在声明后加上 `{ get }` 表示只读，存储属性和计算属性都能满足要求；`{ get set }` 表示可读写，变量存储属性和读写计算属性可以满足要求。
+* 协议可以作为类型使用，所有该协议遵守者的实例都符合该类型，亦可通过该协议类型的数组遍历调用协议规定的方法。
+* **委托**（Delegation）是一种设计模式，它允许类或结构体将一些需要负责的功能委托给其他类型的实例，可以定义协议来封装这些需要被委托的方法。
+* 可以在协议的继承列表前面加上 `class,` 来定义**类专属协议**，当试图让结构体或枚举适配该协议会导致编译错误。
+* 可以使用 `protocol<SomeProtocol, AnotherProtocol>` 来将多个协议合成为一个临时协议。
+* 可以在声明前加上 `optional` 以标识这是一个**可选协议要求**，该协议类型的实例调用时这个可选要求时，可以在其名称后加 `?` 检查它是否被实现，如 `optionalMethod?(args)`。[^protocol] 可选协议要求只能用于被 `@objc` 修饰的协议，且这样的协议只能被类遵守。
+
+[^protocol]: [文档原文](https://developer.apple.com/library/ios/documentation/Swift/Conceptual/Swift_Programming_Language/Protocols.html#//apple_ref/doc/uid/TP40014097-CH25-ID267)「Optional property requirements, and optional method requirements that return a value, will always return an optional value of the appropriate type when they are accessed or called, to reflect the fact that the optional requirement may not have been implemented.」疑有误，可选方法被调用后并不会返回一个可选类型，而是方法其本身是可选的，即非 `(Type) -> Type?` 而是 `((Type) -> Type)?`。
+
+## 泛型
+
+* 可以在函数、类、结构体和枚举名称后使用类型参数 `<T>` 来定义泛型函数和泛型类型。
+* 如果需要限定泛型，可以为类型参数添加**类型约束**，同时可以在后面紧跟 `where` 语句为关联类型声明额外的约束，如 `<T: SomeProtocol, U: SomeClass where T.ItemType: Equatable>`。
+* 当定义一个协议时，可以声明**关联类型**，以提供一个类型的占位名，如 `typealias ItemType`，我们不需要知道 `ItemType` 的实际类型是什么，在实现时它会被自动推断出来。
+
+
+## 权限控制
+
+* `public` 表示可以被任何源文件访问，即作为公开的 API。
+* `internal` 表示只能被本模块（framework / app bundle）中的源文件访问，这是所有实体的**默认访问级别**。
+* `private` 表示只能在当前源文件中使用，以隐藏某些功能的实现细节。
+* 一个 `public` 类的所有成员默认为 `internal` 级别，以防止模块内部使用的实体被默认公开。
+* 子类的访问级别不得高于父类，常量、变量和属性自身的级别不能高于其类型所设的级别。
+
+
+## 运算符函数
+
+### 运算符重载
+
+* 二元运算符，或称**中置**（infix）运算符，重载时不需要关键字修饰，跟普通函数相似，如 `func + (left: Vector, right: Vector) -> Vector {...}`。
+* 一元运算符分为**前置**运算符和**后置**运算符，分别需要用关键字 `prefix` 和 `postfix` 修饰。
+* 组合赋值运算符重载时需要将左参数设置为 `inout`，而赋值号和三目条件运算符是不可重载的。
+
+### 自定义运算符
+
+* 首先需要声明一个自定义运算符，格式为 `*fix operator ∙ {}`，其中 `*` 代表 `in` / `pre` / `post`。定义时的语法与重载相同。
+* 在声明的花括号中可以为中置运算符定义结合性和优先级，如 `{ associativity left precedence 150 }`。结合性可以是 `left` / `right` / `none`，默认值 `none` 表示它不能和同级运算符写在一起；优先级默认为 `100`，即与三目运算符同级。[^precedence]
+
+[^precedence]: Swift 的默认优先级列表参见 [The Swift Programming Language: Expressions](https://developer.apple.com/library/ios/documentation/Swift/Conceptual/Swift_Programming_Language/Expressions.html#//apple_ref/doc/uid/TP40014097-CH32-ID383)。
+
 
 [Prev ← Swift 学习笔记（一）](/swift-notes-1/)
