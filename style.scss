@@ -115,6 +115,38 @@ img {
   max-width: 100%;
 }
 
+// Table style from MacDown
+table {
+  border-collapse: collapse;
+  tr {
+    border-top: 1px solid #cccccc;
+    background-color: white;
+    margin: 0;
+    padding: 0;
+    &:nth-child(2n) {
+      background-color: #f8f8f8;
+    }
+    th {
+      background-color: #eee;
+      font-weight: bold;
+      border: 1px solid #cccccc;
+      margin: 0;
+      padding: 6px 13px;
+    }
+    td {
+      border: 1px solid #cccccc;
+      margin: 0;
+      padding: 6px 13px;
+    }
+    th :first-child, td :first-child {
+      margin-top: 0;
+    }
+    th :last-child, td :last-child {
+      margin-bottom: 0;
+    }
+  }
+}
+
 // Fixes images in popup boxes from Google Translate
 .gmnoprint img {
   max-width: none;
