@@ -12,6 +12,7 @@ category: Tech
 
 [^valuetype]: [结构体和值类型 - objc中国](http://objccn.io/issue-16-2/)
 
+
 ## 属性
 
 ### 存储属性（Stored Properties）
@@ -66,6 +67,7 @@ struct AlternativeRect {
 
 [^static]: 从 [Swift 1.2](https://developer.apple.com/library/ios/releasenotes/DeveloperTools/RN-Xcode/Chapters/xc6_release_notes.html#//apple_ref/doc/uid/TP40001051-CH4-SW6) 开始，`static` 在类中被定义成了 `class final` 的同义词。
 
+
 ## 方法
 
 ### 实例方法
@@ -96,6 +98,7 @@ subscript(index: Int) -> Int {
 }
 ```
 
+
 ## 继承
 
 * 可以通过 `class subclass: superclass {...}` 来实现继承，子类将可以调用父类的属性、方法和下标。
@@ -105,6 +108,7 @@ subscript(index: Int) -> Int {
 * 属性、方法和下标可以使用 `final` 关键字防止被重写，也可以用 `final class` 使类不可以被继承，否则会导致编译错误。
 
 [^overload]: **重写**（override）与**重载**（overload）不同，重载的函数仅名称相同，参数彼此不同，不需要用关键字标识。
+
 
 ## 构造器
 
@@ -128,6 +132,7 @@ subscript(index: Int) -> Int {
 * 子类可以将父类的可失败构造器重写为不可失败构造器，但反过来不行。
 
 [^failable]: 可失败构造器于 [Swift 1.1](https://developer.apple.com/swift/blog/?id=17) 后被引入。
+
 
 ## 析构器
 
@@ -168,6 +173,7 @@ default:
 }
 ```
 
+
 ## 嵌套类型
 
 * 可以在类型定义的花括号内嵌套定义类、结构体和枚举，甚至可以多级嵌套，访问时使用点语法。
@@ -192,6 +198,7 @@ default:
 * 可以在声明前加上 `optional` 以标识这是一个**可选协议要求**，该协议类型的实例调用时这个可选要求时，可以在其名称后加 `?` 检查它是否被实现，如 `optionalMethod?(args)`。[^protocol] 可选协议要求只能用于被 `@objc` 修饰的协议，且这样的协议只能被类遵守。
 
 [^protocol]: [文档原文](https://developer.apple.com/library/ios/documentation/Swift/Conceptual/Swift_Programming_Language/Protocols.html#//apple_ref/doc/uid/TP40014097-CH25-ID267)「Optional property requirements, and optional method requirements that return a value, will always return an optional value of the appropriate type when they are accessed or called, to reflect the fact that the optional requirement may not have been implemented.」疑有误，可选方法被调用后并不会返回一个可选类型，而是方法其本身是可选的，即非 `(Type) -> Type?` 而是 `((Type) -> Type)?`。
+
 
 ## 泛型
 
@@ -224,5 +231,6 @@ default:
 
 [^precedence]: Swift 的默认优先级列表参见 [The Swift Programming Language: Expressions](https://developer.apple.com/library/ios/documentation/Swift/Conceptual/Swift_Programming_Language/Expressions.html#//apple_ref/doc/uid/TP40014097-CH32-ID383)。
 
+---
 
-[Prev ← Swift 学习笔记（一）](/swift-notes-1/)
+[\<Prev\> Swift 学习笔记（一）](/swift-notes-1/) | [Swift 学习笔记（三）\<Next\>](/swift-notes-3/)

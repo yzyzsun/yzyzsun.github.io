@@ -242,6 +242,7 @@ reversed = sorted(names) { $0 > $1 }
 reversed = sorted(names, >)
 ```
 
+
 ## 枚举
 
 * 枚举类型是**一等公民**，它采用了很多传统上只被类所支持的特性，例如实例方法、计算属性、遵守协议等。枚举定义的类型与 Swift 中其他类型一样，名字必须首字母大写。
@@ -284,5 +285,6 @@ let earthsOrder = Planet.Earth.rawValue
 let possiblePlanet = Planet(rawValue: 7)
 ```
 
+---
 
-[Swift 学习笔记（二）→ Next](/swift-notes-2/)
+\<Prev\> n/a | [Swift 学习笔记（二）\<Next\>](/swift-notes-2/)
