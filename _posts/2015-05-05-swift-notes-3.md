@@ -65,7 +65,7 @@ let completionBlock: (NSData, NSError) -> Void = {data, error in /* ... */}
 * 如果在 Swift 中定义的类继承自 `NSObject` 或者其他 Objective-C 类，编译器将自动添加 `@objc` 属性，同时类中所有的属性和方法也会加上该属性，除非其权限级别为 `private`。另外当使用 `@IBOutlet` / `@IBAction` / `@NSManaged` 属性时，`@objc` 也会被自动加上。
 * 当在 Objective-C 中使用 Swift API 时，编译器会作直接的翻译，如 `func playSong(name: String)` 会被翻译为 `- (void)playSong:(NSString *)name`。
 * 而对于构造器，其第一个参数名会在前面加上 `initWith` 成为方法名，如 `init(songName: String, artist: String)` 将被翻译为 `- (instancetype)initWithSongName:(NSString *)songName artist:(NSString *)artist`。
-* 亦可以使用 `@objc(name)` 指定在 Ojective-C 中的标识符，方法有参数时需要加上 `:`。
+* 亦可以使用 `@objc(name)` 指定在 Objective-C 中的标识符，方法有参数时需要加上 `:`。
 
 ### Objective-C Selector
 
@@ -141,7 +141,7 @@ let completionBlock: (NSData, NSError) -> Void = {data, error in /* ... */}
 }
 ```
 
-* 而在 Swift 中，可以直接使用类型属性，这保证了它只被惰性初始化一次。如果希望在调用构造器后做其他初始化工作，可以写一个立即执行的闭包。
+* 而在 Swift 中，可以直接使用类属性，这保证了它只被惰性初始化一次。如果希望在调用构造器后做其他初始化工作，可以写一个立即执行的闭包。
 
 ```swift
 class Singleton {

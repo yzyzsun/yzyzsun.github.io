@@ -134,6 +134,7 @@ a != nil ? a! : b
 
 * 数组类型可以表示为 `Array<SomeType>`，简写为 `[SomeType]`。
 * 创建空数组可用 `[SomeType]()`，以重复的值创建数组可用 `Array(count:repeatedValue:)`。
+* 如果数组下标越界或为负数，会直接触发运行时错误。
 
 ### 集合
 
@@ -145,6 +146,7 @@ a != nil ? a! : b
 ### 字典
 
 * 字典类型可以表示为 `Dictionary<Key, Value>`，简写为 `[Key: Value]`。`Key` 类型必须是可哈希的。
+* 访问字典可以使用 `dic["key"]`，返回值为可选类型，键不存在即返回 `nil`。
 * 遍历字典可用 `for (key, value) in dict {...}` 或单独遍历 `dict.keys` 和 `dict.values`。
 
 
@@ -237,7 +239,7 @@ func join(string s1:String, toString s2: String, joiner: String = " ") -> String
 join(string: "hello", toString: "world", joiner: ", ")
 ```
 
-* 上述代码中的 `s1` 等为**局部参数名**（local parameter name），在函数内部使用；`string` 等为**外部参数名**（external parameter name），在调用函数时使用，以加强可读性。
+* 上述代码中的 `s1` 等为**局部参数名**（local parameter name），在函数内部使用；`string` 等为**外部参数名**（external parameter name），在调用函数时使用，以加强可读性，亦可以不写（但方法对此的规定与函数不同）。
 * 当两者相同时，可只写一次并加上 `#` 前缀。
 * 当函数调用时 `joiner` 的值未被指定，函数会使用默认值。当未给带默认值的参数提供外部参数名时，局部名会自动作为外部名。
 * 在参数类型后加入 `...` 可定义**可变参数**（variadic parameters），调用时可以传入不确定数量的参数，在函数内这将被当做这个类型的一个数组。
