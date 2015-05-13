@@ -52,7 +52,6 @@ let completionBlock: (NSData, NSError) -> Void = {data, error in /* ... */}
 * Objective-C 中的 `id` 可以指向任何类型的对象，这相当于 Swift 中的 `AnyObject` 协议类型。
 * `AnyObject` 允许在不进行类型转换的情况下调用任何 Objective-C 的方法和属性，这个行为类似于隐式解析可选类型。因此与 Objective-C 不同，若方法或属性不存在将触发运行时错误，这可以使用可选链来避免。
 
-
 ### Swift 类型兼容性
 
 * 如果希望 Swift API 在 Objective-C 中可用，可以使用 `@objc` 属性。
@@ -98,6 +97,7 @@ let completionBlock: (NSData, NSError) -> Void = {data, error in /* ... */}
 
 * 当把 `NSArray` 桥接到 Swift 数组时，最终得到的结果是 `[AnyObject]` 类型，所有 Objective-C 对象和 Swift 类实例都与其兼容；而 `Int` 虽然不是一个类的实例，但因为它可以和 `NSNumber` 桥接，所以也是和 `AnyObject` 兼容的。
 * 而把 `NSDictionary` 桥接到 Swift 字典时会返回 `[NSObject: AnyObject]`。
+
 
 ## 采用 Cocoa 设计模式
 
@@ -215,7 +215,6 @@ let completionBlock: (NSData, NSError) -> Void = {data, error in /* ... */}
 | ---- | ---- | ---- |
 | Swift 代码 | 不需要 import | `#import <ProductName/ProductModuleName-Swift.h>` |
 | Objective-C 代码 | 不需要 import，但需要 Objective-C umbrella header | `#import "Header.h"` |
-
 
 ### 导入外部框架
 

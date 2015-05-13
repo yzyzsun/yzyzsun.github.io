@@ -4,7 +4,7 @@ title: About
 permalink: /about/
 ---
 
-我是伊兹桑（yzyzsun），目前就读于浙江大学计算机科学专业。主要使用 C 语言，基本会写 Ruby / Python，目前正在学习 iOS 应用开发与 Rails 网络开发。
+我是孙耀珠（yzyzsun），目前就读于浙江大学计算机科学专业，是[求是潮](http://www.qsc.zju.edu.cn/)技术研发中心的一员。熟悉的语言 C > Ruby > Python > Swift，目前正在学习 iOS 应用开发与 Rails 网络开发。
 
 我正在学习日语，对日本动画、日剧、48G 很感兴趣。
 
