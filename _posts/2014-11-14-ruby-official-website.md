@@ -16,7 +16,7 @@ category: Tech
 
 重点当然是解决方案：如果使用的浏览器是 Chrome 或 Firefox，可以安装 [gooreplacer](http://liujiacai.net/gooreplacer/) 插件将 Google 的资源替换为中科大的镜像。在 Safari 上目前没有类似的扩展，不过可以用 AdBlock Plus 屏蔽 Google API 来暂时解决问题。向 ABP 添加[自定义过滤规则](https://adblockplus.org/zh_CN/filters)即可：
 
-* `||googleapis.com`
-* `||fonts.gstatic.com`
-* `||themes.googleusercontent.com`
-* `||google-analytics.com`
+* `googleapis.com`
+* `fonts.gstatic.com`
+* `themes.googleusercontent.com`
+* `google-analytics.com`
