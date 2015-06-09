@@ -52,7 +52,7 @@ struct AlternativeRect {
 
 * 属性观察器包括两种：`willSet` 在设置新的值之前调用，`didSet` 在新的值被设置之后立即调用。
 * 定义观察器的语法与 getter / setter 类似，`willSet` 默认参数名为 `newValue`，`didSet` 默认参数名为 `oldValue`。
-* 当为存储属性设置默认值或是在构造器中为其赋值时，属性观察器不会被触发。
+* 当为存储属性设置默认值，或是于调用其他构造器前在构造器中为其赋值时，属性观察器不会被触发。
 
 ### 全局变量和局部变量
 
@@ -147,6 +147,29 @@ subscript(index: Int) -> Int {
 * 弱引用必须是一个可选类型的变量，当其引用的实例被销毁后会被赋值为 `nil`。而无主引用的值不会被改变，但在实例被销毁后访问它会触发运行时错误。
 * 为解决闭包和类实例之间的强引用循环，可以定义闭包的捕获列表。捕获列表形如 `[unowned self, weak instance]`，放置在闭包开始处。
 
+## 错误处理
+
+* 在 Swift 中，可以使用遵循 `ErrorType` 协议的枚举类型来定义一系列错误。[^error]
+* 对于一个可能抛出错误的函数或方法，需要在参数列表和返回值之间加上 `throws` 关键字，这样便可以在函数内使用 `throw` 语句。
+* 当调用一个可能抛出错误的函数时，需要在前面加上 `try` 关键字；也可以使用 `try!` 来绕过错误处理强制执行，这时出错将直接触发运行时错误。
+* 可以使用 `do-catch` 语句处理异常，`catch` 对错误的匹配类似于 `case`。
+
+```swift
+do {
+    try shakeHands(with: "Rino Sashihara")
+} catch HandshakeError.NoTicket {
+    print("No handshake ticket.")
+} catch HandshakeError.NoSuchMember {
+    print("No such member in HKT48.")
+} catch {
+    print("Other error happens.")
+}
+```
+
+* 使用 `defer` 语句可以确保在离开当前代码块前执行特定语句，且这些语句将被逆序执行。
+
+[^error]: 错误处理于 [Swift 2.0](https://developer.apple.com/swift/blog/?id=29) 后被引入。
+
 
 ## 类型转换
 
@@ -181,7 +204,7 @@ default:
 
 ## 扩展
 
-* 扩展即向一个已有的类、结构体或枚举类型添加新功能，包括在没有权限获取源代码的情况下进行扩展（retroactive modeling）。扩展与 Objective-C 中的分类（category）相似，但不同的是扩展没有名字。使用 `extension Type: Protocol {...}` 来声明一个扩展。
+* 扩展即向一个已有的类、结构体、枚举或协议添加新功能，包括在没有权限获取源代码的情况下进行扩展（retroactive modeling）。扩展与 Objective-C 中的分类（category）相似，但不同的是扩展没有名字。使用 `extension Type: Protocol {...}` 来声明一个扩展。
 * 扩展可以向已有类型添加计算型的实例属性和类型属性，但不可以添加存储属性或属性观察器。
 * 对于所有属性已提供默认值且未定义构造器的结构体，扩展构造器时可以调用其默认构造器和成员逐一构造器；对于已有的类，可以添加新的便利构造器，但不可以添加指定构造器和析构器。
 * 另外，扩展也可以添加新的实例方法、类型方法、下标和嵌套类型。
@@ -196,8 +219,18 @@ default:
 * 可以在协议的继承列表前面加上 `class,` 来定义**类专属协议**，当试图让结构体或枚举适配该协议会导致编译错误。
 * 可以使用 `protocol<SomeProtocol, AnotherProtocol>` 来将多个协议合成为一个临时协议。
 * 可以在声明前加上 `optional` 以标识这是一个**可选协议要求**，该协议类型的实例调用时这个可选要求时，可以在其名称后加 `?` 检查它是否被实现，如 `optionalMethod?(args)`。[^protocol] 可选协议要求只能用于被 `@objc` 修饰的协议，且这样的协议只能被类遵守。
+* 通过**协议扩展**不仅能够添加协议的一般功能，还可以提供协议的默认实现，并可使用 `where` 关键字对扩展进行约束。[^extension]
+
+```swift
+extension CollectionType where Generator.Element: TextRepresentable {
+    func asList() -> String {
+        return "(" + ", ".join(map({$0.asText()})) + ")"
+    }
+}
+```
 
 [^protocol]: [文档原文](https://developer.apple.com/library/ios/documentation/Swift/Conceptual/Swift_Programming_Language/Protocols.html#//apple_ref/doc/uid/TP40014097-CH25-ID267)「Optional property requirements, and optional method requirements that return a value, will always return an optional value of the appropriate type when they are accessed or called, to reflect the fact that the optional requirement may not have been implemented.」疑有误，可选方法被调用后并不会返回一个可选类型，而是方法其本身是可选的，即非 `(Type) -> Type?` 而是 `((Type) -> Type)?`。
+[^extension]: 协议扩展于 [Swift 2.0](https://developer.apple.com/swift/blog/?id=29) 后被引入。
 
 
 ## 泛型
@@ -212,6 +245,7 @@ default:
 * `public` 表示可以被任何源文件访问，即作为公开的 API。
 * `internal` 表示只能被本模块（framework / app bundle）中的源文件访问，这是所有实体的**默认访问级别**。
 * `private` 表示只能在当前源文件中使用，以隐藏某些功能的实现细节。
+* 使用 `@testable import {ModuleName}` 可以让单元测试能够访问所有 `internal` 实体。
 * 一个 `public` 类的所有成员默认为 `internal` 级别，以防止模块内部使用的实体被默认公开。
 * 子类的访问级别不得高于父类，常量、变量和属性自身的级别不能高于其类型所设的级别。
 

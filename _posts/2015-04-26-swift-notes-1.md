@@ -73,7 +73,8 @@ println(assumedString)
 
 ### 求余
 
-* 求余运算 `a % b` 的结果跟 `a` 的符号相同，而跟 `b` 的符号无关。这与 C / Java / Pascal 等语言是一致的，一般称这样的运算为**求余**（remainder）；而 Python / Ruby 等语言 `%` 运算结果的符号只与 `b` 相同，一般称其为**求模**（modulo）。[^modulo]
+* 求余运算 `a % b` 的结果跟 `a` 的符号相同，而跟 `b` 的符号无关。这与 C / Java / Pascal 等语言是一致的，一般称这样的运算为**求余**（remainder）。
+* 而 Python / Ruby 等语言 `%` 运算结果的符号只与 `b` 相同，一般称其为**求模**（modulo）。[^modulo]
 * Swift 中也可以对浮点数进行求余运算。
 
 [^modulo]: [Modulo operation - Wikipedia](https://en.wikipedia.org/wiki/Modulo_operation)
@@ -99,7 +100,11 @@ a != nil ? a! : b
 
 ### Unicode
 
-* 在字符串字面量中，**Unicode 标量值**（Unicode scalar value）可以表示为 `\u{n}`，其中 `n` 可以为 1-8 位的十六进制数。目前 Unicode 编码共 21 位，从 `U+0000` 到 `U+10FFFF`。
+* 在字符串字面量中，**Unicode 标量值**（Unicode scalar value）可以表示为 `\u{n}`，其中 `n` 可以为 1-8 位的十六进制数。
+* 目前 Unicode 编码共 21 位，标量值的范围包括：
+  * **基本多语言平面**（Basic Multilingual Plane）：[`U+0000`, `U+D7FF`] ∪ [`U+E000`, `U+FFFF`]；
+  * **辅助平面**（Supplementary Planes）：[`U+10000`, `U+10FFF`]；
+  * 但不包括 UTF-16 **代理对**（surrogate pair）的码位：[`U+D800`, `U+DFFF`]。
 * 分别可以通过字符串的 `utf8` / `utf16` / `unicodeScalars` 属性来访问其 UTF-8 / UTF-16 / Unicode Scalars 表示。
 * 调用全局函数 `count()` 可以获得字符串中的字符数，但需注意 Swift 的字符类型表示一个**扩展字形集群**（extended grapheme cluster），例如一对 Unicode 标量 `"\u{65}\u{301}"` 与单个 Unicode 标量 `\u{E9}` 均表示单个字符 é。
 * 而 NSString 其实是用 UTF-16 编码的码元（code units）组成的数组，相应地 `length` 属性的值是其包含的码元个数，而不是字符个数。[^unicode] 因此在 Swift 的 String 类型中这个属性名为 `utf16Count`。
@@ -140,7 +145,7 @@ a != nil ? a! : b
 ### 循环语句
 
 * 若不需要知道循环变量的值，可用 `_` 代替变量名。
-* 除了 `for-in` 循环，Swift 仍提供 C 样式 `for` 循环，三个表达式用分号隔开，但不需要加圆括号。`while` 和 `do-while` 循环仍然存在。
+* 除了 `for-in` 循环，Swift 仍提供 C 样式 `for` 循环，三个表达式用分号隔开，但不需要加圆括号。`while` 和 `repeat-while`（原为 `do-while`，现 `do` 关键字被用于错误处理）循环仍然存在。
 
 ```swift
 for _ in 0..<10 {
@@ -180,6 +185,29 @@ case let (x, y):
 
 * 可以在循环语句和 `switch` 语句前放置一个标签 `label:`，则可以用 `continue label` 或 `break label` 来跳过特定的循环。
 * 在 `switch` 中可以用 `fallthrough` 继续执行下一个 `case` 的代码，这和 C 语言的特性相似。
+
+### 提前退出
+
+* `guard ... else {...}` 类似于只有 `else` 分支的 `if` 语句。[^guard]
+* 如果条件满足则跳过花括号的内容，并且可选绑定的赋值对当前代码块的剩下部分依然有效。
+* 如果条件不满足，`else` 分支必须退出当前代码块，譬如使用 `return`, `break`, `continue` 或抛出错误。
+
+[^guard]: `guard` 语句于 [Swift 2.0](https://developer.apple.com/swift/blog/?id=29) 后被引进。
+
+### 检查 API 可用性
+
+* 在 `if` 或 `guard` 语句中可以判断当前平台版本（包括 `OSX`, `iOS` 和 `watchOS`），以验证 API 目前是否可用。[^available]
+* 最后一个参数 `*` 表示在未指定的平台上，其版本与最低部署目标相同。
+
+```swift
+if #available(OSX 10.11, iOS 9, *) {
+    // Use OS X El Capitan and iOS 9 APIs
+} else {
+    // Fall back to earlier OS X and iOS APIs
+}
+```
+
+[^available]: `#availale()` 于 [Swift 2.0](https://developer.apple.com/swift/blog/?id=29) 后被引进。
 
 
 ## 函数
