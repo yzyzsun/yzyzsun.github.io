@@ -69,7 +69,7 @@ println(assumedString)
 
 * 整数溢出会触发运行时错误，但如果要像 C 一样允许溢出，可以使用溢出运算符 `&+ &- &*`。[^overflow]
 
-[^overflow]: 移除运算符 `&/ &%` 在 [Swift 1.2](https://developer.apple.com/library/ios/releasenotes/DeveloperTools/RN-Xcode/Chapters/xc6_release_notes.html#//apple_ref/doc/uid/TP40001051-CH4-SW3) 中被移除。
+[^overflow]: 溢出运算符 `&/`、`&%` 在 [Swift 1.2](https://developer.apple.com/library/ios/releasenotes/DeveloperTools/RN-Xcode/Chapters/xc6_release_notes.html#//apple_ref/doc/uid/TP40001051-CH4-SW3) 中被移除。
 
 ### 求余
 
