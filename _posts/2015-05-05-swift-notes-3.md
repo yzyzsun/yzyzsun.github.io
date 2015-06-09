@@ -258,4 +258,4 @@ let completionBlock: (NSData, NSError) -> Void = {data, error in /* ... */}
 
 ---
 
-[\<Prev\> Swift 学习笔记（二）](/swift-notes-2/) | n/a \<Next\>
+[\<Prev\> Swift 学习笔记（二）](/swift-notes-2/)
