@@ -315,4 +315,4 @@ let possiblePlanet = Planet(rawValue: 7)
 
 ---
 
-\<Prev\> n/a | [Swift 学习笔记（二）\<Next\>](/swift-notes-2/)
+[Swift 学习笔记（二）\<Next\>](/swift-notes-2/)
