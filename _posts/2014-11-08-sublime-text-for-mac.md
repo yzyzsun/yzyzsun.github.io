@@ -41,7 +41,6 @@ Sublime Text 作为一个轻量级的代码编辑器，对于单文件编程非�
 
 实际上这就是一个 JSON 文件，相关资料可以参阅 [Sublime Text Unofficial Documentation](http://docs.sublimetext.info/en/latest/reference/build_systems.html)。相应地，C 的配置文件将所有的 `g++` 替换为 `gcc` 即可。 
 
-
 ## Python
 
 Python 也存在上述的内置控制台无法输入的问题，这时有比自己重写 Build System 更方便的解决方案。[GitHub](https://github.com/wuub/SublimeREPL) 上有一个项目 **SublimeREPL**，支持在 Sublime 中运行交互式开发环境（即 REPL）。
@@ -67,8 +66,6 @@ Python 也存在上述的内置控制台无法输入的问题，这时有比自�
     }
 ]
 ```
-
-![](/images/sublime-text-for-mac-02.png)
 
 
 ## Ruby
@@ -97,6 +94,8 @@ SublimeREPL 当然也支持 Ruby，不过非常坑爹的是，它不提供运行
 ```
 
 同样地，可以在 `Key Bindings - User` 为其设置快捷键。
+
+![](/images/sublime-text-for-mac-02.png)
 
 
 ## HTML
