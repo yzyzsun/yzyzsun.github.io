@@ -313,6 +313,5 @@ let earthsOrder = Planet.Earth.rawValue
 let possiblePlanet = Planet(rawValue: 7)
 ```
 
----
 
-[Swift 学习笔记（二）\<Next\>](/swift-notes-2/)
+> **\<Next\>** [Swift 学习笔记（二）](/swift-notes-2/)

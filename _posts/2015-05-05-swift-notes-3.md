@@ -256,6 +256,5 @@ let completionBlock: (NSData, NSError) -> Void = {data, error in /* ... */}
 * 默认的 Product Module Name 跟 Product Name 相同，不过如果其中如果有非字母数字的字符，它们将会被 `_` 替代。
 * 也可以在 `Build Settings > Packaging > Product Module Name` 中自定义名称。
 
----
 
-[\<Prev\> Swift 学习笔记（二）](/swift-notes-2/)
+> **\<Prev\>** [Swift 学习笔记（二）](/swift-notes-2/)

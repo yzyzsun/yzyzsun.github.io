@@ -265,6 +265,6 @@ extension CollectionType where Generator.Element: TextRepresentable {
 
 [^precedence]: Swift 的默认优先级列表参见 [The Swift Programming Language: Expressions](https://developer.apple.com/library/ios/documentation/Swift/Conceptual/Swift_Programming_Language/Expressions.html#//apple_ref/doc/uid/TP40014097-CH32-ID383)。
 
----
 
-[\<Prev\> Swift 学习笔记（一）](/swift-notes-1/) | [Swift 学习笔记（三）\<Next\>](/swift-notes-3/)
+> **\<Prev\>** [Swift 学习笔记（一）](/swift-notes-1/)  
+> **\<Next\>** [Swift 学习笔记（三）](/swift-notes-3/)
