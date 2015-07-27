@@ -60,7 +60,7 @@ let completionBlock: (NSData, NSError) -> Void = {data, error in /* ... */}
 
 ### Swift 类型兼容性
 
-* 如果希望 Swift API 在 Objective-C 中可用，可以使用 `@objc` 属性。
+* 如果希望 Swift API 在 Objective-C 中可用，可以使用 `@objc` 属性；相反也可以使用 `@nonobjc` 使其不可用。
 * Swift 中的枚举类型只有使用基本的整型才能使用 `@objc` 属性。
 * 如果在 Swift 中定义的类继承自 `NSObject` 或者其他 Objective-C 类，编译器将自动添加 `@objc` 属性，同时类中所有的属性和方法也会加上该属性，除非其权限级别为 `private`。另外当使用 `@IBOutlet` / `@IBAction` / `@NSManaged` 属性时，`@objc` 也会被自动加上。
 * 当在 Objective-C 中使用 Swift API 时，编译器会作直接的翻译，如 `func playSong(name: String)` 会被翻译为 `- (void)playSong:(NSString *)name`。
@@ -124,6 +124,34 @@ let completionBlock: (NSData, NSError) -> Void = {data, error in /* ... */}
 ### Target-Action
 
 * Target-action 设计模式用于当特定事件发生时，一个对象向另一个对象发送消息。在 Swift 中该模式与 Objective-C 中基本相似，并且可以使用 Swift 中的 `Selector` 类型。
+
+### 单例模式（Singleton）
+
+* 单例模式使用一个供全局访问的共享实例，以完成需要统一接入点的任务，如播放音效或发送 HTTP 请求。
+* 在 Objective-C 中，可以用 `dispatch_once` 函数保证构造器只被执行一次。
+
+```objective-c
++ (instancetype)sharedInstance {
+    static id _sharedInstance = nil;
+    static dispatch_once_t onceToken;
+    dispatch_once(&onceToken, ^{
+        _sharedInstance = [[self alloc] init];
+    });
+    return _sharedInstance;
+}
+```
+
+* 而在 Swift 中，可以直接使用类型属性，这保证了它只被惰性初始化一次。如果希望在调用构造器后做其他初始化工作，可以写一个立即执行的闭包。
+
+```swift
+class Singleton {
+    static let sharedInstance: Singleton = {
+        let instance = Singleton()
+        // Setup
+        return instance
+    }()
+}
+```
 
 ### 内省（Introspection）
 
