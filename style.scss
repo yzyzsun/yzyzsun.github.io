@@ -289,6 +289,10 @@ nav {
 }
 
 .post {
+  h1, .meta {
+    text-align: center;
+  }
+
   blockquote {
     margin: 1.8em .8em;
     border-left: 2px solid $gray;
