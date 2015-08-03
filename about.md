@@ -6,7 +6,7 @@ permalink: /about/
 
 我是孙耀珠（yzyzsun），目前就读于浙江大学计算机科学专业，是[求是潮](http://www.qsc.zju.edu.cn)技术研发中心的一员。熟悉的语言 C > Ruby > Python > Swift，目前正在学习 iOS 应用开发与 Rails 网络开发。
 
-我正在学习日语，对日本动画、日剧、48G 很感兴趣。
+我正在学习日语，对 アニメ・テレビドラマ・ミステリ・アイドル 很感兴趣。
 
 本站使用 [Jekyll](http://jekyllrb.com) via [GitHub Pages](https://pages.github.com) 搭建。如无特殊声明，所有文章采用 [CC BY-NC-SA 4.0](http://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh) 进行许可。
 
