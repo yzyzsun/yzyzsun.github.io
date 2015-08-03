@@ -1,0 +1,31 @@
+---
+layout: default
+permalink: /archive/
+---
+
+<div class="cats">
+  {% for category in site.categories %}
+    <div class="cat">
+      <h2>
+        {% if category.first == "diary" %}
+          <i class="fa fa-book"></i>
+        {% endif %}
+        {% if category.first == "otaku" %}
+          <i class="fa fa-gamepad"></i>
+        {% endif %}
+        {% if category.first == "tech" %}
+          <i class="fa fa-code"></i>
+        {% endif %}
+        <span class="category">{{ category.first }}</span>
+      </h2>
+      <ul>
+        {% for post in category.last %}
+          <li>
+            <span class="date">{{ post.date | date: "%Y-%m-%d" }}</span>
+            <a href="{{ site.baseurl }}{{ post.url }}">{{ post.title }}</a>
+          </li>
+        {% endfor %}
+      </ul>
+    </div>
+  {% endfor %}
+</div>

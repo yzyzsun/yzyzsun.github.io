@@ -49,10 +49,6 @@ url: http://blog.yzyzsun.me
 # then add in the baseurl here, like this: "/repository-name"
 baseurl: ""
 
-#
-# !! You don't need to change any of the configuration flags below !!
-#
-
 markdown: redcarpet
 redcarpet:
   extensions: ["fenced_code_blocks", "footnotes", "highlight", "strikethrough", "tables"]

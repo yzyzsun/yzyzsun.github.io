@@ -157,6 +157,15 @@ table {
   color: gray;
 }
 
+.date {
+  margin-right: 20px;
+  color: gray;
+}
+
+.category {
+  text-transform: capitalize;
+}
+
 // Specify the color of the selection
 //::-moz-selection {
 //  color: $black;
@@ -311,6 +320,18 @@ nav {
 //    font-size: 15px;
     font-variant: small-caps;
   }
+}
+
+.cats > .cat {
+  border-bottom: 1px solid $lightGray;
+}
+
+.cats > .cat:last-child {
+  border-bottom: none;
+}
+
+.cat {
+  line-height: 32px;
 }
 
 .wrapper-footer {
