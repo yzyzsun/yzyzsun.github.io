@@ -10,17 +10,17 @@ Sublime Text 作为一个轻量级的代码编辑器，对于单文件编程非�
 
 即便如此，Sublime Text 还是有一些不尽如人意的地方需要进一步配置，以下便是 C/C++、Python、Ruby、HTML 的几处配置技巧。
 
-测试环境：`Sublime Text 3 (Build 3065) on OS X Yosemite (10.10)`
+测试环境：Sublime Text 3 Build 3065 (OS X Yosemite 10.10)
 
 <!--more-->
 
 ## C / C++
 
-在 Sublime Text 中最头疼的地方是，下方内置的控制台竟然不能输入数据，即程序无法从 stdin 读入用户输入，这个问题在 TextMate 中也一直存在。其次预设的 Build System 只有 C++ 而没有 C，虽然没什么大碍但会弹出警告 `this behavior is deprecated`。
+在 Sublime Text 中最头疼的地方是，下方内置的控制台竟然不能输入数据，即程序无法从 stdin 读入用户输入，这个问题在 TextMate 中也一直存在。其次预设的 Build System 只有 C++ 而没有 C，虽然没什么大碍但会弹出警告「this behavior is deprecated」。
 
 ![](/images/sublime-text-for-mac-00.png)
 
- 解决这两个问题需要创建自定义 Build System，设置其在运行程序时不使用内置控制台，而是直接调用终端运行。我们可以修改内置的 Package，也可以直接点击 `Tools > Build System > New Build System...` 新建自己的配置文件。C++ 的包位于 `/Applications/Sublime Text.app/Contents/MacOS/Packages/C++.sublime-package`，它可以作为归档文件打开，修改其中的 `C++.sublime-build` 即可。修改后的内容为：
+ 解决这两个问题需要创建自定义 Build System，设置其在运行程序时不使用内置控制台，而是直接调用终端运行。我们可以修改内置的 Package，也可以直接点击 Tools > Build System > New Build System... 新建自己的配置文件。C++ 的包位于 `/Applications/Sublime Text.app/Contents/MacOS/Packages/C++.sublime-package`，它可以作为归档文件打开，修改其中的 `C++.sublime-build` 即可。修改后的内容为：
 
 ```json
 {
@@ -39,19 +39,19 @@ Sublime Text 作为一个轻量级的代码编辑器，对于单文件编程非�
 }
 ```
 
-实际上这就是一个 JSON 文件，相关资料可以参阅 [Sublime Text Unofficial Documentation](http://docs.sublimetext.info/en/latest/reference/build_systems.html)。相应地，C 的配置文件将所有的 `g++` 替换为 `gcc` 即可。 
+实际上这就是一个 JSON 文件，相关资料可以参阅 [Sublime Text Unofficial Documentation](http://docs.sublimetext.info/en/latest/reference/build_systems.html)。相应地，C 的配置文件可以新建一个 `C.sublime-build`，将原先所有的 `g++` 替换为 `gcc` 即可。 
 
 ## Python
 
 Python 也存在上述的内置控制台无法输入的问题，这时有比自己重写 Build System 更方便的解决方案。[GitHub](https://github.com/wuub/SublimeREPL) 上有一个项目 **SublimeREPL**，支持在 Sublime 中运行交互式开发环境（即 REPL）。
 
-首先需要安装 Package Control，这是 Sublime Text 的插件包管理器，安装方法见 [Installation - Package Control](https://sublime.wbond.net/installation)。接着按 `⇧⌘P` 调出 `Command Palette`，键入「install」打开 `Package Control: Install Package`，找到 `SublimeREPL` 即可安装。
+首先需要安装 Package Control，这是 Sublime Text 的插件包管理器，安装方法见 [Installation - Package Control](https://sublime.wbond.net/installation)。接着按 ⇧⌘P 调出 Command Palette，键入「install」打开 Package Control: Install Package，找到 SublimeREPL 即可安装。
 
 ![](/images/sublime-text-for-mac-01.png)
 
-安装完成后，可以通过 `Tools > SublimeREPL > Python > Python` 在新窗口中打开交互式开发环境，或是通过同菜单下的 `Python - RUN current file` 运行当前文件。除此之外，也有其他简便的办法，其一是按 ⇧⌘P 并输入「python」，可以在列表中看到 SublimeREPL 的相关命令。其二是为这些命令设置快捷键，这里以 `Python - RUN current file` 为例，设置与 Python IDLE 相同的快捷键 `F5`。
+安装完成后，可以通过 Tools > SublimeREPL > Python > Python 在新窗口中打开交互式开发环境，或是通过同菜单下的 Python - RUN current file 运行当前文件。除此之外，也有其他简便的办法，其一是按 ⇧⌘P 并输入「python」，可以在列表中看到 SublimeREPL 的相关命令。其二是为这些命令设置快捷键，这里以 Python - RUN current file 为例，设置与 Python IDLE 相同的快捷键 F5。
 
-打开 `Sublime Text > Preferences > Key Bindings - User`，在文件中输入：
+打开 Sublime Text > Preferences > Key Bindings - User，在文件中输入：
 
 ```json
 [
@@ -72,7 +72,7 @@ Python 也存在上述的内置控制台无法输入的问题，这时有比自�
 
 SublimeREPL 当然也支持 Ruby，不过非常坑爹的是，它不提供运行当前文件的功能，只提供交互式界面，而在高版本的 Pry 下默认的这个交互式界面还没法用。
 
-还好 GitHub 上已经有人提出了修复的方法：[Fix ruby Pry helper for Pry version >= 0.10.0](https://github.com/wuub/SublimeREPL/pull/372)。至于运行单个文件的功能，还是需要自己添加。打开文件 `~/Library/Application Support/Sublime Text 3/Packages/SublimeREPL/config/Ruby/Main.sublime-menu`，在与 `Ruby - IRB (deprecated)` 同级的位置加入以下代码：
+还好 GitHub 上已经有人提出了修复的方法：[Fix ruby Pry helper for Pry version >= 0.10.0](https://github.com/wuub/SublimeREPL/pull/372)。至于运行单个文件的功能，还是需要自己添加。打开文件 `~/Library/Application Support/Sublime Text 3/Packages/SublimeREPL/config/Ruby/Main.sublime-menu`，在与 Ruby - IRB (deprecated) 同级的位置加入以下代码：
 
 ```json
 {
@@ -93,7 +93,7 @@ SublimeREPL 当然也支持 Ruby，不过非常坑爹的是，它不提供运行
 }
 ```
 
-同样地，可以在 `Key Bindings - User` 为其设置快捷键。
+同样地，可以在 Key Bindings - User 为其设置快捷键。
 
 ![](/images/sublime-text-for-mac-02.png)
 
@@ -117,7 +117,7 @@ SublimeREPL 当然也支持 Ruby，不过非常坑爹的是，它不提供运行
 }
 ```
 
-按下 `⌘B` 和 `⇧⌘B` 会分别在 Safari 和 Chrome 中打开当前 HTML 文件，这样便可以快捷地预览设计中的页面。
+按下 ⌘B 和 ⇧⌘B 会分别在 Safari 和 Chrome 中打开当前 HTML 文件，这样便可以快捷地预览设计中的页面。
 
 
 以上便是对 Sublime Text 配置的个人经验，希望对大家有所帮助。
