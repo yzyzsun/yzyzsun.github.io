@@ -19,4 +19,3 @@ category: Tech
 * `googleapis.com`
 * `fonts.gstatic.com`
 * `themes.googleusercontent.com`
-* `google-analytics.com`
