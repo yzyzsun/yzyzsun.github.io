@@ -39,7 +39,7 @@ h1, h2, h3, h4, h5, h6 {
   font-weight: bold;
 
   line-height: 1.7;
-  margin: 1em 0 15px;
+  margin: 1em 0 10px;
   padding: 0;
 
   @include mobile {
@@ -155,7 +155,7 @@ table {
 .meta {
   font-size: 15px;
   color: gray;
-  margin-bottom: 48px;
+  margin-bottom: 32px;
 }
 
 .date {
@@ -301,6 +301,10 @@ nav {
 .post {
   h1, .meta {
     text-align: center;
+  }
+  
+  img {
+    margin: 20px 0;
   }
 
   blockquote {
