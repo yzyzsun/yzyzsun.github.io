@@ -107,9 +107,11 @@ a != nil ? a! : b
   * 但不包括 UTF-16 **代理对**（surrogate pair）的码位：[`U+D800`, `U+DFFF`]。
 * 分别可以通过字符串的 `utf8` / `utf16` / `unicodeScalars` 属性来访问其 UTF-8 / UTF-16 / Unicode Scalars 表示。
 * 调用全局函数 `count()` 可以获得字符串中的字符数，但需注意 Swift 的字符类型表示一个**扩展字形集群**（extended grapheme cluster），例如一对 Unicode 标量 `"\u{65}\u{301}"` 与单个 Unicode 标量 `\u{E9}` 均表示单个字符 é。
-* 而 NSString 其实是用 UTF-16 编码的码元（code units）组成的数组，相应地 `length` 属性的值是其包含的码元个数，而不是字符个数。[^unicode] 因此在 Swift 的 String 类型中这个属性名为 `utf16Count`。
+* 而 NSString 其实是用 UTF-16 编码的码元（code units）组成的数组，相应地 `length` 属性的值是其包含的码元个数，而不是字符个数。[^unicode] 因此在 Swift 的 String 类型中这个属性名为 `utf16Count`。[^collectiontype]
 
 [^unicode]: [NSString 与 Unicode - objc中国](http://objccn.io/issue-9-1/)
+
+[^collectiontype]: 从 [Swift 2.0](https://developer.apple.com/swift/blog/?id=30) 开始字符串不再遵循 `CollectionType` 协议，这意味着它与 NSString 的实现不相一致。
 
 
 ## 集合类型
@@ -129,8 +131,8 @@ a != nil ? a! : b
 
 * 集合类型可以表示为 `Set<SomeType>`。`SomeType` 必须是可哈希的，即遵循 `Hashable` 协议。
 * 创建空数组可用 `Set<SomeType>()`，可用数组字面量来初始化集合 `var groups: Set = ["AKB48", "SKE48", "NMB48", "HKT48"]`。
-* 分别用 `insert(_:)`、`remove(_:)`、`contains(_:)` 方法来插入、移除、判断元素在集合中。
-* `union(_:)`、`subtract(_:)`、`intersect(_:)`、`exclusiveOr(_:)` 方法分别表示并集、差集、交集、对称差。
+* 分别用 `insert(_:)` / `remove(_:)` / `contains(_:)` 方法来插入、移除、判断元素在集合中。
+* `union(_:)` / `subtract(_:)` / `intersect(_:)` / `exclusiveOr(_:)` 方法分别表示并集、差集、交集、对称差。
 
 ### 字典
 
