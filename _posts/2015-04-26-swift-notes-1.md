@@ -6,7 +6,7 @@ category: Tech
 
 苹果自收购 NeXT 公司开始便使用 Objective-C 作为主力开发语言，至今已有十多年了，若是从这门语言发明之日算起更是超过三十年；而在这期间微软推出了 C# 和 F#，谷歌推出了 Go 和 Dart，Mozilla 推出了 Rust……虽然 Objective-C 随着 OS X 和 iOS 的迅速发展而越来越火，但相比之下它的语言设计已经落后于时代了，于是在这个大背景下 Swift 诞生了，开发者正是 LLVM / Clang 之父 Chris Lattner。
 
-Swift 虽然仍是静态语言，但它拥有类型推断和 Playgrounds 交互界面，能够像脚本语言一样快速开发。Swift 增加不少新特性，比如可选类型、元组、泛型、更优雅的闭包、更强大的枚举、值类型的结构体等等；另外它丢掉了 C 语言的包袱，放弃了指针，`switch` 语句不再需要 `break`，条件表达式必须是布尔类型，整型溢出会抛出运行时错误等等。
+Swift 虽然仍是静态类型语言，但它拥有类型推断和 Playgrounds 交互界面，能够像脚本语言一样快速开发。Swift 增加不少新特性，比如可选类型、元组、泛型、更优雅的闭包、更强大的枚举、值类型的结构体等等；另外它丢掉了 C 语言的包袱，放弃了指针，`switch` 语句不再需要 `break`，条件表达式必须是布尔类型，整型溢出会抛出运行时错误等等。
 
 不过能够看出它本身还是构建在 Objective-C 的基础之上，两者能够很方便地交互和共存，Foundation / Cocoa / UIKit 的 API 也是共通的。Swift 的语法目前仍在不断改进，从 [The Swift Programming Language: Document Revision History](https://developer.apple.com/library/ios/documentation/Swift/Conceptual/Swift_Programming_Language/RevisionHistory.html#//apple_ref/doc/uid/TP40014097-CH40-ID459) 可见一斑。
 
