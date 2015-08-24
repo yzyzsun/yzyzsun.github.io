@@ -8,7 +8,7 @@ category: Tech
 
 Swift 虽然仍是静态类型语言，但它拥有类型推断和 Playgrounds 交互界面，能够像脚本语言一样快速开发。Swift 增加不少新特性，比如可选类型、元组、泛型、更优雅的闭包、更强大的枚举、值类型的结构体等等；另外它丢掉了 C 语言的包袱，放弃了指针，`switch` 语句不再需要 `break`，条件表达式必须是布尔类型，整型溢出会抛出运行时错误等等。
 
-不过能够看出它本身还是构建在 Objective-C 的基础之上，两者能够很方便地交互和共存，Foundation / Cocoa / UIKit 的 API 也是共通的。Swift 的语法目前仍在不断改进，从 [The Swift Programming Language: Document Revision History](https://developer.apple.com/library/ios/documentation/Swift/Conceptual/Swift_Programming_Language/RevisionHistory.html#//apple_ref/doc/uid/TP40014097-CH40-ID459) 可见一斑。
+不过能够看出它本身还是构建在 Objective-C 的基础之上，两者能够很方便地交互和共存，Cocoa / Cocoa Touch 的 API 也是共通的。Swift 的语法目前仍在不断改进，从 [The Swift Programming Language: Document Revision History](https://developer.apple.com/library/ios/documentation/Swift/Conceptual/Swift_Programming_Language/RevisionHistory.html#//apple_ref/doc/uid/TP40014097-CH40-ID459) 可见一斑。
 
 
 ## 数据类型
@@ -139,7 +139,7 @@ a != nil ? a! : b
 ### 集合
 
 * 集合类型可以表示为 `Set<SomeType>`。`SomeType` 必须是可哈希的，即遵循 `Hashable` 协议。
-* 创建空数组可用 `Set<SomeType>()`，可用数组字面量来初始化集合 `var groups: Set = ["AKB48", "SKE48", "NMB48", "HKT48"]`。
+* 创建空数组可用 `Set<SomeType>()`，可用数组字面量来初始化集合 `var groups: Set = ["AKB48", "SKE48", "NMB48", "HKT48", "JKT48", "SNH48", "NGT48"]`。
 * 分别用 `insert(_:)` / `remove(_:)` / `contains(_:)` 方法来插入、移除、判断元素在集合中。
 * `union(_:)` / `subtract(_:)` / `intersect(_:)` / `exclusiveOr(_:)` 方法分别表示并集、差集、交集、对称差。
 

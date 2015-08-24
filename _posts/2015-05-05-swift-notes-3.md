@@ -78,7 +78,7 @@ let completionBlock: (NSData, NSError) -> Void = {data, error in /* ... */}
 
 * 在 Swift 中使用 outlet 和 action 时，需要在属性和方法前加上 `@IBOutlet` 和 `@IBAction`，并将它们声明为隐式解析可选类型。
 * 对于一个继承自 `UIView` 或 `NSView` 的自定义视图，可以在类定义前加上 `@IBDesignable`，则该视图将在 IB 的画布（canvas）上实时渲染。
-* 同时可以为类的属性添加 `@IBInspectable`，这样便能在 IB 的监视器面板（inspector）中编辑这些属性。
+* 同时可以为类的属性添加 `@IBInspectable`，这样便能在 IB 的监视器面板（inspector）中编辑这些属性，并且这里的编辑将覆盖代码中对属性的设置。
 
 ### Core Data Managed Object
 
