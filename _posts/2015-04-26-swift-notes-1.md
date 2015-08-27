@@ -8,7 +8,7 @@ category: Tech
 
 Swift 虽然仍是静态类型语言，但它拥有类型推断和 Playgrounds 交互界面，能够像脚本语言一样快速开发。Swift 增加不少新特性，比如可选类型、元组、泛型、更优雅的闭包、更强大的枚举、值类型的结构体等等；另外它丢掉了 C 语言的包袱，放弃了指针，`switch` 语句不再需要 `break`，条件表达式必须是布尔类型，整型溢出会抛出运行时错误等等。
 
-不过能够看出它本身还是构建在 Objective-C 的基础之上，两者能够很方便地交互和共存，Cocoa / Cocoa Touch 的 API 也是共通的。Swift 的语法目前仍在不断改进，从 [The Swift Programming Language: Document Revision History](https://developer.apple.com/library/ios/documentation/Swift/Conceptual/Swift_Programming_Language/RevisionHistory.html#//apple_ref/doc/uid/TP40014097-CH40-ID459) 可见一斑。
+不过能够看出它本身还是构建在 Objective-C 的基础之上，两者能够很方便地交互和共存，Cocoa / Cocoa Touch 的 API 也是共通的。Swift 的语法目前仍在不断改进，从 [The Swift Programming Language: Document Revision History](https://developer.apple.com/library/ios/documentation/Swift/Conceptual/Swift_Programming_Language/RevisionHistory.html#//apple_ref/doc/uid/TP40014097-CH40-ID459) 可见一斑，我也会根据最新的文档及时更新这三篇学习笔记。（Updated: 2015-08-27）
 
 
 ## 数据类型
@@ -23,7 +23,7 @@ Swift 虽然仍是静态类型语言，但它拥有类型推断和 Playgrounds �
 
 * `Float` 为 32 位浮点数；`Double` 为 64 位浮点数，是默认的浮点类型。
 * `1.25e2` 表示 1.25×10^2 ；`0xFp2` 表示 15×2^2 。
-* 加减乘除运算严格检查左右操作数类型是否相同，不会进行隐式类型转换，因此不同类型的整数和不同类型的浮点数进行运算时需要强制类型转换，可以使用 `Int()` 等构造器完成。
+* 加减乘除运算严格检查左右操作数类型是否相同，不会进行隐式类型转换，因此 `Int` / `UInt` / `Double` / `Float` / `CGFloat` 之间进行运算时需要强制类型转换，可以使用 `Int()` 等构造器完成。
 
 <!--more-->
 
@@ -35,7 +35,7 @@ Swift 虽然仍是静态类型语言，但它拥有类型推断和 Playgrounds �
 
 ```swift
 let http200Status = (statusCode: 200, description: "OK")
-println("Code: \(http200Status.statusCode), message: \(http200Status.description)")
+print("Code: \(http200Status.statusCode), message: \(http200Status.description)")
 ```
 
 ### 可选类型（Optionals）
@@ -57,9 +57,9 @@ if let a = foo(), b = bar() where a < b {
 ```swift
 var optionalString: String? // nil
 var possibleString: String? = "233"
-println(possibleString!)
+print(possibleString!)
 var assumedString: String! = "666"
-println(assumedString)
+print(assumedString)
 ```
 
 
@@ -181,17 +181,17 @@ for var i = 0; i < 10; ++i {
 ```swift
 switch somePoint {
 case (0, 0):
-    println("(0, 0) is at the origin")
+    print("(0, 0) is at the origin")
 case (_, 0):
-    println("(\(somePoint.0), 0) is on the x-axis")
+    print("(\(somePoint.0), 0) is on the x-axis")
 case (0, _):
-    println("(0, \(somePoint.1)) is on the y-axis")
+    print("(0, \(somePoint.1)) is on the y-axis")
 case (-2...2, -2...2):
-    println("(\(somePoint.0), \(somePoint.1)) is inside the box")
+    print("(\(somePoint.0), \(somePoint.1)) is inside the box")
 case let (x, y) where x == y:
-    println("(\(x), \(y)) is on the line x == y"
+    print("(\(x), \(y)) is on the line x == y"
 case let (x, y):
-    println("(\(x), \(y)) is just some arbitrary point")
+    print("(\(x), \(y)) is just some arbitrary point")
 }
 ```
 
@@ -284,6 +284,8 @@ reversed = sorted(names) { $0 > $1 }
 reversed = sorted(names, >)
 ```
 
+* 关键字 `@autoclosure` 能够将一句表达式自动封装成一个闭包，
+
 
 ## 枚举
 
@@ -305,9 +307,9 @@ productBarcode = .QRCode("ABCDEFGHIJKLMNOP")
 
 switch productBarcode {
 case let .UPCA(numberSystem, identifier, check):
-    println("UPC-A with value \(numberSystem), \(identifier), \(check).")
+    print("UPC-A with value \(numberSystem), \(identifier), \(check).")
 case let .QRCode(productCode):
-    println("QR Code with value of \(productCode).")
+    print("QR Code with value of \(productCode).")
 }
 ```
 

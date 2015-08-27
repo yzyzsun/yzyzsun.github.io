@@ -156,7 +156,7 @@ subscript(index: Int) -> Int {
 
 ```swift
 do {
-    try shakeHands(with: "Rino Sashihara")
+    try shakeHandsWith("Rino Sashihara")
 } catch HandshakeError.NoTicket {
     print("No handshake ticket.")
 } catch HandshakeError.NoSuchMember {
@@ -182,17 +182,17 @@ do {
 ```swift
 switch thing {
 case 0 as Int:
-   println("zero as an Int")
+   print("zero as an Int")
 case 0 as Double:
-   println("zero as a Double")
+   print("zero as a Double")
 case let someDouble as Double where someDouble > 0:
-   println("a positive double value of \(someDouble)")
+   print("a positive double value of \(someDouble)")
 case is Double:
-   println("some other double value that I don't want to print")
+   print("some other double value that I don't want to print")
 case let stringConverter as String -> String:
-   println(stringConverter("Michael"))
+   print(stringConverter("Michael"))
 default:
-   println("something else")
+   print("something else")
 }
 ```
 
