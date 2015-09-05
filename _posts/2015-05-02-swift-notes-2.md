@@ -61,7 +61,8 @@ struct AlternativeRect {
 
 ### 类属性（Type Properties）
 
-* 实例属性属于特定的实例，各个实例之间的属性各自独立。而类属性属于类型本身，不管有多少个实例该属性都是唯一的。
+* 实例属性从属于特定的实例，不同实例之间的属性值是各自独立的。而类属性属于类型本身，不管有多少个实例该属性都是唯一的。
+* 与全局变量相似，类属性也是惰性求值的，因此可以用于创建单例。
 * 类属性使用 `static` 关键字，值类型（结构体、枚举）可以定义存储属性和计算属性，但类只能定义计算属性。
 * 在类中，可以使用 `class` 关键字以允许子类重写其类属性。[^static]
 
@@ -260,7 +261,7 @@ extension CollectionType where Generator.Element: TextRepresentable {
 
 ### 自定义运算符
 
-* 首先需要声明一个自定义运算符，格式为 `*fix operator ∙ {}`，其中 `*` 代表 `in` / `pre` / `post`。定义时的语法与重载相同。
+* 首先需要声明一个自定义运算符，格式为 `◯fix operator × {}`，其中 `◯` 代表 `in` / `pre` / `post`。定义时的语法与重载相同。
 * 在声明的花括号中可以为中置运算符定义结合性和优先级，如 `{ associativity left precedence 150 }`。结合性可以是 `left` / `right` / `none`，默认值 `none` 表示它不能和同级运算符写在一起；优先级默认为 `100`，即与三目运算符同级。[^precedence]
 
 [^precedence]: Swift 的默认优先级列表参见 [The Swift Programming Language: Expressions](https://developer.apple.com/library/ios/documentation/Swift/Conceptual/Swift_Programming_Language/Expressions.html#//apple_ref/doc/uid/TP40014097-CH32-ID383)。

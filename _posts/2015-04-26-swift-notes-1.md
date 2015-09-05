@@ -8,7 +8,7 @@ category: Tech
 
 Swift 虽然仍是静态类型语言，但它拥有类型推断和 Playgrounds 交互界面，能够像脚本语言一样快速开发。Swift 增加不少新特性，比如可选类型、元组、泛型、更优雅的闭包、更强大的枚举、值类型的结构体等等；另外它丢掉了 C 语言的包袱，放弃了指针，`switch` 语句不再需要 `break`，条件表达式必须是布尔类型，整型溢出会抛出运行时错误等等。
 
-不过能够看出它本身还是构建在 Objective-C 的基础之上，两者能够很方便地交互和共存，Cocoa / Cocoa Touch 的 API 也是共通的。Swift 的语法目前仍在不断改进，从 [The Swift Programming Language: Document Revision History](https://developer.apple.com/library/ios/documentation/Swift/Conceptual/Swift_Programming_Language/RevisionHistory.html#//apple_ref/doc/uid/TP40014097-CH40-ID459) 可见一斑，我也会根据最新的文档及时更新这三篇学习笔记。（Updated: 2015-08-27）
+不过能够看出它本身还是构建在 Objective-C 的基础之上，两者能够很方便地交互和共存，Cocoa / Cocoa Touch 的 API 也是共通的。Swift 的语法目前仍在不断改进，从 [The Swift Programming Language: Document Revision History](https://developer.apple.com/library/ios/documentation/Swift/Conceptual/Swift_Programming_Language/RevisionHistory.html#//apple_ref/doc/uid/TP40014097-CH40-ID459) 可见一斑，我也会根据最新的文档及时更新这三篇学习笔记。*（Updated: 2015-09-05）*
 
 
 ## 数据类型
@@ -159,10 +159,11 @@ a != nil ? a! : b
 ### 循环语句
 
 * 若不需要知道循环变量的值，可用 `_` 代替变量名。
+* `for i in 0..<10` 中的 `i` 是一个每轮循环开始时自动赋值的常量，因此不需要提前声明。
 * 除了 `for-in` 循环，Swift 仍提供 C 样式 `for` 循环，三个表达式用分号隔开，但不需要加圆括号。`while` 和 `repeat-while`（原为 `do-while`，现 `do` 关键字被用于错误处理）循环仍然存在。
 
 ```swift
-for _ in 0..<10 {
+for i in 0..<10 {
     statements
 }
 for var i = 0; i < 10; ++i {
@@ -173,8 +174,8 @@ for var i = 0; i < 10; ++i {
 ### 条件语句
 
 * `switch` 语句必须是完备的，即在各 `case` 分支不能涵盖所有情况时，最后要有 `default` 分支。如果能匹配多个 `case`，那么只会执行第一个匹配的分支。
-* `switch` 不存在隐式的贯穿，即不需要在 `case` 分支中写 `break` 语句。
-* 每个 `case` 必须包含至少一条语句，所以两个 `case` 连着写会编译错误。这时可以在单个 `case` 中把多个表达式用逗号分开（亦可分行写）。
+* `switch` 不存在隐式的贯穿，即不需要在 `case` 分支结束时写 `break`。
+* 每个 `case` 必须包含至少一条语句，所以两个 `case` 连着写会编译错误。如果是需要一次处理多种情况，可以在单个 `case` 中把多个表达式用逗号分开；如果是什么都不做，要写个 `break`。
 * `case` 的表达式可以是区间或者元组，另可使用 `_` 来匹配所有可能的值。
 * `case` 允许将匹配的值绑定到临时常量或变量（value bindings），以及使用 `where` 来判断额外条件。
 
