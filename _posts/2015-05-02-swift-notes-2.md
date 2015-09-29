@@ -170,6 +170,36 @@ do {
 
 [^error]: 错误处理于 [Swift 2.0](https://developer.apple.com/swift/blog/?id=29) 后被引入。
 
+### 断言
+
+* 在调试中我们常常希望检查某些条件是否成立，但又没有必要为此抛出错误，这时我们可以使用断言。断言只会在 Debug 编译时有效，其签名如下：
+
+```swift
+func assert(@autoclosure condition: () -> Bool,
+            @autoclosure _ message: () -> String = default,
+                              file: StaticString = default,
+                              line: UInt = default)
+```
+
+* 其中 `@autoclosure` 能够将一句表达式自动封装成一个闭包，但此闭包必须是无参的。使用该特性能够延迟表达式（即闭包返回值）的计算。[^autoclosure]
+
+[^autoclosure]: [@autoclosure 和 ?? - Swifter.tips](http://swifter.tips/autoclosure/)
+
+### Fatal Error
+
+* 因为断言在 Release 编译时无效，因此如果遇到致命错误需要立即中止程序，我们可以使用 `fatalError` 函数，其签名如下：
+
+```swift
+@noreturn func fatalError(@autoclosure message: () -> String = default,
+                                          file: StaticString = default,
+                                          line: UInt = default)
+```
+
+* 其中 `@noreturn` 表示调用了这个函数就不再需要返回值，因为这里会直接中止整个程序。
+* 该函数可能的使用场景为：我们在父类中定义了一个抽象方法，需要交由子类去实现，为了防止程序错误调用父类未实现的方法，我们可以在此处使用 `fatalError`。[^fatalerror]
+
+[^fatalerror]: [fatalError - Swifter.tips](http://swifter.tips/fatalerror/)
+
 
 ## 类型转换
 
