@@ -156,5 +156,3 @@ LP64  | 16 | 32 | 64 | 64 | Most Unix and Unix-like 64-bit
 
 > **Link**  
 > [C 语言应试笔记 | 梦断代码](http://blog.zhanghai.me/c-exam-notes/)
-
-<!--顺便祝贺昨天指皇再次登顶〜さしこ最高〜-->

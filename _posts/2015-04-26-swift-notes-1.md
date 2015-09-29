@@ -8,7 +8,7 @@ category: Tech
 
 Swift 虽然仍是静态类型语言，但它拥有类型推断和 Playgrounds 交互界面，能够像脚本语言一样快速开发。Swift 增加不少新特性，比如可选类型、元组、泛型、更优雅的闭包、更强大的枚举、值类型的结构体等等；另外它丢掉了 C 语言的包袱，放弃了指针，`switch` 语句不再需要 `break`，条件表达式必须是布尔类型，整型溢出会抛出运行时错误等等。
 
-不过能够看出它本身还是构建在 Objective-C 的基础之上，两者能够很方便地交互和共存，Cocoa / Cocoa Touch 的 API 也是共通的。Swift 的语法目前仍在不断改进，从 [The Swift Programming Language: Document Revision History](https://developer.apple.com/library/ios/documentation/Swift/Conceptual/Swift_Programming_Language/RevisionHistory.html#//apple_ref/doc/uid/TP40014097-CH40-ID459) 可见一斑，我也会根据最新的文档及时更新这三篇学习笔记。*（Updated: 2015-09-05）*
+不过能够看出它本身还是构建在 Objective-C 的基础之上，两者能够很方便地交互和共存，Cocoa / Cocoa Touch 的 API 也是共通的。Swift 的语法目前仍在不断改进，从 [The Swift Programming Language: Document Revision History](https://developer.apple.com/library/ios/documentation/Swift/Conceptual/Swift_Programming_Language/RevisionHistory.html#//apple_ref/doc/uid/TP40014097-CH40-ID459) 可见一斑，我也会根据最新的文档及时更新这三篇学习笔记。*（Updated: 2015-09-30）*
 
 
 ## 数据类型
@@ -236,18 +236,20 @@ if #available(OSX 10.11, iOS 9, *) {
 ### 参数名称
 
 ```swift
-func join(string s1:String, toString s2: String, joiner: String = " ") -> String {
+func join(s1:String, to s2: String, joiner: String = " ") -> String {
     return s1 + joiner + s2
 }
-join(string: "hello", toString: "world", joiner: ", ")
+join("hello", to: "world", joiner: ", ")
+join("hello", to: "world")
 ```
 
-* 上述代码中的 `s1` 等为**局部参数名**（local parameter name），在函数内部使用；`string` 等为**外部参数名**（external parameter name），在调用函数时使用，以加强可读性，亦可以不写（但方法对此的规定与函数不同）。
-* 当两者相同时，可只写一次并加上 `#` 前缀。
-* 当函数调用时 `joiner` 的值未被指定，函数会使用默认值。当未给带默认值的参数提供外部参数名时，局部名会自动作为外部名。
+* 上述代码中的 `s1` / `s2` 为**局部参数名**（local parameter name），在函数内部使用；`to` 为**外部参数名**（external parameter name），在调用函数时使用，以加强可读性。
+* 除第一个参数外，若不指定外部参数名，Swift 默认为后续参数添加与局部名相同的外部名，也可以使用 `_` 忽略外部参数名。函数参数的命名方法与方法相同。[^parameter]
 * 在参数类型后加入 `...` 可定义**可变参数**（variadic parameters），调用时可以传入不确定数量的参数，在函数内这将被当做这个类型的一个数组。可变参数可以被声明在参数表的任何位置，但至多只能有一个。
 * 函数参数默认是常量，修改参数值会导致编译错误。若要将其当做可修改的副本使用，可在参数名前加上关键字 `var`。
 * 如果需要修改参数在函数外的实际值，可以定义**输入输出参数**（in-out Parameters）。首先需要在参数前加关键字 `inout`，其次调用时传入的变量前要加 `&`。
+
+[^parameter]: 在 Swift 2.0 以前，函数有着与方法不同的外部参数名规则，现在已与其规则统一，并且 `#` 符号已被移除。
 
 ### 函数类型
 
@@ -265,27 +267,25 @@ join(string: "hello", toString: "world", joiner: ", ")
 
 ```swift
 // Closure expression syntax
-reversed = sorted(names, { (s1: String, s2: String) -> Bool in
+reversed = names.sort({ (s1: String, s2: String) -> Bool in
     return s1 > s2
 })
 
 // Inferring type from context
-reversed = sorted(names, { s1, s2 in return s1 > s2 })
+reversed = names.sort( { s1, s2 in return s1 > s2 } )
 
 // Implicit return from single-expression closures
-reversed = sorted(names, { s1, s2 in s1 > s2 })
+reversed = names.sort( { s1, s2 in s1 > s2 } )
 
 // Shorthand argument names
-reversed = sorted(names, { $0 > $1 })
+reversed = names.sort( { $0 > $1 } )
 
 // Trailing closures
-reversed = sorted(names) { $0 > $1 }
+reversed = names.sort { $0 > $1 }
 
 //Operator functions
-reversed = sorted(names, >)
+reversed = names.sort(>)
 ```
-
-* 关键字 `@autoclosure` 能够将一句表达式自动封装成一个闭包，
 
 
 ## 枚举
