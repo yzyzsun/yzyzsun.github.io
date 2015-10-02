@@ -108,13 +108,13 @@ a != nil ? a! : b
 
 - 在字符串字面量中，**Unicode 标量值**（Unicode scalar value）可以表示为 `\u{n}`，其中 `n` 可以为 1-8 位的十六进制数。
 - 目前 Unicode 编码共 21 位，标量值的范围包括：
-  * **基本多文种平面**（Basic Multilingual Plane, Plane 0）：[`U+0000`, `U+D7FF`] ∪ [`U+E000`, `U+FFFF`]；
-  * **多文种补充平面**（Supplementary Multilingual Plane, Plane 1）：[`U+10000`, `U+1FFFF`]；
-  * **表意文字补充平面**（Supplementary Ideographic Plane, Plane 2）：[`U+20000`, `U+2FFFF`]；
-  * 尚未使用的第三至十三平面：[`U+30000`, `U+DFFFF`]；
-  * **特别用途补充平面**（Supplementary Special-purpose Plane, Plane 14）：[`U+E0000`, `U+EFFFF`]；
-  * **私人使用区**（Private Use Area, Plane 15-16）：[`U+F0000`, `U+10FFFF`]；
-  * 但不包括 UTF-16 **代理对**（surrogate pair）的码位：[`U+D800`, `U+DFFF`]。
+    - **基本多文种平面**（Basic Multilingual Plane, Plane 0）：[`U+0000`, `U+D7FF`] ∪ [`U+E000`, `U+FFFF`]；
+    - **多文种补充平面**（Supplementary Multilingual Plane, Plane 1）：[`U+10000`, `U+1FFFF`]；
+    - **表意文字补充平面**（Supplementary Ideographic Plane, Plane 2）：[`U+20000`, `U+2FFFF`]；
+    - 尚未使用的第三至十三平面：[`U+30000`, `U+DFFFF`]；
+    - **特别用途补充平面**（Supplementary Special-purpose Plane, Plane 14）：[`U+E0000`, `U+EFFFF`]；
+    - **私人使用区**（Private Use Area, Plane 15-16）：[`U+F0000`, `U+10FFFF`]；
+    - 但不包括 UTF-16 **代理对**（surrogate pair）的码位：[`U+D800`, `U+DFFF`]。
 - 分别可以通过字符串的 `utf8` / `utf16` / `unicodeScalars` 属性来访问其 UTF-8 / UTF-16 / Unicode Scalars 表示。
 - 调用全局函数 `count()` 可以获得字符串中的字符数，但需注意 Swift 的字符类型表示一个**扩展字形集群**（extended grapheme cluster），例如一对 Unicode 标量 `"\u{65}\u{301}"` 与单个 Unicode 标量 `\u{E9}` 均表示单个字符 é。
 - 而 NSString 其实是用 UTF-16 编码的码元（code units）组成的数组，相应地 `length` 属性的值是其包含的码元个数，而不是字符个数。[^unicode] 因此在 Swift 的 String 类型中这个属性名为 `utf16Count`。[^collectiontype]
