@@ -14,10 +14,10 @@ category: Diary
 
 Jekyll 的官方文档写得非常清楚，有时间的话完全可以从零开始自己设计，而我是直接 fork 了 [Jekyll Now](https://github.com/barryclark/jekyll-now) 项目~~（主要是因为懒）~~。网上的相关资料非常多，我觉得以下几个很有帮助：
 
-* [GitHub Pages](https://pages.github.com)
-* [Jekyll • Simple, blog-aware, static sites](http://jekyllrb.com)
-* [Markdown 语法说明](http://wowubuntu.com/markdown/)
-* [GitHub Flavored Markdown](https://help.github.com/articles/github-flavored-markdown/)
-* [使用 GitHub, Jekyll 打造自己的免费独立博客 - on_1y - 博客频道 - CSDN.NET](http://blog.csdn.net/on_1y/article/details/19259435)
+- [GitHub Pages](https://pages.github.com)
+- [Jekyll • Simple, blog-aware, static sites](http://jekyllrb.com)
+- [Markdown 语法说明](http://wowubuntu.com/markdown/)
+- [GitHub Flavored Markdown](https://help.github.com/articles/github-flavored-markdown/)
+- [使用 GitHub, Jekyll 打造自己的免费独立博客 - on_1y - 博客频道 - CSDN.NET](http://blog.csdn.net/on_1y/article/details/19259435)
 
 至此便已经可以尽情享受 Jekyll 博客的乐趣了。
