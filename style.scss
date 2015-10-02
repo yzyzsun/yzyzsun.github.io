@@ -103,10 +103,6 @@ ul ul, ol ul {
   list-style-type: circle;
 }
 
-li {
-  margin-bottom: .5em;
-}
-
 em, i {
   font-style: italic;
 }
@@ -329,6 +325,10 @@ nav {
 //    text-transform: uppercase;
 //    font-size: 15px;
     font-variant: small-caps;
+  }
+  
+  li {
+    margin-top: .5em;
   }
 }
 
