@@ -248,7 +248,7 @@ default:
 * **委托**（Delegation）是一种设计模式，它允许类或结构体将一些需要负责的功能委托给其他类型的实例，可以定义协议来封装这些需要被委托的方法。
 * 可以在协议的继承列表前面加上 `class,` 来定义**类专属协议**，当试图让结构体或枚举适配该协议会导致编译错误。
 * 可以使用 `protocol<SomeProtocol, AnotherProtocol>` 来将多个协议合成为一个临时协议。
-* 可以在声明前加上 `optional` 以标识这是一个**可选协议要求**，该协议类型的实例调用时这个可选要求时，可以在其名称后加 `?` 检查它是否被实现，如 `optionalMethod?(args)`。[^protocol] 可选协议要求只能用于被 `@objc` 修饰的协议，且这样的协议只能被类遵守。
+* 可以在声明前加上 `optional` 以标识这是一个**可选协议要求**，若用于方法则此时方法本身是可选类型，即 `((Type) -> Type)?`；调用时这个可选方法时，可以在其名称后加 `?` 检查它是否被实现，如 `optionalMethod?(args)`。可选协议要求只能用于被 `@objc` 修饰的协议，且这样的协议只能被类遵守。
 * 通过**协议扩展**不仅能够添加协议的一般功能，还可以提供协议的默认实现，并可使用 `where` 关键字对扩展进行约束。[^extension]
 
 ```swift
@@ -259,7 +259,6 @@ extension CollectionType where Generator.Element: TextRepresentable {
 }
 ```
 
-[^protocol]: [文档原文](https://developer.apple.com/library/ios/documentation/Swift/Conceptual/Swift_Programming_Language/Protocols.html#//apple_ref/doc/uid/TP40014097-CH25-ID267)「Optional property requirements, and optional method requirements that return a value, will always return an optional value of the appropriate type when they are accessed or called, to reflect the fact that the optional requirement may not have been implemented.」疑有误，可选方法被调用后并不会返回一个可选类型，而是方法其本身是可选的，即非 `(Type) -> Type?` 而是 `((Type) -> Type)?`。
 [^extension]: 协议扩展于 [Swift 2.0](https://developer.apple.com/swift/blog/?id=29) 后被引入。
 
 
