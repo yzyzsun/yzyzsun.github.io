@@ -33,7 +33,7 @@ Sublime Text 作为一个轻量级的代码编辑器，对于单文件编程非�
     [
         {
             "name": "Run",
-            "shell_cmd": "g++ -o \"${file_path}/${file_base_name}\" \"${file}\" && open -a Terminal.app \"${file_path}/${file_base_name}\""
+            "shell_cmd": "g++ -o \"${file_path}/${file_base_name}\" \"${file}\" && open \"${file_path}/${file_base_name}\""
         }
     ]
 }
@@ -72,7 +72,7 @@ Python 也存在上述的内置控制台无法输入的问题，这时有比自�
 
 SublimeREPL 当然也支持 Ruby，不过非常坑爹的是，它不提供运行当前文件的功能，只提供交互式界面，而在高版本的 Pry 下默认的这个交互式界面还没法用。
 
-还好 GitHub 上已经有人提出了修复的方法：[Fix ruby Pry helper for Pry version >= 0.10.0](https://github.com/wuub/SublimeREPL/pull/372)。至于运行单个文件的功能，还是需要自己添加。打开文件 `~/Library/Application Support/Sublime Text 3/Packages/SublimeREPL/config/Ruby/Main.sublime-menu`，在与 Ruby - IRB (deprecated) 同级的位置加入以下代码：
+还好 GitHub 上已经有人提出了修复的方法：[Fix ruby Pry helper for Pry version >= 0.10.0](https://github.com/wuub/SublimeREPL/pull/372)，可以照着这个 Pull request 修改 `config/Ruby/pry_repl.rb`。至于运行单个文件的功能，还是需要自己添加。打开文件 `~/Library/Application Support/Sublime Text 3/Packages/SublimeREPL/config/Ruby/Main.sublime-menu`，在与 Ruby - IRB (deprecated) 同级的位置加入以下代码：
 
 ```json
 {
@@ -100,7 +100,7 @@ SublimeREPL 当然也支持 Ruby，不过非常坑爹的是，它不提供运行
 
 ## HTML
 
-若是做 Web 开发，当然有 [Brackets](http://brackets.io)、[Coda](http://www.panic.com/coda/)、[Espresso](http://www.macrabbit.com/espresso/)、[WebStorm](http://www.jetbrains.com/webstorm/) 这些更专业的选择，不过偶尔也会有用 Sublime Text 写 HTML / CSS 的时候。ST 本身支持 HTML 代码着色、补全结束标签，但不具备预览网页的功能，我们仍可以照 C / C++ 的办法自定义 Build System。如果这样写 `HTML.sublime-build`：
+若是做 Web 开发，当然有 [Brackets](http://brackets.io)、[Coda](http://www.panic.com/coda/)、[Espresso](http://www.macrabbit.com/espresso/)、[WebStorm](http://www.jetbrains.com/webstorm/) 这些更专业的选择，不过偶尔也会有用 Sublime Text 写静态网页的时候。ST 本身支持 HTML 代码着色、补全结束标签，但不具备预览网页的功能，我们仍可以照 C / C++ 的办法自定义 Build System。如果这样写 `HTML.sublime-build`：
 
 ```json
 {
