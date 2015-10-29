@@ -18,12 +18,11 @@ html {
 }
 
 body {
-//	background: $white;
-//  font: 18px/1.4 $helvetica;
   color: $darkGray;
   background-color: $lighterGray;
   line-height: 1.5;
-  font-family: -apple-system, "Helvetica Neue", Arial, "PingFang SC", "Hiragino Sans GB", "Microsoft Yahei", sans-serif;
+  font-family: -apple-system, sans-serif;
+//  font-family: -apple-system, "Helvetica Neue", Helvetica, Arial, "PingFang SC", "Hiragino Sans GB", "Source Han Sans CN", "Microsoft YaHei", sans-serif;
 }
 
 .container {
@@ -34,7 +33,6 @@ body {
 }
 
 h1, h2, h3, h4, h5, h6 {
-//  font-family: $helveticaNeue;
   color: $darkerGray;
   font-weight: bold;
 
@@ -50,9 +48,6 @@ h1, h2, h3, h4, h5, h6 {
 h1 {
   font-size: 30px;
   font-weight: 300;
-//  a {
-//    color: inherit;
-//  }
 }
 
 h2 {  
@@ -159,7 +154,7 @@ table {
 }
 
 .date {
-  font-family: "Helvetica Neue";
+  font-family: "Helvetica Neue", sans-serif;
   margin-right: 20px;
   color: gray;
 }
@@ -242,7 +237,6 @@ table {
   margin: 0;
   color: $darkGray;
   cursor: pointer;
-//  font-family: $helveticaNeue;
   font-weight: 300;
   font-size: 28px;
   letter-spacing: 1px;
@@ -261,7 +255,6 @@ table {
 nav {
   float: right;
   margin-top: 23px; // @TODO: Vertically middle align
-//  font-family: $helveticaNeue;
   font-size: 18px;
 
   @include mobile {
@@ -313,8 +306,6 @@ nav {
     border-left: 2px solid $gray;
     padding: 0.1em 1em;
     color: $gray;
-//    font-size: 22px;
-//    font-style: italic;
   }
 
   .comments {
@@ -322,8 +313,6 @@ nav {
   }
 
   .read-more {
-//    text-transform: uppercase;
-//    font-size: 15px;
     font-variant: small-caps;
   }
   
