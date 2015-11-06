@@ -36,7 +36,7 @@ let color = UIColor(red: 0.5, green: 0.0, blue: 0.5, alpha: 1.0)
 - Objective-C 中的 `id` 可以指向任何类型的对象，这相当于 Swift 中的 `AnyObject` 协议类型。
 - `AnyObject` 允许在不进行类型转换的情况下调用任何 Objective-C 的方法和属性，这个行为类似于隐式解析可选类型。因此与 Objective-C 不同，若方法或属性不存在将触发运行时错误，这可以使用可选链来避免。
 
-### 为空性和可选类型
+### 可空性和可选类型
 
 - 在 Objective-C 中以 `(nonnull)` 标注的类型声明将被引入为 Swift 中的**非可选类型**。
 - 以 `(nullable)` 标注的类型声明将被引入为**可选类型**。
