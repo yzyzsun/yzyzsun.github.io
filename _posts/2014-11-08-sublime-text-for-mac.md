@@ -20,7 +20,7 @@ Sublime Text 作为一个轻量级的代码编辑器，对于单文件编程非�
 
 ![](/images/sublime-text-for-mac-00.png)
 
- 解决这两个问题需要创建自定义 Build System，设置其在运行程序时不使用内置控制台，而是直接调用终端运行。我们可以修改内置的 Package，也可以直接点击 Tools > Build System > New Build System... 新建自己的配置文件。C++ 的包位于 `/Applications/Sublime Text.app/Contents/MacOS/Packages/C++.sublime-package`，它可以作为归档文件打开，修改其中的 `C++.sublime-build` 即可。修改后的内容为：
+解决这两个问题需要创建自定义 Build System，设置其在运行程序时不使用内置控制台，而是直接调用终端运行。我们可以直接点击 Tools > Build System > New Build System... 新建自己的配置文件，也可以去修改 Sublime Text 内置的 Package。C++ 的包位于 `/Applications/Sublime Text.app/Contents/MacOS/Packages/C++.sublime-package`，它可以作为归档文件打开，修改其中的 `C++.sublime-build` 即可。修改后的内容为：
 
 ```json
 {
@@ -43,9 +43,9 @@ Sublime Text 作为一个轻量级的代码编辑器，对于单文件编程非�
 
 ## Python
 
-Python 也存在上述的内置控制台无法输入的问题，这时有比自己重写 Build System 更方便的解决方案。[GitHub](https://github.com/wuub/SublimeREPL) 上有一个项目 **SublimeREPL**，支持在 Sublime 中运行交互式开发环境（即 REPL）。
+Python 也存在上述的内置控制台无法输入的问题，这时有比自己重写 Build System 更方便的解决方案。[GitHub](https://github.com/wuub/SublimeREPL) 上有一个项目 **SublimeREPL**，支持在 Sublime 中运行交互式开发环境（即 REPL, Read-Eval-Print Loop）。
 
-首先需要安装 Package Control，这是 Sublime Text 的插件包管理器，安装方法见 [Installation - Package Control](https://sublime.wbond.net/installation)。接着按 ⇧⌘P 调出 Command Palette，键入「install」打开 Package Control: Install Package，找到 SublimeREPL 即可安装。
+首先需要安装 Package Control，这是 Sublime Text 的插件包管理器，安装方法见 [Installation - Package Control](https://packagecontrol.io/installation)。接着按 ⇧⌘P 调出 Command Palette，键入「install」打开 Package Control: Install Package，找到 SublimeREPL 即可安装。
 
 ![](/images/sublime-text-for-mac-01.png)
 
@@ -70,9 +70,9 @@ Python 也存在上述的内置控制台无法输入的问题，这时有比自�
 
 ## Ruby
 
-SublimeREPL 当然也支持 Ruby，不过非常坑爹的是，它不提供运行当前文件的功能，只提供交互式界面，而在高版本的 Pry 下默认的这个交互式界面还没法用。
+SublimeREPL 当然也支持 Ruby，不过非常坑爹的是，它不提供运行当前文件的功能，只提供交互式界面，而在高版本的 Pry 下默认的这个交互式界面还没法用。还好 GitHub 上已经有人提出了修复的方法：[Fix ruby Pry helper for Pry version >= 0.10.0](https://github.com/wuub/SublimeREPL/pull/372)，可以照着这个 Pull request 修改 `config/Ruby/pry_repl.rb`。
 
-还好 GitHub 上已经有人提出了修复的方法：[Fix ruby Pry helper for Pry version >= 0.10.0](https://github.com/wuub/SublimeREPL/pull/372)，可以照着这个 Pull request 修改 `config/Ruby/pry_repl.rb`。至于运行单个文件的功能，还是需要自己添加。打开文件 `~/Library/Application Support/Sublime Text 3/Packages/SublimeREPL/config/Ruby/Main.sublime-menu`，在与 Ruby - IRB (deprecated) 同级的位置加入以下代码：
+至于运行单个文件的功能，还是需要自己添加。打开文件 `~/Library/Application Support/Sublime Text 3/Packages/SublimeREPL/config/Ruby/Main.sublime-menu`，在与 Ruby - IRB (deprecated) 同级的位置加入以下代码：
 
 ```json
 {
@@ -100,7 +100,7 @@ SublimeREPL 当然也支持 Ruby，不过非常坑爹的是，它不提供运行
 
 ## HTML
 
-若是做 Web 开发，当然有 [Brackets](http://brackets.io)、[Coda](http://www.panic.com/coda/)、[Espresso](http://www.macrabbit.com/espresso/)、[WebStorm](http://www.jetbrains.com/webstorm/) 这些更专业的选择，不过偶尔也会有用 Sublime Text 写静态网页的时候。ST 本身支持 HTML 代码着色、补全结束标签，但不具备预览网页的功能，我们仍可以照 C / C++ 的办法自定义 Build System。如果这样写 `HTML.sublime-build`：
+若是做前端开发，当然有 [WebStorm](http://www.jetbrains.com/webstorm/)、[Brackets](http://brackets.io)、[Coda](http://www.panic.com/coda/) 这些更专业的选择，不过也会有用 Sublime Text 写静态网页的时候。ST 本身支持 HTML 代码着色、补全结束标签，通过 [Emmet](https://packagecontrol.io/packages/Emmet) 等插件也能显著提高生产力，但它不具备预览网页的功能。同样我们仍可以照 C / C++ 的办法自定义 Build System，如果这样写 `HTML.sublime-build`：
 
 ```json
 {
@@ -117,7 +117,7 @@ SublimeREPL 当然也支持 Ruby，不过非常坑爹的是，它不提供运行
 }
 ```
 
-按下 ⌘B 和 ⇧⌘B 会分别在 Safari 和 Chrome 中打开当前 HTML 文件，这样便可以快捷地预览设计中的页面。
+按下 ⌘B 和 ⇧⌘B 会分别在 Safari 和 Chrome 中打开当前 HTML，这样便可以快捷地预览设计中的页面。
 
 
 以上便是对 Sublime Text 配置的个人经验，希望对大家有所帮助。
