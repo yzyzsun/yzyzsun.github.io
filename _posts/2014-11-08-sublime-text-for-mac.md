@@ -8,7 +8,7 @@ Mac OS X 从不缺乏优秀的代码编辑器，从 Vim 和 Emacs 到 Xcode、In
 
 Sublime Text 作为一个轻量级的代码编辑器，对于单文件编程非常友好，原生支持不少主流语言的编译运行。它吸收了前辈 TextMate 的优点，并在可扩展性方面更胜一筹。通过各种插件包，我们可以定制包括主题、配色方案、编译选项在内的方方面面。
 
-即便如此，Sublime Text 还是有一些不尽如人意的地方需要进一步配置，以下便是 C/C++、Python、Ruby、HTML 的几处配置技巧。
+即便如此，Sublime Text 还是有一些不尽如人意的地方需要进一步配置，以下便是 C / C++、Python、Ruby、HTML 的几处配置技巧。
 
 测试环境：Sublime Text 3 Build 3065 (OS X Yosemite 10.10)
 
@@ -20,7 +20,7 @@ Sublime Text 作为一个轻量级的代码编辑器，对于单文件编程非�
 
 ![](/images/sublime-text-for-mac-00.png)
 
-解决这两个问题需要创建自定义 Build System，设置其在运行程序时不使用内置控制台，而是直接调用终端运行。我们可以直接点击 Tools > Build System > New Build System... 新建自己的配置文件，也可以去修改 Sublime Text 内置的 Package。C++ 的包位于 `/Applications/Sublime Text.app/Contents/MacOS/Packages/C++.sublime-package`，它可以作为归档文件打开，修改其中的 `C++.sublime-build` 即可。修改后的内容为：
+解决这两个问题需要创建自定义 Build System，设置其在运行程序时不使用内置控制台，而是直接调用终端运行。我们可以点击 Tools > Build System > New Build System... 新建自己的配置文件，以后选择自己的这个 Build System 来编译；也可以去修改 Sublime Text 内置的 Package。C++ 的包位于 `/Applications/Sublime Text.app/Contents/MacOS/Packages/C++.sublime-package`，它可以作为归档文件打开，修改其中的 `C++.sublime-build` 即可。修改后的内容为：
 
 ```json
 {
@@ -39,7 +39,7 @@ Sublime Text 作为一个轻量级的代码编辑器，对于单文件编程非�
 }
 ```
 
-实际上这就是一个 JSON 文件，相关资料可以参阅 [Sublime Text Unofficial Documentation](http://docs.sublimetext.info/en/latest/reference/build_systems.html)。相应地，C 的配置文件可以新建一个 `C.sublime-build`，将原先所有的 `g++` 替换为 `gcc` 即可。 
+实际上这就是一个 JSON，相关资料可以参阅 [Sublime Text Unofficial Documentation](http://docs.sublimetext.info/en/latest/reference/build_systems.html)。相应地，C 的配置文件可以新建一个 `C.sublime-build`，将原先所有的 `g++` 替换为 `gcc` 即可。 
 
 ## Python
 
@@ -70,7 +70,7 @@ Python 也存在上述的内置控制台无法输入的问题，这时有比自�
 
 ## Ruby
 
-SublimeREPL 当然也支持 Ruby，不过非常坑爹的是，它不提供运行当前文件的功能，只提供交互式界面，而在高版本的 Pry 下默认的这个交互式界面还没法用。还好 GitHub 上已经有人提出了修复的方法：[Fix ruby Pry helper for Pry version >= 0.10.0](https://github.com/wuub/SublimeREPL/pull/372)，可以照着这个 Pull request 修改 `config/Ruby/pry_repl.rb`。
+SublimeREPL 当然也支持 Ruby，不过非常坑的是，它不提供运行当前文件的功能，只提供交互式界面。这个交互式界面默认调用的是比 IRB 更优雅的 [Pry](http://pryrepl.org)，然而它对 Pry 的新版本有一些兼容性问题。还好 GitHub 上已经有人提出了修复的方法：[Fix ruby Pry helper for Pry version >= 0.10.0](https://github.com/wuub/SublimeREPL/pull/372)，可以照着这个 pull request 修改 `~/Library/Application Support/Sublime Text 3/Packages/SublimeREPL/config/Ruby/pry_repl.rb`。
 
 至于运行单个文件的功能，还是需要自己添加。打开文件 `~/Library/Application Support/Sublime Text 3/Packages/SublimeREPL/config/Ruby/Main.sublime-menu`，在与 Ruby - IRB (deprecated) 同级的位置加入以下代码：
 
