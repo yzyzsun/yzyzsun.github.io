@@ -104,12 +104,15 @@ signals:
 在新线程中执行计算任务时，我们会发现这时不能再访问 UI 了，这是因为 QWidget 及其子类都不是**可重入的**（reentrant），只能通过主线程访问。这样的设计虽然对开发者来说有些麻烦，但避免了可能导致的死锁或是复杂的 UI 同步。总之若要更新 UI 或是做其他交互，我们需要进行线程间通信。一种方法是调用静态函数 `QMetaObject::invokeMethod()`：
 
 ```c++
-QMetaObject::invokeMethod(obj, "methodName", Qt::QueuedConnection, Q_RETURN_ARG(QString, retVal), Q_ARG(int, 48))
+QMetaObject::invokeMethod(obj, "methodName",
+                          Qt::QueuedConnection,
+                          Q_RETURN_ARG(QString, retVal),
+                          Q_ARG(int, 48));
 ```
 
 其中 `Qt::QueuedConnection` 意味着向对象所在进程发送事件，进入目标线程的事件循环以待执行。另一种方法则更加简单——使用跨线程的信号槽，`QObject::connect()` 的最后一个参数可以指定连接类型，默认值 `Qt::AutoConnection` 表示如果目标线程就是当前进程则用 `Qt::DirectConnection`，否则采用 `Qt::QueuedConnection` 连接。
 
-另外值得注意的是，如果信号槽的参数类型不是内建数据类型、不属于 QVariant，会抛出错误「QObject::connect: Cannot queue arguments of type '...'」，即该类型的参数无法进入信号队列。这时需要我们在类的声明之后调用宏 `Q_DECLARE_METATYPE(MyClass)`，当然前提是该类提供了公有的构造函数、拷贝构造函数和析构函数，并且要在跨线程通信前使用函数 `qRegisterMetaType<MyClass>("MyClass");` 来注册这个类型。
+另外值得注意的是，如果信号槽的参数类型不是内建数据类型、不属于 QVariant，会抛出错误「QObject::connect: Cannot queue arguments of type '...'」，即该类型的参数无法进入信号队列。这时需要我们在类的声明之后调用宏 `Q_DECLARE_METATYPE(MyClass)`，当然前提是该类提供了公有的构造函数、拷贝构造函数和析构函数，并且要在跨线程通信前使用函数 `qRegisterMetaType<MyClass>("MyClass")` 来注册这个类型。
 
 > 参考文档：
 > 
