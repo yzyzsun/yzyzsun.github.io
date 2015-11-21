@@ -131,11 +131,11 @@ if (x > 0 && y > 0)
 else
     assert(y > x);
 
-#define assert(e) if (!e) assert_error(__FILE__, __LINE__)
+#define assert(e) if (!(e)) assert_error(__FILE__, __LINE__)
 // 如果这样定义，会出现 if-else 的嵌套问题
-#define assert(e) { if (!e) assert_error(__FILE__, __LINE__); }
+#define assert(e) { if (!(e)) assert_error(__FILE__, __LINE__); }
 // 如果这样定义，花括号后会多出一个分号
-#define assert(e) do { if (!e) assert_error(__FILE__, __LINE__); } while (0)
+#define assert(e) do { if (!(e)) assert_error(__FILE__, __LINE__); } while (0)
 // 这是一个可行的定义
 #define assert(e) ((e) || assert_error(__FILE__, __LINE__))
 // 这是另一个可行的定义
