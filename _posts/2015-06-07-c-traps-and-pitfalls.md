@@ -135,8 +135,10 @@ else
 // 如果这样定义，会出现 if-else 的嵌套问题
 #define assert(e) { if (!e) assert_error(__FILE__, __LINE__); }
 // 如果这样定义，花括号后会多出一个分号
-#define assert(e) ((e) || assert_error(__FILE__, __LINE__))
+#define assert(e) do { if (!e) assert_error(__FILE__, __LINE__); } while (0)
 // 这是一个可行的定义
+#define assert(e) ((e) || assert_error(__FILE__, __LINE__))
+// 这是另一个可行的定义
 ```
 
 - 尽量不要用宏代替 `typedef`，如果 `#define IP int *`，则 `IP p1, p2;` 中的 `p2` 将是整型而不是整型指针。
