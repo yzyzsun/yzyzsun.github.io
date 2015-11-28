@@ -57,7 +57,7 @@ struct AlternativeRect {
 ### 全局变量和局部变量
 
 - 计算属性和属性观察器的语法也可用于全部和局部变量。
-- 全局的常量和变量是**惰性求值**的，跟延迟存储属性相似；而局部变量是**及早求值**的。
+- 全局的常量和变量是**惰性求值**（lazy evaluation）的，跟延迟存储属性相似；而局部变量是**及早求值**（eager evaluation）的。
 
 ### 类属性（Type Properties）
 
@@ -205,8 +205,8 @@ func assert(@autoclosure condition: () -> Bool,
 
 - 在用实例初始化集合类型时，将自动推断出其类型为它们共同的父类。
 - 用类型检查操作符 `is` 可以检查是否为某类型（或其父类）的实例，抑或是否遵循某协议。
-- 使用 `as?` 或者 `as!` 可以尝试将实例向下转型（downcast）为原类型的子类。
-- `as` 亦可用于 Swift 与 Objective-C 桥接类型之间的相互转换，如 `String` 与 `NSString`。[^coercion]本质上它们就是相同的类型，因此这样的类型转换是绝对安全的，`as` 也不必加感叹号。
+- 使用 `as?` 或者 `as!` 可以尝试将实例**向下转型**（downcast）为原类型的子类。
+- `as` 亦可用于 Swift 与 Objective-C 桥接类型之间的相互转换，如 `String` 与 `NSString`。[^coercion] 本质上它们就是相同的类型，因此这样的类型转换是绝对安全的，`as` 也不必加感叹号。
 - `AnyObject` 可以表示任何类（class）的实例，`Any` 可以表示任何类型（包括函数类型）的实例。
 - 可以在 `switch` 语句中使用 `is` 和 `as` 来判断 `AnyObject` 或 `Any` 类型的值。
 
@@ -227,7 +227,7 @@ default:
 }
 ```
 
-[^coercion]: 这里的类型转换与形如 `String(str)` 的强制转换（coercion）不同，后者是依赖于构造器生成了一个新的对象，而前者只是向编译器重新描述了原对象的类型。
+[^coercion]: 这里的类型转换（casting）与形如 `String(str)` 的强制转换（coercion）不同，后者是依赖于构造器生成了一个新的对象，而前者只是向编译器重新描述了原对象的类型。
 
 ## 嵌套类型
 
