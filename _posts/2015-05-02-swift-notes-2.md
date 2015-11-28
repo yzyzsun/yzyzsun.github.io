@@ -142,10 +142,10 @@ subscript(index: Int) -> Int {
 
 ## 自动引用计数
 
-- 将实例赋值给属性、常量或者变量时会建立一个**强引用**，强引用会阻止 ARC 释放实例，有时会导致强引用循环。
+- 将类的实例赋值给属性、常量或者变量时会建立一个**强引用**，强引用会阻止 ARC 释放实例，有时会导致强引用循环。
 - 为解决强引用循环，可以使用关键字 `weak` 声明一个**弱引用**，或使用 `unowned` 声明**无主引用**，它们都不会阻止 ARC 释放实例。
 - 弱引用必须是一个可选类型的变量，当其引用的实例被销毁后会被赋值为 `nil`。而无主引用的值不会被改变，但在实例被销毁后访问它会触发运行时错误。
-- 为解决闭包和类实例之间的强引用循环，可以定义闭包的捕获列表。捕获列表形如 `[unowned self, weak instance]`，放置在闭包开始处。
+- 为解决闭包和实例之间的强引用循环，可以定义闭包的捕获列表。捕获列表形如 `[unowned self, weak instance]`，放在闭包的参数表前面。
 
 ## 错误处理
 
@@ -203,9 +203,10 @@ func assert(@autoclosure condition: () -> Bool,
 
 ## 类型转换
 
-- 在用类实例初始化集合类型时，将自动推断出其类型为它们共同的父类。
+- 在用实例初始化集合类型时，将自动推断出其类型为它们共同的父类。
 - 用类型检查操作符 `is` 可以检查是否为某类型（或其父类）的实例，抑或是否遵循某协议。
 - 使用 `as?` 或者 `as!` 可以尝试将实例向下转型（downcast）为原类型的子类。
+- `as` 亦可用于 Swift 与 Objective-C 桥接类型之间的相互转换，如 `String` 与 `NSString`。[^coercion]本质上它们就是相同的类型，因此这样的类型转换是绝对安全的，`as` 也不必加感叹号。
 - `AnyObject` 可以表示任何类（class）的实例，`Any` 可以表示任何类型（包括函数类型）的实例。
 - 可以在 `switch` 语句中使用 `is` 和 `as` 来判断 `AnyObject` 或 `Any` 类型的值。
 
@@ -226,6 +227,7 @@ default:
 }
 ```
 
+[^coercion]: 这里的类型转换与形如 `String(str)` 的强制转换（coercion）不同，后者是依赖于构造器生成了一个新的对象，而前者只是向编译器重新描述了原对象的类型。
 
 ## 嵌套类型
 
@@ -289,7 +291,7 @@ extension CollectionType where Generator.Element: TextRepresentable {
 
 ### 自定义运算符
 
-- 首先需要声明一个自定义运算符，格式为 `◯fix operator × {}`，其中 `◯` 代表 `in` / `pre` / `post`。定义时的语法与重载相同。
+- 首先需要声明一个自定义运算符，格式为 `(in|pre|post)fix operator × {}`，定义时的语法与重载相同。
 - 在声明的花括号中可以为中置运算符定义结合性和优先级，如 `{ associativity left precedence 150 }`。结合性可以是 `left` / `right` / `none`，默认值 `none` 表示它不能和同级运算符写在一起；优先级默认为 `100`，即与三目运算符同级。[^precedence]
 
 [^precedence]: Swift 的默认优先级列表参见 [The Swift Programming Language: Expressions](https://developer.apple.com/library/ios/documentation/Swift/Conceptual/Swift_Programming_Language/Expressions.html#//apple_ref/doc/uid/TP40014097-CH32-ID383)。
