@@ -102,7 +102,7 @@ a != nil ? a! : b
 - 与 C 语言不同，Swift 无论字符串还是字符都使用双引号 `"` 而不用单引号 `'`。
 - Swift 的 String 是**值类型**，当其进行赋值操作或在函数中传递时会进行值拷贝。
 - 字符串之间可以通过 `+` 连接，将字符连接到字符串尾部可以使用 `append()` 方法。通过构造器也可以使用字符数组来创建一个字符串。
-- `str.characters.count` 可以获得字符串中的字符个数。因为一个字符占用的空间可能不同（详见下面 Unicode 部分），所以需要使用特殊的 `String.Index` 类型作为下标获取字符串指定位置的字符，如 `str[str.startIndex.successor]` / `str[str.endIndex.advancedBy(-7)]`。
+- `str.characters.count` 可以获得字符串中的字符个数。因为一个字符占用的空间可能不同（详见下面 Unicode 部分），所以需要使用特殊的 `String.Index` 类型作为下标获取字符串指定位置的字符，如 `str[str.startIndex.successor()]` 和 `str[str.endIndex.advancedBy(-7)]`。
 - 在字符串中插值可以使用 `"\()"`。
 
 ### Unicode
