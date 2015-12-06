@@ -8,7 +8,7 @@ category: Tech
 
 Swift 仍然是一门静态类型的语言，不过它拥有很多现代的语言特性，譬如类型推断、泛型、元组、更优雅的闭包等等，同时也有 Playgrounds 这样便利的交互式编程环境。Swift 非常强调安全性，不论是随处可见的可选类型、继承时复杂的构造规则，还是赋值没有返回值、控制流不能省略花括号，都是为了代码安全而考虑。另外 Swift 终于丢掉了 C 语言的包袱，放弃了指针，`switch` 语句不再需要 `break`，整型溢出会抛出运行时错误等等。
 
-我们能够看出它本身还是构建在 Objective-C 的基础之上，两者能够很方便地交互和共存，Cocoa / Cocoa Touch 的 API 也是共通的。Swift 的语法目前仍在不断改进，从 [The Swift Programming Language: Document Revision History](https://developer.apple.com/library/ios/documentation/Swift/Conceptual/Swift_Programming_Language/RevisionHistory.html#//apple_ref/doc/uid/TP40014097-CH40-ID459) 可见一斑，我也会根据最新的文档及时更新这三篇学习笔记。*（Updated: 2015-11-04）*
+我们能够看出它本身还是构建在 Objective-C 的基础之上，两者能够很方便地交互和共存，Cocoa / Cocoa Touch 的 API 也是共通的。Swift 的语法目前仍在不断改进，从 [The Swift Programming Language: Document Revision History](https://developer.apple.com/library/ios/documentation/Swift/Conceptual/Swift_Programming_Language/RevisionHistory.html#//apple_ref/doc/uid/TP40014097-CH40-ID459) 可见一斑，我也会根据最新的文档及时更新这三篇学习笔记。*（Updated: 2015-12-06）*
 
 
 ## 数据类型
@@ -101,7 +101,8 @@ a != nil ? a! : b
 
 - 与 C 语言不同，Swift 无论字符串还是字符都使用双引号 `"` 而不用单引号 `'`。
 - Swift 的 String 是**值类型**，当其进行赋值操作或在函数中传递时会进行值拷贝。
-- 字符串之间可以通过 `+` 连接，将字符连接到字符串尾部可以使用 `append()` 方法。
+- 字符串之间可以通过 `+` 连接，将字符连接到字符串尾部可以使用 `append()` 方法。通过构造器也可以使用字符数组来创建一个字符串。
+- `str.characters.count` 可以获得字符串中的字符个数。因为一个字符占用的空间可能不同（详见下面 Unicode 部分），所以需要使用特殊的 `String.Index` 类型作为下标获取字符串指定位置的字符，如 `str[str.startIndex.successor]` / `str[str.endIndex.advancedBy(-7)]`。
 - 在字符串中插值可以使用 `"\()"`。
 
 ### Unicode
@@ -116,7 +117,7 @@ a != nil ? a! : b
     - **私人使用区**（Private Use Area, Plane 15-16）：[`U+F0000`, `U+10FFFF`]；
     - 但不包括 UTF-16 **代理对**（surrogate pair）的码位：[`U+D800`, `U+DFFF`]。
 - 分别可以通过字符串的 `utf8` / `utf16` / `unicodeScalars` 属性来访问其 UTF-8 / UTF-16 / Unicode Scalars 表示。
-- 调用全局函数 `count()` 可以获得字符串中的字符数，但需注意 Swift 的字符类型表示一个**扩展字形集群**（extended grapheme cluster），例如一对 Unicode 标量 `"\u{65}\u{301}"` 与单个 Unicode 标量 `\u{E9}` 均表示单个字符 é。
+- 注意 Swift 的字符类型表示一个**扩展字形集群**（extended grapheme cluster），可以包含多个 Unicode 标量，例如一对 Unicode 标量 `"\u{65}\u{301}"` 与单个 Unicode 标量 `\u{E9}` 均表示**单个**字符 é。
 - 而 NSString 其实是用 UTF-16 编码的码元（code units）组成的数组，相应地 `length` 属性的值是其包含的码元个数，而不是字符个数。[^unicode] 因此在 Swift 的 String 类型中这个属性名为 `utf16Count`。[^collectiontype]
 
 [^unicode]: [NSString 与 Unicode - objc中国](http://objccn.io/issue-9-1/)
