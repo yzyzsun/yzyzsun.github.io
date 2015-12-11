@@ -152,21 +152,36 @@ subscript(index: Int) -> Int {
 - 在 Swift 中，可以使用遵循 `ErrorType` 协议的枚举类型来定义一系列错误。[^error]
 - 对于一个可能抛出错误的函数或方法，需要在参数列表和返回值之间加上 `throws` 关键字，这样便可以在函数内使用 `throw` 语句。
 - 当调用一个可能抛出错误的函数时，需要在前面加上 `try` 关键字；也可以使用 `try?` 将该函数转换为一个返回可选类型的函数，这将不再抛出错误而是返回 `nil`；或用 `try!` 来绕过错误处理强制执行，这时出错将直接触发运行时错误。
-- 可以使用 `do-catch` 语句处理异常，`catch` 对错误的匹配类似于 `case`。
+- 可以使用 `do-catch` 处理异常，`catch` 对错误的匹配类似于 `case`。错误一旦抛出，`do` 语句块中剩下的语句将不再执行，`catch` 捕获并处理完异常后直接执行整个 `do-catch` 语句块下面的代码。
 
 ```swift
 do {
-    try shakeHandsWith("Rino Sashihara")
+    try shakeHandsWith("Nanase Nishino")
 } catch HandshakeError.NoTicket {
     print("No handshake ticket.")
 } catch HandshakeError.NoSuchMember {
-    print("No such member in HKT48.")
+    print("No such member in Nogizaka 46.")
 } catch {
-    print("Other error happens.")
+    print("Another error happens.")
 }
 ```
 
-- 使用 `defer` 语句可以确保在离开当前代码块前执行特定语句，且这些语句将被逆序执行。
+- 使用 `defer` 可以确保在离开当前代码块前执行特定语句，不论是因为抛出了错误，还是 `return` 或 `break`。且最后一个 `defer` 语句块将最先被执行，以此类推逆序执行。
+
+```swift
+func processFile(filename: String) throws {
+    if exists(filename) {
+        let file = open(filename)
+        defer {
+            close(file)
+        }
+        while let line = try file.readline() {
+            // ...
+        }
+        // `close(file)` is called here, at the end of the scope.
+    }
+}
+```
 
 [^error]: 错误处理于 [Swift 2.0](https://developer.apple.com/swift/blog/?id=29) 后被引入。
 
@@ -220,7 +235,7 @@ case let someDouble as Double where someDouble > 0:
    print("a positive double value of \(someDouble)")
 case is Double:
    print("some other double value that I don't want to print")
-case let stringConverter as String -> String:
+case let stringConverter as (String) -> String:
    print(stringConverter("Michael"))
 default:
    print("something else")
