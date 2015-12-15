@@ -107,7 +107,7 @@ a != nil ? a! : b
 ### Unicode
 
 - 在字符串字面量中，**Unicode scalar value** 可以表示为 `\u{n}`，其中 `n` 可以为 1-8 位的十六进制数。
-- 目前 Unicode 编码共 21 位，Unicode scalars 的范围包括：
+- 目前 Unicode 编码共 21 位，Unicode scalars (code points) 的范围包括：
     - **基本多文种平面**（Basic Multilingual Plane, Plane 0）：[`U+0000`, `U+D7FF`] ∪ [`U+E000`, `U+FFFF`]；
     - **多文种补充平面**（Supplementary Multilingual Plane, Plane 1）：[`U+10000`, `U+1FFFF`]；
     - **表意文字补充平面**（Supplementary Ideographic Plane, Plane 2）：[`U+20000`, `U+2FFFF`]；
