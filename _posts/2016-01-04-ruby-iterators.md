@@ -20,7 +20,7 @@ n.times { |i| ... }
 
 Ruby 中的迭代器当然不止于此，十分有趣的是，常用的 map / reduce / filter 系列方法，在 Enumerable 模块中都起了 -ect 后缀的名字，简直是强迫症的福音。下面是它们的 Reference：
 
-## collect (map)
+## #collect (#map)
 
 ``` 
 collect { |obj| block } → array
@@ -34,7 +34,7 @@ collect → an_enumerator
 #=> [1, 4, 9, 16]
 ```
 
-## detect (find)
+## #detect (#find)
 
 ``` 
 detect(ifnone = nil) { |obj| block } → obj or nil
@@ -48,7 +48,7 @@ detect(ifnone = nil) → an_enumerator
 #=> 4
 ```
 
-## inject (reduce)
+## #inject (#reduce)
 
 ``` 
 inject(initial, sym) → obj
@@ -66,7 +66,7 @@ inject { |memo, obj| block } → obj
 #=> 5050
 ```
 
-## reject
+## #reject
 
 ``` 
 reject { |obj| block } → array
@@ -80,7 +80,7 @@ reject → an_enumerator
 #=> [1, 2, 3, 5, 6, 7, 9, 10]
 ```
 
-## select (find_all)
+## #select (#find_all)
 
 ``` 
 select { |obj| block } → array
