@@ -286,7 +286,7 @@ reversed = names.sort( { $0 > $1 } )
 // Trailing closures
 reversed = names.sort { $0 > $1 }
 
-//Operator functions
+// Operator functions
 reversed = names.sort(>)
 ```
 
