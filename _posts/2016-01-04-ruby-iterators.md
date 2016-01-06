@@ -98,5 +98,5 @@ select → an_enumerator
 
 ## Ruby - AKB48（篠田TeamA）
 
-<embed height="430" width="720" quality="high" allowfullscreen="true" type="application/x-shockwave-flash" src="http://static.hdslb.com/miniloader.swf" flashvars="aid=3194009&page=1" pluginspage="http://www.adobe.com/shockwave/download/download.cgi?P1_Prod_Version=ShockwaveFlash"></embed>
+<embed width="720" height="430" quality="high" allowfullscreen="true" type="application/x-shockwave-flash" src="http://static.hdslb.com/miniloader.swf" flashvars="aid=3194009" pluginspage="https://get.adobe.com/flashplayer/">
 
