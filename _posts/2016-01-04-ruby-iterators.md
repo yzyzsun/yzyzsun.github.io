@@ -4,9 +4,9 @@ title: "Ruby: collect, detect, inject, reject, select"
 category: Tech
 ---
 
-在比较 Ruby 和 Python 的时候，很多人会说 Python 是一门简约的语言，而 Ruby 是一门魔幻的语言。之所以说 Ruby 魔幻，一方面是因为神奇的元编程和好吃的语法糖，另一方面是在 Ruby 中总有不止一种方法去做一件事（[There's more than one way to do it](https://en.wikipedia.org/wiki/There%27s_more_than_one_way_to_do_it)），循环便是其中一例。
+在比较 Ruby 和 Python 的时候，很多人会说 Python 是一门简约的语言，而 Ruby 是一门魔幻的语言。之所以说 Ruby 魔幻，一方面是因为神奇的元编程和好吃的语法糖，另一方面是在 Ruby 中总有不止一种方法去做一件事（[There's more than one way to do it](https://en.wikipedia.org/wiki/There%27s_more_than_one_way_to_do_it)），循环便是其中一例。
 
-如果你写过 C 语言，那么你一定很熟悉传统的 `for (int i = 0; i < n; ++i) ...`；或者在 Pascal 等语言里，它有更简洁的形式 `for i := 0 to n-1 do ...`；如果你还学过 Python，你可能会把它改写成 `for i in range(0, n): ...`。在 Ruby 中，虽然也有 `for i in 0...n` 的语法，但实际上大多数 Rubyist 都不会去用 for 这个关键字。譬如上面的例子，Ruby 通常是这样表达的：
+如果你写过 C 语言，那么你一定很熟悉传统的 `for (int i = 0; i < n; ++i) ...`；或者在 Pascal 等语言里，它有更简洁的形式 `for i := 0 to n-1 do ...`；如果你还学过 Python，你可能会把它改写成 `for i in range(0, n): ...`。在 Ruby 中，虽然也有 `for i in 0...n` 的语法，但实际上大多数 Rubyist 都不会去用 for 这个关键字。譬如上面的例子，Ruby 通常是这样表达的：
 
 ``` ruby
 n.times { |i| ... }
@@ -93,3 +93,10 @@ select → an_enumerator
 (1..10).select { |x| x % 4 == 0 }
 #=> [4, 8]
 ```
+
+---
+
+## Ruby - AKB48（篠田TeamA）
+
+<embed height="430" width="720" quality="high" allowfullscreen="true" type="application/x-shockwave-flash" src="http://static.hdslb.com/miniloader.swf" flashvars="aid=3194009&page=1" pluginspage="http://www.adobe.com/shockwave/download/download.cgi?P1_Prod_Version=ShockwaveFlash"></embed>
+
