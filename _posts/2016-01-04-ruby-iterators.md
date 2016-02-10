@@ -18,7 +18,7 @@ n.times { |i| ... }
 
 <!--more-->
 
-Ruby 中的迭代器当然不止于此，十分有趣的是，常用的 map / reduce / filter 系列方法，在 Enumerable 模块中都起了 -ect 后缀的名字，简直是强迫症的福音。下面是它们的 Reference：
+Ruby 中的迭代器当然不止于此，十分有趣的是，常用的 map / reduce / filter 系列方法，在 Enumerable 模块中都起了 -ect 后缀的名字，简直是强迫症的福音。下面是它们的 [Reference](http://ruby-doc.org/core/Enumerable.html)：
 
 ## #collect (#map)
 
@@ -99,4 +99,3 @@ select → an_enumerator
 ## Ruby - AKB48（篠田TeamA）
 
 <embed width="720" height="430" quality="high" allowfullscreen="true" type="application/x-shockwave-flash" src="http://static.hdslb.com/miniloader.swf" flashvars="aid=3194009" pluginspage="https://get.adobe.com/flashplayer/">
-
