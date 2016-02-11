@@ -18,7 +18,7 @@ category: Tech
 
 **QRunnable** 是一个非常轻量的抽象类，它的主体是纯虚函数 `QRunnable::run()`，我们需要继承它并实现这个函数。使用时需要将其子类的实例放进 **QThreadPool** 的执行队列，线程池默认会在运行后自动删除这个实例。每个应用都有一个全局的线程池，我们可以直接使用它，这就不需要手动创建和管理线程池了。不过因为 QRunnable 不是 QObject 的子类，它没有内建与外界通信的手段，所以真正在使用时没那么实用。
 
-```c++
+```cpp
 class Task : public QRunnable
 {
 public:
@@ -36,7 +36,7 @@ QThreadPool::globalInstance()->start(new Task);
 
 **QThread** 是 Qt 多线程调度中最核心的底层类，也是最常见的多线程实现方法。跟前面两者相比，QThread 的优势在于能够开启线程内的事件循环，为线程中所有 QObject 分发事件，以及能够设置自身的线程优先级。在 Qt 4.4 之前，QThread 跟 QRunnable 一样是一个抽象类，需要在子类中实现 `QThread::run()`，再将其实例化并调用成员函数 `QThread::start()` 即可运行。
 
-```c++
+```cpp
 class WorkerThread : public QThread
 {
 protected:
@@ -53,7 +53,7 @@ workerThread->start();
 
 但现在的 Qt 版本中 `QThread::run()` 不再是纯虚函数，其默认实现是调用 `QThread::exec()` 开启一个事件循环。因此继承 QThread 实现多线程已不再是推荐的做法，，**更加优雅**的做法是将计算任务和线程管理分离，即在一个 QObject 中处理任务，并使用 `QObject::moveToThread` 改变其线程关联（thread affinity）。
 
-```c++
+```cpp
 class Worker : public QObject
 {
     Q_OBJECT
@@ -71,7 +71,7 @@ signals:
 };
 ```
 
-```c++
+```cpp
 class Controller : public QObject
 {
     Q_OBJECT
@@ -103,7 +103,7 @@ signals:
 
 在新线程中执行计算任务时，我们会发现这时不能再访问 UI 了，这是因为 QWidget 及其子类都不是**可重入的**（reentrant），只能通过主线程访问。这样的设计虽然对开发者来说有些麻烦，但避免了可能导致的死锁或是复杂的 UI 同步。总之若要更新 UI 或是做其他交互，我们需要进行线程间通信。一种方法是调用静态函数 `QMetaObject::invokeMethod()`：
 
-```c++
+```cpp
 QMetaObject::invokeMethod(object, "methodName",
                           Qt::QueuedConnection,
                           Q_RETURN_ARG(QString, retVal),

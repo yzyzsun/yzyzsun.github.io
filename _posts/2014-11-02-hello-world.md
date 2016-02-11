@@ -12,7 +12,7 @@ category: Diary
 
 <!--more-->
 
-Jekyll 的官方文档写得非常清楚，有时间的话完全可以从零开始自己设计，而我是直接 fork 了 [Jekyll Now](https://github.com/barryclark/jekyll-now) 项目~~（主要是因为懒）~~。网上的相关资料非常多，我觉得以下几个很有帮助：
+Jekyll 的官方文档写得非常清楚，有时间的话完全可以从零开始自己设计，而我是直接 fork 了 [Jekyll Now](https://github.com/barryclark/jekyll-now) 项目<s>（主要是因为懒）</s>。网上的相关资料非常多，我觉得以下几个很有帮助：
 
 - [GitHub Pages](https://pages.github.com)
 - [Jekyll • Simple, blog-aware, static sites](http://jekyllrb.com)

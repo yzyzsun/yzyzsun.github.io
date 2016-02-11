@@ -12,7 +12,7 @@ category: Tech
 - 为了一致性和便捷性，Objective-C 中的工厂方法（factory methods）也被映射成为 Swift 中的构造器。
 - 在 Objective-C 中可能返回 `nil` 的构造器，引入 Swift 时被定义为了可失败构造器。
 
-```objective-c
+```objc
 // Objective-C
 UITableView *myTableView = [[UITableView alloc] initWithFrame:CGRectZero style:UITableViewStyleGrouped];
 UIColor *color = [UIColor colorWithRed:0.5 green:0.0 blue:0.5 alpha:1.0];
@@ -46,7 +46,7 @@ let color = UIColor(red: 0.5, green: 0.0, blue: 0.5, alpha: 1.0)
 
 - Swift 中的闭包和 Objective-C 中的代码块是互相兼容的，所以可以将闭包直接传入一个以代码块为参数的函数。
 
-```objective-c
+```objc
 // Objective-C
 void (^completionBlock)(NSData *, NSError *) = ^(NSData *data, NSError *error) {/* ... */}
 ```
@@ -130,7 +130,7 @@ let completionBlock: (NSData, NSError) -> Void = {data, error in /* ... */}
 - 单例模式使用一个供全局访问的共享实例，以完成需要统一接入点的任务，如播放音效或发送 HTTP 请求。
 - 在 Objective-C 中，可以用 `dispatch_once` 函数保证构造器只被执行一次。
 
-```objective-c
+```objc
 + (instancetype)sharedInstance {
     static id _sharedInstance = nil;
     static dispatch_once_t onceToken;
