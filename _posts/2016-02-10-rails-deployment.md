@@ -199,7 +199,7 @@ config.serve_static_files = ENV['RAILS_SERVE_STATIC_FILES'].present?
 ```
 
 - 访问网站时显示「Incomplete response received from application」一般是没有设置 `secret_key_base`，具体参见前文「部署 Rails」。
-- 如果在 `gem install pg` 时报告找不到头文件 `libpq-fe.h`，那是因为没有安装 `postgresql-devel`，或者在其他操作系统中这个包叫 `libpq-dev`。
+- 如果在 `gem install pg` 时报告找不到头文件 `libpq-fe.h`，那是因为没有 `yum install postgresql-devel`，或者在 Debian 系的 APT 中这个包叫 `libpq-dev`、在 Arch Linux 的 Pacman 中叫 `postgresql-libs`。
 
 ## 版本信息
 
