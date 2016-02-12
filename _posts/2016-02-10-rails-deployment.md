@@ -209,5 +209,7 @@ CentOS 7 x86_64 (1511) / Nginx 1.8.1 / Passenger 5.0.24 / PostgreSQL 9.2.14 / Ra
 > 
 > [Deploying a Ruby app with Passenger to production - Passenger Library](https://www.phusionpassenger.com/library/walkthroughs/deploy/ruby/)  
 > [Configuration reference for Nginx - Passenger Library](https://www.phusionpassenger.com/library/config/nginx/reference/)  
-> [Configuring NGINX Plus as a Web Server - NGINX Admin Guide](https://www.nginx.com/resources/admin-guide/nginx-web-server/)  
-> [The Asset Pipeline - Ruby on Rails Guides](http://guides.rubyonrails.org/asset_pipeline.html)
+> [Configuring NGINX Plus as a Web Server | NGINX Admin Guide](https://www.nginx.com/resources/admin-guide/nginx-web-server/)  
+> [PostgreSQL Documentation: Tutorial](http://www.postgresql.org/docs/current/interactive/tutorial.html)  
+> [Configuring Rails Applications - Ruby on Rails Guides](http://guides.rubyonrails.org/configuring.html)  
+> [Ruby on Rails Security Guide - Ruby on Rails Guides](http://guides.rubyonrails.org/security.html)
