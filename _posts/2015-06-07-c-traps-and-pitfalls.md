@@ -28,8 +28,7 @@ r = hi<<4 + low
 // <=> r = hi << (4 + low)
 // SHOULD BE: r = hi<<4 | low
 
-while (c=getc(in) != EOF)
-    putc(c, out);
+while (c=getc(in) != EOF) putc(c, out);
 // <=> c = (getc(in) != EOF)
 ```
 
@@ -154,7 +153,7 @@ LLP64 | 16 | 32 | 32 | 64 | Windows 64-bit
 LP64  | 16 | 32 | 64 | 64 | Most Unix and Unix-like 64-bit
 
 - `char` 默认是 `signed` 还是 `unsigned` 因环境而异，如 Android NDK 中的 GCC 默认是 `unsigned char`。
-- 大多数 C 编译器的求余结果与被除数同号，相应地，整数除法向零取整。
+- C99 规定求余结果与被除数同号，相应地，整数除法向零取整；而 C99 以前对此没有明确的定义。
 
 > **Link**  
 > [C 语言应试笔记 | 梦断代码](http://blog.zhanghai.me/c-exam-notes/)
