@@ -1,6 +1,6 @@
 ---
 layout: post
-title: Ruby 官方网站加载过慢的解决方法
+title: Google Web Fonts 无法加载的解决方法
 category: Tech
 ---
 
