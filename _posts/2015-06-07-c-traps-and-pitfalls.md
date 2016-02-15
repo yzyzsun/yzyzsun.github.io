@@ -144,15 +144,16 @@ else
 
 ## 可移植性缺陷（Portability pitfalls）
 
-- ANSI 标准要求 `long` 至少是 32 位，`int` 和 `short` 至少是 16 位。
+- ANSI 标准要求 `short` 和 `int` 至少是 16 位，`long` 至少是 32 位，C99 要求 `long long` 至少 64 位，但没有规定确切的大小。
 
-Data model | short | int | long | pointers / size_t | OS
---- | --- | --- | --- | --- | --- | ---
-ILP32 | 16 | 32 | 32 | 32 | Most 32-bit
-LLP64 | 16 | 32 | 32 | 64 | Windows 64-bit
-LP64  | 16 | 32 | 64 | 64 | Most Unix and Unix-like 64-bit
+Data model | short | int | long | long long | pointers / size_t | OS
+--- | --- | --- | --- | --- | --- | --- | ---
+ILP32 | 16 | 32 | 32 | 64 | 32 | Most 32-bit
+LLP64 | 16 | 32 | 32 | 64 | 64 | Windows 64-bit
+LP64  | 16 | 32 | 64 | 64 | 64 | Most Unix and Unix-like 64-bit
 
 - `char` 默认是 `signed` 还是 `unsigned` 因环境而异，如 Android NDK 中的 GCC 默认是 `unsigned char`。
+- `long double` 的实现也因编译器而异，可能是双精度的同义词、扩展精度（extended precision, 80-bit）、四倍精度（quadruple precision, 128-bit）、一对双精度浮点数（double-double arithmetic, 64-bit + 64-bit）。为了字节对齐，扩展精度（10 字节）可能会被存储为 12 / 16 字节。
 - C99 规定求余结果与被除数同号，相应地，整数除法向零取整；而 C99 以前对此没有明确的定义。
 
 > **Link**  
