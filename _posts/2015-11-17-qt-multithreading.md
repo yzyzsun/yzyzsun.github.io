@@ -2,6 +2,7 @@
 layout: post
 title: Qt 多线程解决阻塞
 category: Tech
+author: 孙耀珠
 ---
 
 这学期选了一门物理实验的小课题「宇宙射线μ子探测」，于是需要给实验用到的程序写个 GUI。因为目标平台是 Windows，何宇就直接去写 WPF 了；而我本身不是 Windows 用户，当然倾向于寻找一个跨平台的解决方案，目前主流的 GUI 框架中 Qt 大概是最优雅的选择（[知乎上也有对此的讨论](http://www.zhihu.com/question/23480014)）。

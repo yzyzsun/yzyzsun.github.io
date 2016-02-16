@@ -110,57 +110,9 @@ img {
   max-width: 100%;
 }
 
-// Table style from MacDown
-table {
-  border-collapse: collapse;
-  tr {
-    border-top: 1px solid #cccccc;
-    background-color: white;
-    margin: 0;
-    padding: 0;
-    &:nth-child(2n) {
-      background-color: #f8f8f8;
-    }
-    th {
-      background-color: #eee;
-      font-weight: bold;
-      border: 1px solid #cccccc;
-      margin: 0;
-      padding: 6px 13px;
-    }
-    td {
-      border: 1px solid #cccccc;
-      margin: 0;
-      padding: 6px 13px;
-    }
-    th :first-child, td :first-child {
-      margin-top: 0;
-    }
-    th :last-child, td :last-child {
-      margin-bottom: 0;
-    }
-  }
-}
-
 // Fixes images in popup boxes from Google Translate
 .gmnoprint img {
   max-width: none;
-}
-
-.meta {
-  font-size: 15px;
-  color: gray;
-  margin-bottom: 32px;
-}
-
-.date {
-  font-family: "Helvetica Neue", sans-serif;
-  margin-right: 20px;
-  color: gray;
-}
-
-.category {
-  text-transform: capitalize;
 }
 
 // Specify the color of the selection
@@ -285,23 +237,13 @@ nav {
 .posts > .post {
   padding-bottom: 2em;
   border-bottom: 1px solid $lightGray;
-}
-
-.posts > .post:last-child {
-  padding-bottom: 1em;
-  border-bottom: none;
+  &:last-child {
+    padding-bottom: 1em;
+    border-bottom: none;
+  }
 }
 
 .post {
-  h1, .meta {
-    line-height: 1.2;
-    text-align: center;
-  }
-  
-  img {
-    margin: 20px 0;
-  }
-
   blockquote {
     margin: 1.8em .8em;
     border-left: 2px solid $gray;
@@ -312,26 +254,6 @@ nav {
   .comments {
     margin-top: 10px;
   }
-
-  .read-more {
-    font-variant: small-caps;
-  }
-  
-  li {
-    margin-top: .5em;
-  }
-}
-
-.cats > .cat {
-  border-bottom: 1px solid $lightGray;
-}
-
-.cats > .cat:last-child {
-  border-bottom: none;
-}
-
-.cat {
-  line-height: 32px;
 }
 
 .wrapper-footer {
@@ -344,6 +266,91 @@ nav {
 footer {
   padding: 20px 0;
   text-align: center;
+}
+
+/************/
+/*  CUSTOM  */
+/************/
+
+// Table style from MacDown
+table {
+  border-collapse: collapse;
+  margin: auto;
+  tr {
+    border-top: 1px solid #cccccc;
+    background-color: white;
+    margin: 0;
+    padding: 0;
+    &:nth-child(2n) {
+      background-color: #f8f8f8;
+    }
+    th {
+      background-color: #eee;
+      font-weight: bold;
+      border: 1px solid #cccccc;
+      margin: 0;
+      padding: 6px 13px;
+    }
+    td {
+      border: 1px solid #cccccc;
+      margin: 0;
+      padding: 6px 13px;
+    }
+    th :first-child, td :first-child {
+      margin-top: 0;
+    }
+    th :last-child, td :last-child {
+      margin-bottom: 0;
+    }
+  }
+}
+
+
+.post {
+  h1 {
+    line-height: 1.2;
+    text-align: center;
+  }
+  img {
+    margin: 20px 0;
+  }
+  li {
+    margin-top: .5em;
+  }
+  .read-more {
+    font-variant: small-caps;
+  }
+}
+
+
+.info {
+  text-align: center;
+  font-size: 15px;
+  color: gray;
+  margin-top: 16px;
+  margin-bottom: 32px;
+  > span {
+    margin-left: 8px;
+    margin-right: 8px;
+  }
+}
+
+.date {
+  font-family: "Helvetica Neue", sans-serif;
+  margin-right: 20px;
+  color: gray;
+}
+
+.category {
+  text-transform: capitalize;
+}
+
+.archive {
+  line-height: 32px;
+  border-bottom: 1px solid $lightGray;
+  &:last-child {
+    border-bottom: none;
+  }
 }
 
 // Settled on moving the import of syntax highlighting to the bottom of the CSS

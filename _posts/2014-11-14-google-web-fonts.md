@@ -2,6 +2,7 @@
 layout: post
 title: Google Web Fonts 无法加载的解决方法
 category: Tech
+author: 孙耀珠
 ---
 
 如果没有翻墙，大家一定会发现 [Ruby 官方网站](https://www.ruby-lang.org/) 加载得非常慢，在 Chrome 中停止加载的话仍能正常阅读，但在 Safari 中停止加载只能得到一片空白。

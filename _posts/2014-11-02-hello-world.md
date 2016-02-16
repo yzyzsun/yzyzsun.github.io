@@ -2,6 +2,7 @@
 layout: post
 title: Hello, World!
 category: Diary
+author: 孙耀珠
 ---
 
 这是博客的第一篇文章，首先当然是说声欢迎来访～

@@ -2,6 +2,7 @@
 layout: post
 title: Swift 学习笔记（二）
 category: Tech
+author: 孙耀珠
 ---
 
 ## 类和结构体

@@ -7,12 +7,7 @@ layout: default
     <article class="post">
       <h1><a href="{{ site.baseurl }}{{ post.url }}">{{ post.title }}</a></h1>
 
-      <div class="meta">
-        <i class="fa fa-calendar"></i>
-        {{ post.date | date: "%Y-%m-%d" }} &nbsp;&nbsp;
-        <i class="fa fa-folder-open"></i>
-        <span class="category">{{ post.categories }}</span>
-      </div>
+      {% include info.html %}
 
       <div class="entry">
         {{ post.excerpt }}
