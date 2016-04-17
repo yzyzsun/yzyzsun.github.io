@@ -40,7 +40,7 @@ $ gem install bundler --no-rdoc --no-ri
 如果服务器在国内，由于众所周知的原因，也许会频繁地遭遇网络连接失败，那你可以考虑使用淘宝的 [Ruby 源代码镜像和 RubyGems 镜像](https://ruby.taobao.org)：
 
 ``` sh
-$ sed -i .bak -E 's!https?://cache.ruby-lang.org/pub/ruby!https://ruby.taobao.org/mirrors/ruby!' $rvm_path/config/db
+$ sed -i -r 's|https?://cache.ruby-lang.org/pub/ruby|https://ruby.taobao.org/mirrors/ruby|g' $rvm_path/config/db
 $ gem sources -a https://ruby.taobao.org/ -r https://rubygems.org/
 ```
 
