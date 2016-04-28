@@ -148,7 +148,7 @@ passenger_env_var SECRET_KEY_BASE ...;
 
 但千万不要直接在 shell 里输 export 命令，这只会在当前 shell 及其子进程中生效。也不要随意更改密钥，这会使原先加密的 cookies 失效。
 
-最后让 [Asset Pipeline](http://guides.ruby-china.org/asset_pipeline.html) 对静态资源做预编译，让 Active Record 做数据库迁移：
+最后让 [Asset Pipeline](http://guides.ruby-china.org/asset_pipeline.html) 对静态资源做预编译，让 Active Record 做数据库迁移，记得别忘了加 **`RAILS_ENV=production`**：
 
 ``` sh
 $ bundle exec rake assets:precompile db:migrate RAILS_ENV=production
@@ -201,6 +201,15 @@ config.serve_static_files = ENV['RAILS_SERVE_STATIC_FILES'].present?
 
 - 访问网站时显示「Incomplete response received from application」一般是没有设置 `secret_key_base`，具体参见前文「部署 Rails」。
 - 如果在 `gem install pg` 时报告找不到头文件 `libpq-fe.h`，那是因为没有 `yum install postgresql-devel`，或者在 Debian 系的 APT 中这个包叫 `libpq-dev`、在 Arch Linux 的 Pacman 中叫 `postgresql-libs`。
+- 如果在 `rake assets:precompile` 时显示「Killed」，很可能是内存不足导致的。最简单的解决方法就是花钱💰去升级 VPS 的内存，或者你可以创建 SWAP 文件用于虚拟内存：
+
+``` sh
+$ fallocate -l 1G /swapfile
+$ chmod 600 /swapfile
+$ mkswap /swapfile
+$ swapon /swapfile
+$ echo "/swapfile swap swap defaults 0 0" >> /etc/fstab
+```
 
 ## 版本信息
 
@@ -213,4 +222,5 @@ CentOS 7 x86_64 (1511) / Nginx 1.8.1 / Passenger 5.0.24 / PostgreSQL 9.2.14 / Ra
 > [Configuring NGINX Plus as a Web Server | NGINX Admin Guide](https://www.nginx.com/resources/admin-guide/nginx-web-server/)  
 > [PostgreSQL Documentation: Tutorial](http://www.postgresql.org/docs/current/interactive/tutorial.html)  
 > [Configuring Rails Applications - Ruby on Rails Guides](http://guides.rubyonrails.org/configuring.html)  
-> [Ruby on Rails Security Guide - Ruby on Rails Guides](http://guides.rubyonrails.org/security.html)
+> [Ruby on Rails Security Guide - Ruby on Rails Guides](http://guides.rubyonrails.org/security.html)  
+> [Chapter 14. Swap Space - Storage Administration Guide - Red Hat Enterprise Linux 7](https://access.redhat.com/documentation/en-US/Red_Hat_Enterprise_Linux/7/html/Storage_Administration_Guide/ch-swapspace.html)  
