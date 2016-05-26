@@ -77,7 +77,7 @@ gems:
   - jekyll-seo-tag
 
 feed:
-  path: atom.xml
+ path: feed-atom.xml
 
 # Exclude these files from your production _site
 exclude:
