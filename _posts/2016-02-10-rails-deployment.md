@@ -134,7 +134,7 @@ production:
   secret_key_base: <%= ENV["SECRET_KEY_BASE"] %>
 ```
 
-密钥可通过 `bundle exec rake secret` 生成，然后在 `~/.bashrc` 或 `/srv/rails/.env.production`（使用了 [gem 'dotenv-rails'](https://github.com/bkeepers/dotenv) 的话）设置环境变量：
+密钥可通过 `bundle exec rake secret` 生成，然后在 `~/.bashrc` 或 `/srv/sample-app/.env.production`（使用了 [gem 'dotenv-rails'](https://github.com/bkeepers/dotenv) 的话）设置环境变量：
 
 ``` sh
 export SECRET_KEY_BASE=...
