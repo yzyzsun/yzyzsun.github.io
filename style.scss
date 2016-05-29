@@ -330,8 +330,8 @@ table {
   margin-top: 16px;
   margin-bottom: 32px;
   > span {
-    margin-left: 8px;
-    margin-right: 8px;
+    margin-left: 4px;
+    margin-right: 4px;
   }
 }
 
@@ -339,10 +339,6 @@ table {
   font-family: "Helvetica Neue", sans-serif;
   margin-right: 20px;
   color: gray;
-}
-
-.category {
-  text-transform: capitalize;
 }
 
 .archive {

@@ -4,16 +4,15 @@
     <title>{% if page.title %}{{ page.title }} - {% endif %}{{ site.name }}</title>
 
     {% include meta.html %}
+    {% seo title=false %}
+    {% feed_meta %}
 
     <!--[if lt IE 9]>
       <script src="//cdnjs.cloudflare.com/ajax/libs/html5shiv/r29/html5.min.js"></script>
     <![endif]-->
 
-    {% feed_meta %}
-    {% seo %}
     <link rel="stylesheet" type="text/css" href="{{ site.baseurl }}/style.css" />
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.4.0/css/font-awesome.min.css" />
-    <meta name="google-site-verification" content="zYt2wigM41vmyHtpvOvLHk4Yetcfbv5Bz9pdvsTRT3Y" />
   </head>
 
   <body>
@@ -49,5 +48,6 @@
     </div>
 
     {% include analytics.html %}
+    {% if site.disqus %}<script id="dsq-count-scr" src="//{{ site.disqus }}.disqus.com/count.js" async></script>{% endif %}
   </body>
 </html>

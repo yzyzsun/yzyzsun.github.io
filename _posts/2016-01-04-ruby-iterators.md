@@ -95,6 +95,8 @@ select → an_enumerator
 #=> [4, 8]
 ```
 
+<br><br><br><br>
+
 ---
 
 ## Ruby - AKB48（篠田TeamA）
