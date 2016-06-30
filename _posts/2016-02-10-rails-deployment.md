@@ -42,6 +42,7 @@ $ gem install bundler --no-rdoc --no-ri
 ``` sh
 $ sed -i -r 's|https?://cache.ruby-lang.org/pub/ruby|https://ruby.taobao.org/mirrors/ruby|g' $rvm_path/config/db
 $ gem sources -a https://ruby.taobao.org/ -r https://rubygems.org/
+$ bundle config mirror.https://rubygems.org https://ruby.taobao.org
 ```
 
 ## 安装 JavaScript 引擎
@@ -216,7 +217,7 @@ $ echo "/swapfile swap swap defaults 0 0" >> /etc/fstab
 CentOS 7 x86_64 (1511) / Nginx 1.8.1 / Passenger 5.0.24 / PostgreSQL 9.2.14 / Rails 4.2.5 / Ruby 2.3.0
 
 > 参考文档：
-> 
+>
 > [Deploying a Ruby app with Passenger to production - Passenger Library](https://www.phusionpassenger.com/library/walkthroughs/deploy/ruby/)  
 > [Configuration reference for Nginx - Passenger Library](https://www.phusionpassenger.com/library/config/nginx/reference/)  
 > [Configuring NGINX Plus as a Web Server | NGINX Admin Guide](https://www.nginx.com/resources/admin-guide/nginx-web-server/)  
