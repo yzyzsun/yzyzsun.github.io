@@ -318,18 +318,18 @@ extension Collection where Iterator.Element: TextRepresentable {
 
 | Operator                                 | Associativity | Precedence Group    |
 | ---------------------------------------- | ------------- | ------------------- |
-| `!` `~` `+` `-` (Prefix)                 | -             | -                   |
-| `<<` `>>`                                | -             | Bitwise shift       |
-| `*` `/` `%` `&*` `&`                     | Left          | Multiplication      |
-| `+` `-` `&+` `&-` `|` `^`                | Left          | Addition            |
-| `..<` `...`                              | -             | Range formation     |
-| `is` `as` `as?` `as!`                    | Left          | Casting             |
+| `!`  `~`  `+`  `-`  (Prefix)             | -             | -                   |
+| `<<`  `>>`                               | -             | Bitwise shift       |
+| `*`  `/`  `%`  `&*`  `&`                 | Left          | Multiplication      |
+| `+`  `-`  `&+`  `&-`  `|`  `^`           | Left          | Addition            |
+| `..<`  `...`                             | -             | Range formation     |
+| `is`  `as`  `as?`  `as!`                 | Left          | Casting             |
 | `??`                                     | Right         | Nil coalescing      |
-| `<` `<=` `>` `>=` `==` `!=` `===` `!==` `~=` | -             | Comparison          |
+| `<`  `<=`  `>`  `>=`  `==`  `!=`  `===`  `!==`  `~=` | -             | Comparison          |
 | `&&`                                     | Left          | Logical conjunction |
-| ``                                     | Left          | Logical disjunction |
+| `||`                                     | Left          | Logical disjunction |
 | `?:`                                     | Right         | Ternary             |
-| `=` `*=` `/=` `%=` `+=` `-=` `<<=` `>>=` `&=` `|=` `^=` | Right         | Assignment          |
+| `=`  `*=`  `/=`  `%=`  `+=`  `-=`  `<<=`  `>>=`  `&=`  `|=`  `^=` | Right         | Assignment          |
 
 ### 运算符重载
 
