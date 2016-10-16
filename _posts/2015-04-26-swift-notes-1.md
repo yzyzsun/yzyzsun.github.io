@@ -9,7 +9,7 @@ author: 孙耀珠
 
 Swift 仍然是一门静态类型的语言，不过它拥有很多现代的语言特性，譬如类型推断、泛型、元组、更优雅的闭包等等，同时也有 Playgrounds 这样便利的交互式编程环境。Swift 非常强调安全性，不论是随处可见的可选类型、继承时复杂的构造规则，还是赋值没有返回值、控制流不能省略花括号，都是为了代码安全而考虑。另外 Swift 终于丢掉了 C 语言的包袱，放弃了指针，`switch` 语句不再需要 `break`，整型溢出会抛出运行时错误等等。
 
-我们能够看出它本身还是构建在 Objective-C 的基础之上，两者能够很方便地交互和共存，Cocoa / Cocoa Touch 的 API 也是共通的。Swift 的语法目前仍在不断改进，从 [The Swift Programming Language: Document Revision History](https://developer.apple.com/library/ios/documentation/Swift/Conceptual/Swift_Programming_Language/RevisionHistory.html#//apple_ref/doc/uid/TP40014097-CH40-ID459) 可见一斑，我也会根据最新的文档及时更新这三篇学习笔记。*（Updated: 2015-12-11）*
+我们能够看出它本身还是构建在 Objective-C 的基础之上，两者能够很方便地交互和共存，Cocoa / Cocoa Touch 的 API 也是共通的。Swift 的语法目前仍在不断改进，从 [Swift-Evolution Proposal Status](https://apple.github.io/swift-evolution/) 可见一斑，我也会根据最新的文档及时更新这三篇学习笔记。*（Updated: 2016-10-16）*
 
 
 ## 数据类型
@@ -24,8 +24,8 @@ Swift 仍然是一门静态类型的语言，不过它拥有很多现代的语�
 
 ### 浮点数
 
-- `Float` 为 32 位浮点数；`Double` 为 64 位浮点数，是默认的浮点类型。
-- `1.25e2` 表示 1.25×10^2 ；`0xFp2` 表示 15×2^2 。
+- `Float` 为 32 位浮点数；`Double` 为 64 位浮点数，浮点数字面量会被自动推断为 `Double`。
+- `1.25e2` 表示 1.25×10<sup>2</sup>；`0xFp2` 表示 15×2<sup>2</sup>。
 - 加减乘除运算严格检查左右操作数类型是否相同，不会进行隐式类型转换，因此 `Int` / `UInt` / `Double` / `Float` / `CGFloat` 之间进行运算时需要强制类型转换，可以使用 `Int()` 等构造器完成。
 
 ### 元组（Tuples）
@@ -35,21 +35,21 @@ Swift 仍然是一门静态类型的语言，不过它拥有很多现代的语�
 - 在定义时可以给元素命名，命名后便可通过名字来获取元素的值。
 
 ```swift
-let http200Status = (statusCode: 200, description: "OK")
-print("Code: \(http200Status.statusCode), message: \(http200Status.description)")
+let status = (code: 200, message: "OK")
+print("Code: \(status.code), message: \(status.message)")
 ```
 
 ### 可选类型（Optionals）
 
-- 可选类型相当于一个特殊的枚举类型：成员 `None` 表示值为 `nil`；成员 `Some` 则可以通过 `!` 来**强制解析**（forced unwrapping）获取值，或是通过 `?` 构成一个**可选链**（optional chaining）。对 `nil` 进行强制解析会触发运行时错误 `EXC_BAD_INSTRUCTION`，而可选链不会。
+- 可选类型相当于一个特殊的枚举类型：成员 `None` 表示值为 `nil`；成员 `Some` 则可以通过 `!` 来**强制解析**（forced unwrapping）获取值，或是通过 `?` 构成**可选链**（optional chaining）。对 `nil` 进行强制解析会触发运行时错误 `EXC_BAD_INSTRUCTION`，而可选链不会。
 - 当可选链中有可选值为 `nil` 时整条链失败并返回 `nil`，但不会触发运行时错误；若成功则返回一个相应的可选类型。
 - 在 `if` 和 `while` 语句中使用**可选绑定**（optional binding）可以判断可选类型是否包含值，若包含则将值赋给临时常量或变量，可使用 `where` 来判断额外条件。[^binding]
 
-[^binding]: 从 [Swift 1.2](https://developer.apple.com/library/ios/releasenotes/DeveloperTools/RN-Xcode/Chapters/xc6_release_notes.html#//apple_ref/doc/uid/TP40001051-CH4-SW6) 开始，`if-let` / `while-let` 语句支持多个可选绑定，且可选绑定可以接在布尔条件后面用 `,` 隔开。
+[^binding]: 从 [Swift 1.2](https://developer.apple.com/library/ios/releasenotes/DeveloperTools/RN-Xcode/Chapters/xc6_release_notes.html#//apple_ref/doc/uid/TP40001051-CH4-SW6) 开始，`if-let` / `while-let` 语句支持多个可选绑定，且可选绑定可以接在布尔条件后面用 `,` 隔开。从 [Swift 3.0](https://github.com/apple/swift-evolution/blob/master/proposals/0099-conditionclauses.md) 开始，逗号只用于 condition clause 间的分割，不再用于 condition clause 内的分割，于是可选绑定不再限定位置、但前面的 `let` 不可省略了，原来接在 `let` 后面使用的 `where` 关键字也不再需要了。
 
 ```swift
-if let a = foo(), b = bar() where a < b {
-    statements
+if let a = foo(), let b = bar(), a < b && b < 42 {
+    // Do something
 }
 ```
 
@@ -73,24 +73,26 @@ print(assumedString)
 
 ### 溢出
 
-- 整数溢出会触发运行时错误，但如果要像 C 一样允许溢出，可以使用溢出运算符 `&+ &- &*`。[^overflow]
+- 整数溢出会触发运行时错误，但如果要像 C 一样允许溢出，可以使用溢出运算符 `&+` `&-` `&*`。[^overflow]
 
-[^overflow]: 溢出运算符 `&/`、`&%` 在 [Swift 1.2](https://developer.apple.com/library/ios/releasenotes/DeveloperTools/RN-Xcode/Chapters/xc6_release_notes.html#//apple_ref/doc/uid/TP40001051-CH4-SW3) 中被移除。
+[^overflow]: 溢出运算符 `&/` `&%` 在 [Swift 1.2](https://developer.apple.com/library/ios/releasenotes/DeveloperTools/RN-Xcode/Chapters/xc6_release_notes.html#//apple_ref/doc/uid/TP40001051-CH4-SW3) 中被移除。
 
 ### 求余
 
-- 求余运算 `a % b` 的结果跟 `a` 的符号相同，而跟 `b` 的符号无关。这与 C / Java / Pascal 等语言是一致的，一般称这样的运算为**求余**（remainder）。
+- 求余运算 `a % b` 的结果跟 `a` 的符号相同，而跟 `b` 的符号无关。这与 C / Java / JavaScript 等语言是一致的，一般称这样的运算为**求余**（remainder）。
 - 而 Python / Ruby 等语言 `%` 运算结果的符号只与 `b` 相同，一般称其为**求模**（modulo）。[^modulo]
-- Swift 中也可以对浮点数进行求余运算。
 
 [^modulo]: [Modulo operation - Wikipedia](https://en.wikipedia.org/wiki/Modulo_operation)
 
 ### 空合运算符（Nil Coalescing Operator）
 
 ```swift
-a ?? b // a 必须是可选类型，b 要与 a 存储值的类型一致
+a ?? b
+// is equal to
 a != nil ? a! : b
 ```
+
+- `a` 必须是可选类型，且 `b` 要与 `a` 所存储值的类型一致。
 
 ### 区间运算符
 
@@ -118,111 +120,117 @@ a != nil ? a! : b
     - 但不包括 UTF-16 **代理对**（surrogate pair）的码位：[`U+D800`, `U+DFFF`]。
 - 分别可以通过字符串的 `utf16` / `utf8` / `unicodeScalars` / `characters` 属性来访问其 UTF-8 / UTF-16 / Unicode Scalars / 字符集合。
 - 注意 Swift 的字符类型表示一个**扩展字形集群**（extended grapheme cluster），可以包含多个 Unicode scalars，例如一对 Unicode scalars `"\u{65}\u{301}"` 与单个 Unicode scalar `\u{E9}` 均表示**单个**字符「é」。
-- `str.characters.count` 可以获得字符串中的字符个数。因为一个字符占用的空间可能不同，所以需要使用特殊的 `String.Index` 类型作为下标获取字符串指定位置的字符，如 `str[str.startIndex.successor()]` 和 `str[str.endIndex.advancedBy(-7)]`。
-- 而 NSString 其实是用 UTF-16 编码的码元（code units）组成的数组，相应的 `length` 属性的值是其包含的码元个数，而不是字符个数。[^unicode] 因此在 Swift 的 String 类型中这个属性名为 `utf16Count`。[^collectiontype]
+- `str.characters.count` 可以获得字符串中的字符个数。因为一个字符占用的空间可能不同，所以需要使用特殊的 `String.Index` 类型作为下标获取字符串指定位置的字符，如 `str[str.index(after: str.startIndex)]` 和 `str[str.index(str.endIndex, offsetBy: -7)]`。[^stringindex]
+- 而 NSString 其实是用 UTF-16 编码的码元（code units）组成的数组，相应的 `length` 属性的值是其包含的码元个数，而不是字符个数。[^unicode]
 
 ![Swift String Views](/images/swift-string-views.png)
 
-[^unicode]: [NSString 与 Unicode - objc中国](http://objccn.io/issue-9-1/)
+[^stringindex]: [Swift 2](https://developer.apple.com/swift/blog/?id=30) 和 [Swift 3](https://github.com/apple/swift-evolution/blob/master/proposals/0065-collections-move-indices.md) 分别对字符串的下标访问方式做出了不小的改动。
 
-[^collectiontype]: 从 [Swift 2.0](https://developer.apple.com/swift/blog/?id=30) 开始字符串不再遵循 `CollectionType` 协议，这意味着它与 NSString 的实现不相一致。
+[^unicode]: [NSString 与 Unicode - objc中国](http://objccn.io/issue-9-1/)
 
 
 ## 集合类型
 
-- 集合类型（collection types）包括数组（Array）、集合（Set）[^set] 和字典（Dictionary），其存储值类型必须相同，由泛型（generic）实现。
+- 集合类型（Collection types）包括数组（Array）、集合（Set）[^set] 和字典（Dictionary），其存储值类型必须相同，由泛型（generic）实现。
 - 集合类型均由结构体实现，为**值类型**。
-- 获取元素个数可访问其 `count` 属性。
+- 获取元素个数可访问其 `count` 属性，判断是否为空可以用 `isEmpty` 属性。
 
 [^set]: [Swift 1.2](https://developer.apple.com/library/ios/releasenotes/DeveloperTools/RN-Xcode/Chapters/xc6_release_notes.html#//apple_ref/doc/uid/TP40001051-CH4-SW6) 引入了原生的 `Set` 类型，与原先的 `NSSet` 桥接。
 
 ### 数组
 
-- 数组类型可以表示为 `Array<SomeType>`，简写为 `[SomeType]`。
-- 创建空数组可用 `[SomeType]()`，以重复的值创建数组可用 `Array(count:repeatedValue:)`。
+- 数组类型可以表示为 `Array<Element>`，简写为 `[Element]`。
+- 创建空数组可用 `[Element]()`，以重复的值创建数组可用 `Array(repeating:count:)`。
+- 可以用 `insert(_:at:)` / `append(_:)` / `remove(at:)` / `removeLast()` 来插入和删除元素。
 - 如果数组下标越界或为负数，会直接触发运行时错误。
 
 ### 集合
 
-- 集合类型可以表示为 `Set<SomeType>`。`SomeType` 必须是可哈希的，即遵循 `Hashable` 协议。
-- 创建空数组可用 `Set<SomeType>()`，可用数组字面量来初始化集合 `var groups: Set = ["AKB48", "SKE48", "NMB48", "HKT48", "JKT48", "SNH48", "NGT48"]`。
+- 集合类型可以表示为 `Set<Element>`。`Element` 必须是可哈希的，即遵循 `Hashable` 协议。
+- 创建空数组可用 `Set<Element>()`，可用数组字面量来初始化集合 `var groups: Set = ["AKB48", "SKE48", "NMB48", "HKT48", "NGT48", "STU48"]`。
 - 分别用 `insert(_:)` / `remove(_:)` / `contains(_:)` 方法来插入、移除、判断元素在集合中。
-- `union(_:)` / `subtract(_:)` / `intersect(_:)` / `exclusiveOr(_:)` 方法分别表示并集、差集、交集、对称差。
+- `union(_:)` / `intersection(_:)` / `subtracting(_:)` / `symmetricDifference(_:)` 方法分别会创建两个集合的并集、交集、差集、对称差；另有 `formUnion(_:)` / `formIntersection(:_)` / `subtract(_:)` / `formSymmetricDifference(_:)` 会直接在原集合上进行修改。[^setalgebra]
+- `isSubset(of:)` / `isSuperset(of:)` / `isDisjoint(with:)` 方法分别用来判断子集、超集、互斥。
+
+[^setalgebra]: [Swift 3.0](https://github.com/apple/swift-evolution/blob/master/proposals/0059-updated-set-apis.md) 按照 API Design Guidelines 对集合代数的接口做了调整。
 
 ### 字典
 
 - 字典类型可以表示为 `Dictionary<Key, Value>`，简写为 `[Key: Value]`。`Key` 类型必须是可哈希的。
 - 访问字典可以使用 `dic["key"]`，返回值为可选类型，键不存在即返回 `nil`。
-- 遍历字典可用 `for (key, value) in dict {...}` 或单独遍历 `dict.keys` 和 `dict.values`。
+- 遍历字典可用 `for (key, value) in dict { … }` 或单独遍历 `dict.keys` 和 `dict.values`。
 
 
 ## 控制流
 
-- 所有控制流不需要条件外侧的圆括号，但不可以省略语句体的花括号。
+- 所有控制流都不需要条件外侧的圆括号，但不可以省略语句体的花括号。
 
 ### 循环语句
 
-- 若不需要知道循环变量的值，可用 `_` 代替变量名。
 - `for i in 0..<10` 中的 `i` 是一个每轮循环开始时自动赋值的常量，因此不需要提前声明。
-- 除了 `for-in` 循环，Swift 仍提供 C 样式 `for` 循环，三个表达式用分号隔开，但不需要加圆括号。`while` 和 `repeat-while`（原为 `do-while`，现 `do` 关键字被用于错误处理）循环仍然存在。
+- `for-in` 若不需要知道循环变量的值，可用 `_` 代替变量名。
+- C 样式 `for` 循环已于 [Swift 3.0](https://github.com/apple/swift-evolution/blob/master/proposals/0007-remove-c-style-for-loops.md) 被废除，不过当然 `while` 和 `repeat-while` [^repeat] 循环仍然存在。
+- 可以在循环语句或下面提到的 `switch` 语句前放置一个标签 `label:`，则可以用 `continue label` 或 `break label` 来跳过它。
 
-```swift
-for i in 0..<10 {
-    statements
-}
-for var i = 0; i < 10; ++i {
-    statements
-}
-```
+[^repeat]: `repeat-while` 原为 `do-while`，Swift 2.0 之后 `do` 关键字被用于错误处理。
 
-### 条件语句
+### Switch
 
 - `switch` 语句必须是完备的，即在各 `case` 分支不能涵盖所有情况时，最后要有 `default` 分支。如果能匹配多个 `case`，那么只会执行第一个匹配的分支。
-- `switch` 不存在隐式的贯穿，即不需要在 `case` 分支结束时写 `break`。
+- `switch` 不存在隐式的贯穿，即不需要在 `case` 分支结束时写 `break`；不过如果一定要像 C 那样贯穿到下一个 `case`，可以用 `fallthrough` 关键字。 
 - 每个 `case` 必须包含至少一条语句，所以两个 `case` 连着写会编译错误。如果是需要一次处理多种情况，可以在单个 `case` 中把多个表达式用逗号分开；如果是什么都不做，要写个 `break`。
 - `case` 的表达式可以是区间或者元组，另可使用 `_` 来匹配所有可能的值。
-- `case` 允许将匹配的值绑定到临时常量或变量（value bindings），以及使用 `where` 来判断额外条件。
+- `case let` 允许将匹配的值绑定到临时值（value bindings），并可以使用 `where` 来判断额外条件。
 
 ```swift
 switch somePoint {
 case (0, 0):
-    print("(0, 0) is at the origin")
-case (_, 0):
-    print("(\(somePoint.0), 0) is on the x-axis")
-case (0, _):
-    print("(0, \(somePoint.1)) is on the y-axis")
+    print("At the origin")
+case (let distance, 0), (0, let distance):
+    print("On an axis, \(distance) from the origin")
 case (-2...2, -2...2):
-    print("(\(somePoint.0), \(somePoint.1)) is inside the box")
+    print("Inside the box")
 case let (x, y) where x == y:
     print("(\(x), \(y)) is on the line x == y"
-case let (x, y):
-    print("(\(x), \(y)) is just some arbitrary point")
+default:
+    print("Just some arbitrary point")
 }
 ```
 
-### 控制转移语句
+### 模式匹配 [^pattern]
 
-- 可以在循环语句和 `switch` 语句前放置一个标签 `label:`，则可以用 `continue label` 或 `break label` 来跳过特定的循环。
-- 在 `switch` 中可以用 `fallthrough` 继续执行下一个 `case` 的代码，这和 C 语言的特性相似。
+[^pattern]: [Pattern Matching, Part 4 – Crunchy Development](http://alisoftware.github.io/swift/pattern-matching/2016/05/16/pattern-matching-4/)
 
-### 提前退出
+- Swift 在进行 `case` 的匹配时，实际上使用了 `~=` 运算符，譬如为区间的匹配定义了 `static func ~=(pattern: Range<Bound>, value: Bound) -> Bool`。因此，我们也可以为自定义类型定义 `~=` 运算符。
+- 当 `switch` 处理一个可选值时，可以在 `case` 中使用 `x?` 作为语法糖来表示 `.Some(x)`。
+- 当只需要匹配一条 `case` 时，可以使用 `if case let x = y { … }` 来代替 `switch y { case let x: … }`，类似的还有 `guard case let`，后面都可以接 `where` 判断。
+- 使用 `for case` 可以只遍历相应 `if case` 匹配成功的元素，也可以后接 `where` 判断，实际上使用 `for … where` 而不带 `case` 依然是合法的。
 
-- `guard ... else {...}` 类似于只有 `else` 分支的 `if` 语句。[^guard]
-- 如果条件满足则跳过花括号的内容，并且可选绑定的赋值对当前代码块的剩下部分依然有效。
-- 如果条件不满足，`else` 分支必须退出当前代码块，譬如使用 `return`, `break`, `continue` 或抛出错误。
+```swift
+for case let (title?, kind) in mediaList.map({ ($0.title, $0.kind) }) where title.hasPrefix("Harry Potter") {
+    print("- [\(kind)] \(title)")
+}
+```
+
+### Guard [^guard]
 
 [^guard]: `guard` 语句于 [Swift 2.0](https://developer.apple.com/swift/blog/?id=29) 后被引进。
 
+- `guard … else { … }` 类似于只有 `else` 分支的 `if` 语句。
+- 如果条件满足则跳过花括号的内容，并且可选绑定的赋值对当前代码块的剩下部分依然有效。
+- 如果条件不满足，`else` 分支必须退出当前代码块，譬如使用 `return` / `break` / `continue` / `throw` / `fatalError()`。
+
 ### 检查 API 可用性
 
-- 在 `if` 或 `guard` 语句中可以判断当前平台版本（包括 `OSX`, `iOS` 和 `watchOS`），以验证 API 目前是否可用。[^available]
-- 最后一个参数 `*` 表示在未指定的平台上，其版本与最低部署目标相同。
+- 在 `if` 或 `guard` 语句中可以判断当前平台版本（包括 `macOS` / `iOS` / `watchOS` / `tvOS`），以验证 API 目前是否可用。[^available]
+- 最后一个参数 `*` 是不可省略的，表示在未指定的平台上，其版本与最低部署目标相同。
 
 ```swift
-if #available(OSX 10.11, iOS 9, *) {
-    // Use OS X El Capitan and iOS 9 APIs
+if #available(macOS 10.12, iOS 10, *) {
+    // Use macOS Sierra and iOS 10 APIs
 } else {
-    // Fall back to earlier OS X and iOS APIs
+    // Fall back to earlier macOS and iOS APIs
 }
 ```
 
@@ -234,33 +242,34 @@ if #available(OSX 10.11, iOS 9, *) {
 ### 参数与返回值
 
 - 无参函数在定义和调用时需要写一对空括号。
-- 无返回值函数在定义时不需要写 `-> returnType`，实际上它返回了一个特殊的值 `Void`，这是一个空的元组即 `()`。
+- 无返回值函数在定义时不需要写 `-> Type`，实际上它返回了一个特殊的值 `Void`，这是一个空的元组即 `()`。
 - 可以使用元组类型让函数返回多个值。
 
 ### 参数名称
 
 ```swift
-func join(s1:String, to s2: String, joiner: String = " ") -> String {
+func join(_ s1:String, to s2: String, joiner: String = " ") -> String {
     return s1 + joiner + s2
 }
 join("hello", to: "world", joiner: ", ")
 join("hello", to: "world")
 ```
 
-- 上述代码中的 `s1` / `s2` 为**局部参数名**（local parameter name），在函数内部使用；`to` 为**外部参数名**（external parameter name），在调用函数时使用，以加强可读性。
-- 除第一个参数外，若不指定外部参数名，Swift 默认为后续参数添加与局部名相同的外部名，也可以使用 `_` 忽略外部参数名。函数参数的命名方法与方法相同。[^parameter]
-- 在参数类型后加入 `...` 可定义**可变参数**（variadic parameters），调用时可以传入不确定数量的参数，在函数内这将被当做这个类型的一个数组。可变参数可以被声明在参数表的任何位置，但至多只能有一个。
-- 函数参数默认是常量，修改参数值会导致编译错误。若要将其当做可修改的副本使用，可在参数名前加上关键字 `var`。
-- 如果需要修改参数在函数外的实际值，可以定义**输入输出参数**（in-out Parameters）。首先需要在参数前加关键字 `inout`，其次调用时传入的变量前要加 `&`。
+- 上述代码中的 `s1` / `s2` 部分为**参数名称**（parameter name），在函数内部使用；`_` / `to` 部分为**参数标签**（argument label），在调用函数时使用，以加强可读性。
+- 若不指定参数标签，则参数标签与参数名称相同，也可以使用 `_` 忽略参数标签。此项规则现在也适用于方法和构造器。[^parameter]
+- 在参数类型后加 `...` 可定义**可变参数**（variadic parameters），调用时可以传入不确定数量的参数，在函数内这将被当做这个类型的一个数组，但一个函数至多只能有一个可变参数。
+- 函数参数默认是常量，如果需要修改参数在函数外的实际值，可以定义**输入输出参数**（in-out Parameters）。首先需要在参数的类型前加关键字 `inout`，其次调用时传入的变量前要加 `&`。
 
-[^parameter]: 在 Swift 2.0 以前，函数有着与方法不同的外部参数名规则，现在已与其规则统一，并且 `#` 符号已被移除。
+[^parameter]: 在 Swift 1.x 时代，函数默认没有外部参数名（现称参数标签），方法除了第一个参数其他默认都有外部参数名，而构造器所有参数都有外部参数名。在 Swift 2.0 中，函数改用了方法的外部参数名规则；在 [Swift 3.0](https://github.com/apple/swift-evolution/blob/master/proposals/0046-first-label.md) 之后，函数和方法都统一成了构造器的参数标签规则。
 
 ### 函数类型
 
-- 函数类型可以表示为诸如 `(Int) -> Int` 的形式，既无参数也无返回值的函数类型为 `() -> Void`。
+- 函数类型可以表示为诸如 `(Int) -> Int` 的形式，既无参数也无返回值的函数类型为 `() -> Void`。从 [Swift 3.0](https://github.com/apple/swift-evolution/blob/master/proposals/0066-standardize-function-type-syntax.md) 开始，即使是单参数函数也不能省略参数两边的圆括号。
+- 函数的类型现在只与参数类型和返回值有关，因此函数作为变量时不需要书写函数标签，函数标签不再是类型的一部分。[^functiontype]
 - 函数在 Swift 中是一等公民（first-class citizen），可以作为参数类型和返回类型。
 - 函数可以被定义在别的函数体内，这被称为**嵌套函数**（nested function）。嵌套函数对全局是不可见的，但可以被它的封闭函数（enclosing function）返回从而被外界使用。
 
+[^functiontype]: [Swift 3.0](https://github.com/apple/swift-evolution/blob/master/proposals/0111-remove-arg-label-type-significance.md) 之前，函数标签是类型的一部分，且函数变量在被重新赋值时会保留原来的参数标签，从而有奇怪的表现。
 
 ## 闭包
 
@@ -268,34 +277,39 @@ join("hello", to: "world")
 - 全局函数是一个有名字但不会捕获任何值的闭包。
 - 嵌套函数是一个有名字并可以捕获其封闭函数域内值的闭包。
 - 闭包表达式是一个利用轻量级语法所写的可以捕获其上下文中变量或常量值的匿名闭包。
+- 当闭包作为参数传给函数时，若闭包的调用发生在函数返回之后，则称这是一个**逃逸闭包**（escaping closure）。闭包参数默认是不逃逸的 [^escaping]，如果要允许闭包逃逸，可以在参数类型前加上 `@escaping`，但这也意味着在闭包中 `self.` 将不可省略。
+
+[^escaping]: 在 [Swift 3.0](https://github.com/apple/swift-evolution/blob/master/proposals/0103-make-noescape-default.md) 之前，闭包参数默认是可以逃逸的，因此只有 `noescape` 关键字没有 `escaping` 关键字。
 
 ```swift
 // Closure expression syntax
-reversed = names.sort({ (s1: String, s2: String) -> Bool in
+reversed = names.sorted(by: { (s1: String, s2: String) -> Bool in
     return s1 > s2
 })
 
 // Inferring type from context
-reversed = names.sort( { s1, s2 in return s1 > s2 } )
+reversed = names.sorted(by: { s1, s2 in return s1 > s2 })
 
 // Implicit return from single-expression closures
-reversed = names.sort( { s1, s2 in s1 > s2 } )
+reversed = names.sorted(by: { s1, s2 in s1 > s2 })
 
 // Shorthand argument names
-reversed = names.sort( { $0 > $1 } )
+reversed = names.sorted(by: { $0 > $1 })
 
 // Trailing closures
-reversed = names.sort { $0 > $1 }
+reversed = names.sorted { $0 > $1 }
 
-// Operator functions
-reversed = names.sort(>)
+// Operator methods
+reversed = names.sorted(by: >)
 ```
-
 
 ## 枚举
 
-- 枚举类型是**一等公民**，它采用了很多传统上只被类所支持的特性，例如实例方法、计算属性、遵守协议等。枚举定义的类型与 Swift 中其他类型一样，名字必须首字母大写。
-- 与 C 不同，Swift 的枚举成员在被创建时不会被赋予一个默认的整数值。
+- 枚举类型是**一等公民**，它采用了很多传统上只被类所支持的特性，例如实例方法、计算属性、遵守协议等。
+- 枚举与 Swift 中其他类型名一样，应当首字母大写；而枚举的 `case` 成员应当首字母小写 [^enumcase]。
+- 与 C 语言不同，Swift 的枚举成员在被创建时不会被赋予一个默认的整数值。
+
+[^enumcase]: 在 Swift 3.0 之前枚举的 `case` 成员为首字母大写。
 
 ### 相关值（Associated Values）
 
@@ -303,18 +317,18 @@ reversed = names.sort(>)
 
 ```swift
 enum Barcode {
-    case UPCA(Int, Int, Int)
-    case QRCode(String)
+    case upc(Int, Int, Int, Int)
+    case qrCode(String)
 }
 
-var productBarcode = Barcode.UPCA(8, 85909_51226, 3)
-productBarcode = .QRCode("ABCDEFGHIJKLMNOP")
+var productBarcode = Barcode.upc(8, 85909, 51226, 3)
+productBarcode = .qrCode("ABCDEFGHIJKLMNOP")
 
 switch productBarcode {
-case let .UPCA(numberSystem, identifier, check):
-    print("UPC-A with value \(numberSystem), \(identifier), \(check).")
-case let .QRCode(productCode):
-    print("QR Code with value of \(productCode).")
+case let .upc(numberSystem, manufacturer, product, check):
+    print("UPC: \(numberSystem), \(manufacturer), \(product), \(check).")
+case let .qrCode(productCode):
+    print("QR code: \(productCode).")
 }
 ```
 
@@ -327,11 +341,11 @@ case let .QRCode(productCode):
 
 ```swift
 enum Plant: Int {
-    case Mercury = 1, Venus, Earth, Mars, Jupiter, Saturn, Uranus, Neptune
+    case mercury = 1, venus, earth, mars, jupiter, saturn, uranus, neptune
 }
 
-let earthsOrder = Planet.Earth.rawValue
-let possiblePlanet = Planet(rawValue: 7)
+let earthOrder = Planet.earth.rawValue
+let somePlanet = Planet(rawValue: 7)!
 ```
 
 
