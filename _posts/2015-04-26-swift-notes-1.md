@@ -9,7 +9,7 @@ author: 孙耀珠
 
 Swift 仍然是一门静态类型的语言，不过它拥有很多现代的语言特性，譬如类型推断、泛型、元组、更优雅的闭包等等，同时也有 Playgrounds 这样便利的交互式编程环境。Swift 非常强调安全性，不论是随处可见的可选类型、继承时复杂的构造规则，还是赋值没有返回值、控制流不能省略花括号，都是为了代码安全而考虑。另外 Swift 终于丢掉了 C 语言的包袱，放弃了指针，`switch` 语句不再需要 `break`，整型溢出会抛出运行时错误等等。
 
-我们能够看出它本身还是构建在 Objective-C 的基础之上，两者能够很方便地交互和共存，Cocoa / Cocoa Touch 的 API 也是共通的。Swift 的语法目前仍在不断改进，从 [Swift-Evolution Proposal Status](https://apple.github.io/swift-evolution/) 可见一斑，我也会根据最新的文档及时更新这三篇学习笔记。*（Updated: 2016-10-16）*
+我们能够看出它本身还是构建在 Objective-C 的基础之上，两者能够很方便地交互和共存，Cocoa / Cocoa Touch 的 API 也是共通的。Swift 的语法目前仍在不断改进，从 [Swift-Evolution Proposal Status](https://apple.github.io/swift-evolution/) 可见一斑，我也会根据最新的文档及时更新这三篇学习笔记。*（Updated: 2016-10-17）*
 
 
 ## 数据类型

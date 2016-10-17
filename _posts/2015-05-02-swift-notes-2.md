@@ -275,7 +275,7 @@ default:
 
 [^protocol]: 在 [Swift 3.0](https://github.com/apple/swift-evolution/blob/master/proposals/0095-any-as-existential.md) 之前，这被表示为 `protocol<SomeProtocol, AnotherProtocol>`。
 
-[^optional]: 实际上，使用协议扩展来提供协议的默认实现可以取代可选协议要求，所以保留可选协议要求只是为了与 Objective-C 兼容。参考：[Swift Evolution SE-0070](https://github.com/apple/swift-evolution/blob/master/proposals/0070-optional-requirements.md)
+[^optional]: 实际上，使用协议扩展来提供协议的默认实现可以取代可选协议要求，所以保留可选协议要求只是为了与 Objective-C 兼容。参考：[Swift Evolution 0070](https://github.com/apple/swift-evolution/blob/master/proposals/0070-optional-requirements.md)
 
 [^extension]: 协议扩展于 [Swift 2.0](https://developer.apple.com/swift/blog/?id=29) 后被引入。
 
@@ -333,7 +333,7 @@ extension Collection where Iterator.Element: TextRepresentable {
 
 ### 运算符重载
 
-- 二元运算符，或称**中置**（infix）运算符，重载时不需要关键字修饰，跟普通函数相似，如 `func + (left: Vector2D, right: Vector2D) -> Vector2D { … }`。[^operator]
+- 二元运算符，或称**中置**（infix）运算符，重载时不需要关键字修饰，跟普通函数相似，如 `func + (left: Vector, right: Vector) -> Vector { … }`。[^operator]
 - 一元运算符分为**前置**运算符和**后置**运算符，分别 `prefix func` 和 `postfix func` 修饰。
 - 组合赋值运算符重载时需要将左参数设置为 `inout`，而 `=` 和 `?:` 是不可重载的。
 
@@ -344,14 +344,18 @@ extension Collection where Iterator.Element: TextRepresentable {
 - 首先需要声明一个自定义运算符，格式为 `{in,pre,post}fix operator ×: PrecedenceGroup`，实现这个运算符的语法与重载相同。
 - 运算符的优先级和结合性是由它的优先级组决定的，若不指定优先级组则其属于 `DefaultPrecedence`，这个组的优先级仅高于三目运算符，且没有结合性，即它不能和同组运算符写在一起。[^precedence]
 
-[^precedence]: 在 [Swift 3.0](https://github.com/apple/swift-evolution/blob/master/proposals/0077-operator-precedence.md) 之前，运算符优先级是用整数表示，譬如默认优先级是三目运算符的 `100`。
+[^precedence]: 在 [Swift 3.0](https://github.com/apple/swift-evolution/blob/master/proposals/0077-operator-precedence.md) 之前，运算符优先级是用整数表示的，譬如默认优先级是三目运算符的 `100`。
 
 ```swift
-infix operator +-: AdditionPrecedence
+precedencegroup ExponentiationPrecedence {
+    associativity: left
+    higherThan: MultiplicationPrecedence
+}
+infix operator **: ExponentiationPrecedence
 
-extension Vector2D {
-    static func +- (left: Vector2D, right: Vector2D) -> Vector2D {
-        return Vector2D(x: left.x + right.x, y: left.y - right.y)
+extension Double {
+    static func ** (left: Double, right: Double) -> Double {
+        return pow(left, right)
     }
 }
 ```
