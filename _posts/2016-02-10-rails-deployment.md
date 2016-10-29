@@ -37,12 +37,12 @@ $ rvm --default use X.X.X
 $ gem install bundler --no-rdoc --no-ri
 ```
 
-如果服务器在国内，由于众所周知的原因，也许会频繁地遭遇网络连接失败，那你可以考虑使用淘宝的 [Ruby 源代码镜像和 RubyGems 镜像](https://ruby.taobao.org)：
+如果服务器在国内，由于众所周知的原因，也许会频繁地遭遇网络连接失败，那你可以考虑使用 Ruby China 的 [Ruby 源代码镜像](https://ruby-china.org/wiki/ruby-mirror) 和 [RubyGems 镜像](https://gems.ruby-china.org)：
 
 ``` sh
-$ sed -i -r 's|https?://cache.ruby-lang.org/pub/ruby|https://ruby.taobao.org/mirrors/ruby|g' $rvm_path/config/db
-$ gem sources -a https://ruby.taobao.org/ -r https://rubygems.org/
-$ bundle config mirror.https://rubygems.org https://ruby.taobao.org
+$ echo "ruby_url=https://cache.ruby-china.org/pub/ruby" > $rvm_path/user/db
+$ gem sources -a https://gems.ruby-china.org/ -r https://rubygems.org/
+$ bundle config mirror.https://rubygems.org https://gems.ruby-china.org
 ```
 
 ## 安装 JavaScript 引擎
