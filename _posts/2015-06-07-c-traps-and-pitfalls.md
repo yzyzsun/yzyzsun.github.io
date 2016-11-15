@@ -156,5 +156,5 @@ else
 - `long double` 的实现也因编译器而异，可能是双精度的同义词、扩展精度（extended precision, 80-bit）、四倍精度（quadruple precision, 128-bit）、一对双精度浮点数（double-double arithmetic, 64-bit + 64-bit）。为了字节对齐，扩展精度（10 字节）可能会被存储为 12 / 16 字节。
 - C99 规定求余结果与被除数同号，相应地，整数除法向零取整；而 C99 以前对此没有明确的定义。
 
-> **Link**  
+> **See also**  
 > [C 语言应试笔记 | 梦断代码](http://blog.zhanghai.me/c-exam-notes/)
