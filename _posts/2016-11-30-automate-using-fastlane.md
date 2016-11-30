@@ -17,7 +17,7 @@ author: 孙耀珠
 
 ## fastlane
 
-![](https://raw.githubusercontent.com/fastlane/fastlane/master/fastlane/assets/fastlane_text.png)
+[![](https://raw.githubusercontent.com/fastlane/fastlane/master/fastlane/assets/fastlane_text.png)](https://fastlane.tools)
 
 简而言之，fastlane 是一套用 Ruby 编写的 iOS 命令行工具集（后来也支持了 Android），主要组件包括：
 
@@ -87,7 +87,7 @@ end
 
 ## boarding
 
-![](https://raw.githubusercontent.com/fastlane/boarding/master/assets/BoardingHuge.png)
+[![](https://raw.githubusercontent.com/fastlane/boarding/master/assets/BoardingHuge.png)](https://github.com/fastlane/boarding)
 
 除了命令行工具之外，fastlane 还提供了一个自动建站工具 boarding，通过这个网站用户可以一键注册成为 TestFlight 外部测试员。也许你已经猜到了，boarding 用的是 Ruby on Rails 框架，你所需要做的就是将网站部署到 Heroku 上，填写好模板信息，就可以通过 xxx.herokuapp.com 来访问它了。
 
