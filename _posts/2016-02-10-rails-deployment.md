@@ -50,7 +50,7 @@ $ bundle config mirror.https://rubygems.org https://gems.ruby-china.org
 如果 Gemfile 直接或间接依赖了 [ExecJS](https://github.com/rails/execjs)，譬如 `coffee-rails` / `uglifier` / `turbolinks` / `bootstrap-sass` 等等，则还需要安装 JS 引擎，以在 Ruby 中执行 JS 代码。
 
 - 一种方法是在 Gemfile 中加上 `gem 'therubyracer'`，这是一个嵌入式的 V8 引擎。
-- 另一种方法是在服务器上安装 Node.js，这使用的也是 V8 引擎。安装 [Extra Packages for Enterprise Linux (EPEL)](https://fedoraproject.org/wiki/EPEL/zh-cn) 后可以直接通过 yum 安装 node，但版本会比较旧（0.10.X）；与 RVM 类似，Node.js 也有更好用的 [NVM](https://github.com/creationix/nvm) 来安装和管理版本，这里不再赘述。
+- 另一种方法是在服务器上安装 Node.js，这使用的也是 V8 引擎。安装 [Extra Packages for Enterprise Linux (EPEL)](https://fedoraproject.org/wiki/EPEL/zh-cn) 后可以直接通过 yum 安装 node，但版本会比较旧；与 RVM 类似，Node.js 也有更好用的 [NVM](https://github.com/creationix/nvm) 来安装和管理版本，这里不再赘述。
 
 ## 安装 Nginx + Passenger
 
@@ -201,7 +201,7 @@ config.serve_static_files = ENV['RAILS_SERVE_STATIC_FILES'].present?
 ```
 
 - 访问网站时显示「Incomplete response received from application」一般是没有设置 `secret_key_base`，具体参见前文「部署 Rails」。
-- 如果在 `gem install pg` 时报告找不到头文件 `libpq-fe.h`，那是因为没有 `yum install postgresql-devel`，或者在 Debian 系的 APT 中这个包叫 `libpq-dev`、在 Arch Linux 的 Pacman 中叫 `postgresql-libs`。
+- 如果在 `gem install pg` 时报告找不到头文件 `libpq-fe.h`，那是因为没有 `yum install postgresql-devel`，或者在 Debian 系的 APT 中这个包叫 `libpq-dev`。
 - 如果在 `rake assets:precompile` 时显示「Killed」，很可能是内存不足导致的。最简单的解决方法就是花钱💰去升级 VPS 的内存，或者你可以创建 SWAP 文件用于虚拟内存：
 
 ``` sh
