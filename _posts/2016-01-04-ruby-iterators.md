@@ -101,4 +101,7 @@ select → an_enumerator
 
 ## Ruby - AKB48（篠田TeamA）
 
-<embed width="720" height="430" quality="high" allowfullscreen="true" type="application/x-shockwave-flash" src="http://static.hdslb.com/miniloader.swf" flashvars="aid=3194009" pluginspage="https://get.adobe.com/flashplayer/">
+<object data="http://static.hdslb.com/miniloader.swf" type="application/x-shockwave-flash" width="720" height="500">
+  <param name="flashvars" value="aid=3194009">
+  Your browser does not support Flash.
+</object>
