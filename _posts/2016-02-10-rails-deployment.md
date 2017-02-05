@@ -212,9 +212,11 @@ $ swapon /swapfile
 $ echo "/swapfile swap swap defaults 0 0" >> /etc/fstab
 ```
 
+- Bundler 会将所有 `--without` 的组保存在 `.bundle/config` 中，因此之后的 `bundle install` 永远不会包含这些组。如果被这个特性所困扰，可以通过删除配置文件相关内容或使用 `--with` 选项来解决。
+
 ## 版本信息
 
-CentOS 7 x86_64 (1511) / Nginx 1.8.1 / Passenger 5.0.24 / PostgreSQL 9.2.14 / Rails 4.2.5 / Ruby 2.3.0
+CentOS 7 x86_64 (1511) / Nginx 1.8.1 / Passenger 5.0.24 / PostgreSQL 9.2.14 / Bundler 1.11.2 / Rails 4.2.5 / Ruby 2.3.0
 
 > 参考文档：
 >
