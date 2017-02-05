@@ -50,7 +50,7 @@ h1 {
   font-weight: 300;
 }
 
-h2 {  
+h2 {
   font-size: 26px;
   font-weight: 300;
 }
@@ -71,7 +71,7 @@ p {
 a {
   color: $blue;
   text-decoration: none;
-	cursor: pointer;
+  cursor: pointer;
   &:hover, &:active {
     color: $blue;
   }
