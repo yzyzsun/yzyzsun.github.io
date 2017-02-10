@@ -7,15 +7,15 @@ author: 孙耀珠
 
 在比较 Ruby 和 Python 的时候，很多人会说 Python 是一门简约的语言，而 Ruby 是一门魔幻的语言。之所以说 Ruby 魔幻，一方面是因为神奇的元编程和好吃的语法糖，另一方面是在 Ruby 中总有不止一种方法去做一件事（[There's more than one way to do it](https://en.wikipedia.org/wiki/There%27s_more_than_one_way_to_do_it)），循环便是其中一例。
 
-如果你写过 C 语言，那么你一定很熟悉传统的 `for (int i = 0; i < n; ++i) ...`；或者在 Pascal 等语言里，它有更简洁的形式 `for i := 0 to n-1 do ...`；如果你还学过 Python，你可能会把它改写成 `for i in range(0, n): ...`。在 Ruby 中，虽然也有 `for i in 0...n` 的语法，但实际上大多数 Rubyist 都不会去用 for 这个关键字。譬如上面的例子，Ruby 通常是这样表达的：
+如果你写过 C 语言，那么你一定很熟悉传统的 `for (int i = 0; i < n; ++i) ……`；或者在 Pascal 等语言里，它有更简洁的形式 `for i := 0 to n-1 do ……`；如果你还学过 Python，你可能会把它改写成 `for i in range(0, n): ……`。在 Ruby 中，虽然也有 `for i in 0...n` 的语法，但实际上大多数 Rubyist 都不会去用 for 这个关键字。譬如上面的例子，Ruby 通常是这样表达的：
 
 ``` ruby
-n.times { |i| ... }
-(0...n).each { |i| ... }
-0.upto(n-1) { |i| ... }
+n.times { |i| …… }
+(0...n).each { |i| …… }
+0.upto(n-1) { |i| …… }
 ```
 
-当然相应地，Java / C++11 中的 `for (type x : array)` 或是其他语言中的 for-in 语句，在 Ruby 中只需要用 `array.each` 就能实现了。像 `times` / `each` / `upto` 这样的方法在 Ruby 中被称为**迭代器**（iterators），类似于通常所说的高阶函数（[higher-order functions](https://en.wikipedia.org/wiki/Higher-order_function)）。迭代器能够接受一个 block，并在适当的时候反复调用这个代码块；而这个 block 实际上是 Ruby 中一种特殊的闭包，它只能跟在方法后面而不能单独存在，如果希望存储或是传递闭包，需要使用 proc / lambda。
+实际上，前述的 Ruby for 语句也只是 `(0...n).each` 的语法糖而已。当然相应地，Java / C++11 中的 `for (type x : array)` 或是其他语言中的 for-in 语句，在 Ruby 中只需要用 `array.each` 就能实现了。像 `times` / `each` / `upto` 这样的方法在 Ruby 中被称为**迭代器**（iterators），类似于通常所说的高阶函数（[higher-order functions](https://en.wikipedia.org/wiki/Higher-order_function)）。迭代器能够接受一个 block，并在适当的时候反复调用这个代码块；而这个 block 实际上是 Ruby 中一种特殊的闭包，它只能跟在方法后面而不能单独存在，如果希望存储或是传递闭包，需要使用 proc / lambda。
 
 <!--more-->
 
