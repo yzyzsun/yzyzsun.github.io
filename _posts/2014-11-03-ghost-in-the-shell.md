@@ -27,4 +27,4 @@ author: 孙耀珠
 
 补番的你若是喜欢科幻，《攻壳机动队》（个人首推**电视动画**）不会让你失望的。
 
-> 本文是我半个月前给 [浙大Fantasy动漫社](http://mp.weixin.qq.com/s?__biz=MzA3ODc0NzczMQ==&mid=201725590&idx=1&sn=cb8d10d8b16617d408c6f5b9ed0049b3) 的投稿 (｀･ω･´)
+> 本文是我半个月前给 [浙大Fantasy动漫社](http://mp.weixin.qq.com/s/7uDBieLzx753bnK8zkLZ9g) 的投稿 (｀･ω･´)
