@@ -18,7 +18,7 @@ Jekyll 的官方文档写得非常清楚，有时间的话完全可以从零开�
 - [GitHub Pages](https://pages.github.com)
 - [Jekyll • Simple, blog-aware, static sites](https://jekyllrb.com)
 - [Markdown 語法說明](http://markdown.tw)
-- [Writing on GitHub](https://help.github.com/categories/writing-on-github/)
+- [GitHub Flavored Markdown Spec](https://github.github.com/gfm/)
 - [使用 GitHub, Jekyll 打造自己的免费独立博客 - on_1y 的博客](http://blog.csdn.net/on_1y/article/details/19259435)
 
 至此便已经可以尽情享受 Jekyll 博客的乐趣了～
