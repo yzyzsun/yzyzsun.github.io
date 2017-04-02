@@ -4,9 +4,9 @@ title: About
 permalink: /about/
 ---
 
-我是孙耀珠（yzyzsun），目前就读于浙江大学计算机科学专业，是[求是潮](http://www.qsc.zju.edu.cn)技术研发中心、浙江大学超级计算团队的成员。目前负责求是潮手机站 iOS 端的开发工作，主力语言 Swift，同时有 Ruby on Rails 开发经验。
+我是孙耀珠（yzyzsun），就读于浙江大学计算机科学专业，为浙江大学超级计算团队的成员。曾于[浙江大学求是潮](http://www.qsc.zju.edu.cn)技术研发中心负责求是潮手机站 iOS 端的开发工作，主力语言 Swift，同时有 Ruby on Rails / JavaScript 开发经验。
 
-我正在学习日语，对 アニメ・テレビドラマ・アイドル 很感兴趣。
+我目前旅居日本东京，跟随导师进行编程语言方面的研究。
 
 本站使用 [Jekyll](http://jekyllrb.com) via [GitHub Pages](https://pages.github.com) 搭建。如无特殊声明，所有文章采用 [CC BY-NC-SA 4.0](http://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh) 进行许可。
 
