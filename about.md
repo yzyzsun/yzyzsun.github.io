@@ -10,7 +10,6 @@ permalink: /about/
 
 本站使用 [Jekyll](http://jekyllrb.com) via [GitHub Pages](https://pages.github.com) 搭建。如无特殊声明，所有文章采用 [CC BY-NC-SA 4.0](http://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh) 进行许可。
 
-![Zhihu](/images/zhihu.ico) [知乎](http://www.zhihu.com/people/yzyzsun) │
-![Douban](/images/douban.ico) [豆瓣](http://www.douban.com/people/yzyzsun/) │
-![Bangumi](/images/bangumi.ico) [番组计划](http://bgm.tv/user/yzyzsun) │
-![Wikipedia](/images/wikipedia.ico) [中文维基百科](https://zh.wikipedia.org/wiki/User:Yzyzsun)
+![Zhihu](/images/zhihu.ico) [知乎](https://www.zhihu.com/people/yzyzsun) │
+![Douban](/images/douban.ico) [豆瓣](https://www.douban.com/people/yzyzsun/) │
+![Bangumi](/images/bangumi.ico) [番组计划](https://bgm.tv/user/yzyzsun)
