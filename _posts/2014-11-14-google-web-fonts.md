@@ -9,14 +9,18 @@ author: 孙耀珠
 
 为了探明真相，我们可以调出浏览器的开发者工具，从时间线中可以看出究竟是什么拖慢了加载的进度：
 
-![屏幕快照](/images/ruby-official-website-00.png)
+![屏幕快照](/images/ruby-official-website.png)
 
 <!--more-->
 
 这下原因就显而易见了，因为 Google 被墙导致 **Google Web Fonts** 无法加载，即截屏中无响应的 `https://fonts.googleapis.com/css`。实际上其他使用 Google API 的网站还有很多，包括但不限于 [Ruby on Rails](http://rubyonrails.org/)、[Jekyll](http://jekyllrb.com/)、[Hexo](http://hexo.io/)、[Stack Overflow](https://stackoverflow.com/) 以及 [WordPress 博客](https://wordpress.org/plugins/disable-google-fonts/)。
 
-重点当然是解决方案：如果使用的浏览器是 Chrome 或 Firefox，可以安装 [gooreplacer](http://liujiacai.net/gooreplacer/) 插件将 Google 的资源替换为中科大的镜像。在 Safari 上目前没有类似的扩展，不过可以用 AdBlock Plus 屏蔽 Google API 来暂时解决问题。向 ABP 添加[自定义过滤规则](https://adblockplus.org/zh_CN/filters)即可：
+最直接的解决方案当然是翻墙，不过针对这个问题也有另外的方法：如果使用的浏览器是 Chrome 或 Firefox，可以安装 [gooreplacer](http://liujiacai.net/gooreplacer/) 插件将 Google 的资源替换为中科大的镜像；Safari 则可以使用 [Redirector](http://lanceli.github.io/redirector/) 扩展以自定义重定向规则，譬如
 
-- `googleapis.com`
-- `fonts.gstatic.com`
-- `themes.googleusercontent.com`
+```
+fonts.googleapis.com,fonts.proxy.ustclug.org
+ajax.googleapis.com,ajax.proxy.ustclug.org
+themes.googleusercontent.com,google-themes.proxy.ustclug.org
+fonts.gstatic.com,fonts-gstatic.proxy.ustclug.org
+```
+
