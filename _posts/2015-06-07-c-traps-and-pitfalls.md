@@ -5,6 +5,9 @@ category: Tech
 author: 孙耀珠
 ---
 
+* 目录
+{:toc}
+
 ## 词法陷阱（Lexical pitfalls）
 
 - 由 ALGOL 派生的编程语言如 Pascal 和 Ada，使用 `:=` 作为赋值运算符，而 `=` 作为比较运算符。C 语言则使用了另一种表示法，以 `=` 为赋值运算符，以 `==` 为比较运算符。

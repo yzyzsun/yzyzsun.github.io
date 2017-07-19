@@ -46,6 +46,9 @@ n timesRepeat: [ …… ].
 
 另外十分有趣的是，常用的 map / reduce / filter 系列函数，在 Smalltalk 的 `Iterable` 类中都起了 -ect 后缀的名字，Ruby 也将其继承到了 `Enumerable` 模块中，简直是强迫症的福音。下面则是 Ruby 中这些方法的 [Reference](http://ruby-doc.org/core/Enumerable.html)：
 
+* 目录
+{:toc}
+
 ## #collect (#map)
 
 ``` 

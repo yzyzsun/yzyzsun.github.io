@@ -13,6 +13,9 @@ $ rails server -e production -b 0.0.0.0 -p 80
 
 但 Rails 内建的 WEBrick + SQLite 性能较差，而且这样也没法配置虚拟主机。相比 Apache，Nginx 的异步模型能更好地处理高并发的场景，Passenger 是性能最好的 Rails servers 之一，而 PostgreSQL 比 MySQL / MariaDB 功能更强大，这三者差不多是 Web 开发的最佳实践，因此我决定折腾一下 Nginx + Passenger + PostgreSQL。
 
+* 目录
+{:toc}
+
 ## 安装 Ruby
 
 直接使用 yum 安装当然是可行的，但 [Ruby Version Manager (RVM)](https://rvm.io) 能够更方便地安装并管理 Ruby 版本，因此下面以 RVM 为例。安装 RVM：

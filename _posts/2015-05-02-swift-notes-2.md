@@ -5,6 +5,9 @@ category: Tech
 author: 孙耀珠
 ---
 
+* 目录
+{:toc}
+
 ## 类和结构体
 
 - 类和结构体有以下共同点：属性（properties）、方法（methods）、下标（subscripts）、构造器（initializers）、扩展（extensions）、协议（protocols）。

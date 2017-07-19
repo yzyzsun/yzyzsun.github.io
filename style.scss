@@ -354,6 +354,20 @@ table {
   font-size: 80%;
 }
 
+#markdown-toc {
+  border: 1px solid #aaa;
+  background-color: #f9f9f9;
+  padding-top: 10px;
+  padding-bottom: 10px;
+  font-size: 90%;
+}
+
+.posts {
+  #markdown-toc, .footnote, .footnotes {
+    display: none;
+  }
+}
+
 // Settled on moving the import of syntax highlighting to the bottom of the CSS
 // ... Otherwise it really bloats up the top of the CSS file and makes it difficult to find the start
 @import "highlights";

@@ -4,6 +4,9 @@ title: アイドルについて
 permalink: /idol/
 ---
 
+* 目录
+{:toc}
+
 ## CD
 
 ### AKB48
