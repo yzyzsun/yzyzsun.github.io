@@ -1,5 +1,4 @@
 ---
-layout: page
 title: アイドルについて
 permalink: /idol/
 ---

@@ -1,6 +1,6 @@
 ---
 layout: default
-title: Archive
+title: ARCHIVE
 permalink: /archive/
 ---
 
@@ -14,7 +14,7 @@ permalink: /archive/
         {% if category.first == "Tech" %}
           <i class="fa fa-code"></i>
         {% endif %}
-        <span class="category">{{ category.first }}</span>
+        <span class="category">{{ category.first | upcase }}</span>
       </h2>
       <ul>
         {% for post in category.last %}

@@ -1,5 +1,4 @@
 ---
-layout: post
 title: Hello, World!
 category: Diary
 author: 孙耀珠

@@ -1,5 +1,4 @@
 ---
-layout: post
 title: Swift 学习笔记（一）
 category: Tech
 author: 孙耀珠

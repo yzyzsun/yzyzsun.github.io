@@ -1,5 +1,4 @@
 ---
-layout: post
 title: 《C 陷阱与缺陷》笔记
 category: Tech
 author: 孙耀珠

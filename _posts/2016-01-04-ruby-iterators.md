@@ -1,5 +1,4 @@
 ---
-layout: post
 title: "Ruby: collect, detect, inject, reject, select"
 category: Tech
 author: 孙耀珠

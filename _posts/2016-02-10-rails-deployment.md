@@ -1,5 +1,4 @@
 ---
-layout: post
 title: Deploy Rails with PostgreSQL Using Passenger and Nginx on CentOS
 category: Tech
 author: 孙耀珠

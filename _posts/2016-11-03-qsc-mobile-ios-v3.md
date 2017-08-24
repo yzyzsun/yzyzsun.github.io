@@ -1,5 +1,4 @@
 ---
-layout: post
 title: 求是潮手机站 V3 for iOS
 category: Diary
 author: 求是潮

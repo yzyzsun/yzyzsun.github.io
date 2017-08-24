@@ -1,5 +1,4 @@
 ---
-layout: post
 title: Sublime Text for Mac 使用配置
 category: Tech
 author: 孙耀珠

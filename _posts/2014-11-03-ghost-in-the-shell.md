@@ -1,5 +1,4 @@
 ---
-layout: post
 title: 动画介绍：攻壳机动队
 category: Diary
 author: 孙耀珠
