@@ -37,7 +37,7 @@ author: 孙耀珠
 
 ## Fastfile
 
-接下来最核心的部分就是来配置 `Fastfile` 了，虽然自动生成的 `Fastfile` 已经囊括了 `test` / `beta` / `release` 这三支流程（在这里称为 lane），不过它们的默认操作只是简单的 `scan`  / `gym` + `pilot` / `gym` + `deliver`，尚未发挥出 fastlane 的全部威力。fastlane 除了上述的子工具之外，还内建了非常多实用的操作，在 [https://docs.fastlane.tools/actions/](https://docs.fastlane.tools/actions/) 可以查询 fastlane 所有支持的操作和已有的插件。因为 `Fastfile` 本质上就是 Ruby DSL，所以你也可以直接在其中写 Ruby 代码，甚至为其创建插件。
+接下来最核心的部分就是来配置 `Fastfile` 了，虽然自动生成的 `Fastfile` 已经囊括了 `test` / `beta` / `release` 这三支流程（在这里称为 lane），不过它们的默认操作只是简单的 `scan`  / `gym` + `pilot` / `gym` + `deliver`，尚未发挥出 fastlane 的全部威力。fastlane 除了上述的子工具之外，还内建了非常多实用的操作，在 <https://docs.fastlane.tools/actions/> 可以查询 fastlane 所有支持的操作和已有的插件。因为 `Fastfile` 本质上就是 Ruby DSL，所以你也可以直接在其中写 Ruby 代码，甚至为其创建插件。
 
 以我自己的项目（QSCMobileV3）为例，在常规的编译打包和上传之前，我需要用 `agvtool` 增加 Build Number 并修改版本号，`git commit` 之后再打上包含更新日志的标签并推送到远程仓库。这一整套流程实际上都可以由 fastlane 代劳，而我需要做的只是预先书写一下 `release_notes.txt`，接着敲下 `fastlane release` 便能一键部署，剩下就是静静等待苹果审核了。
 

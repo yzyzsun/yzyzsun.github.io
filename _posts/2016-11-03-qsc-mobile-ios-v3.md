@@ -6,8 +6,8 @@ author: 求是潮
 
 ![](/images/qsc-mobile-ios-v3.jpg)
 
-> App Store: [https://itunes.apple.com/cn/app/id583334920](https://itunes.apple.com/cn/app/id583334920)  
-> GitLab (Private): [https://git.zjuqsc.com/qsc-mobile/qsc-mobile-ios-v3](https://git.zjuqsc.com/qsc-mobile/qsc-mobile-ios-v3)
+> App Store: <https://itunes.apple.com/cn/app/id583334920>  
+> GitLab (Private): <https://git.zjuqsc.com/qsc-mobile/qsc-mobile-ios-v3>
 
 在深冬，写下第一行代码  
 在初春，设计第一版界面  
