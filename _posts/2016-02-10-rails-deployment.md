@@ -10,7 +10,7 @@ author: 孙耀珠
 $ rails server -e production -b 0.0.0.0 -p 80
 ```
 
-但 Rails 内建的 WEBrick + SQLite 性能较差，而且这样也没法配置虚拟主机。相比 Apache，Nginx 的异步模型能更好地处理高并发的场景，Passenger 是性能最好的 Rails servers 之一，而 PostgreSQL 比 MySQL / MariaDB 功能更强大，这三者差不多是 Web 开发的最佳实践，因此我决定折腾一下 Nginx + Passenger + PostgreSQL。
+但 Rails 内建的 WEBrick + SQLite 性能较差，而且这样部署也不够灵活，还是上 Apache / Nginx 比较主流。与 Apache 相比 Nginx 的异步模型能更好地处理高并发的场景，Passenger 性能不错并且可以直接集成于 Apache / Nginx 而不必反向代理，而 PostgreSQL 比 MySQL / MariaDB 功能更强大，这三者是 Ruby 服务器的最佳实践之一，因此我决定折腾一下 Nginx + Passenger + PostgreSQL。
 
 * 目录
 {:toc}
@@ -39,7 +39,7 @@ $ rvm --default use X.X.X
 $ gem install bundler --no-rdoc --no-ri
 ```
 
-如果服务器在国内，由于众所周知的原因，也许会频繁地遭遇网络连接失败，那你可以考虑使用 Ruby China 的 [Ruby 源代码镜像](https://ruby-china.org/wiki/ruby-mirror) 和 [RubyGems 镜像](https://gems.ruby-china.org)：
+如果服务器在国内，由于众所周知的原因，也许会频繁遭遇网络连接失败，这时候可以考虑使用 Ruby China 的 [Ruby 源代码镜像](https://ruby-china.org/wiki/ruby-mirror) 和 [RubyGems 镜像](https://gems.ruby-china.org)：
 
 ``` sh
 $ echo "ruby_url=https://cache.ruby-china.org/pub/ruby" > $rvm_path/user/db
@@ -49,14 +49,14 @@ $ bundle config mirror.https://rubygems.org https://gems.ruby-china.org
 
 ## 安装 JavaScript 引擎
 
-如果 Gemfile 直接或间接依赖了 [ExecJS](https://github.com/rails/execjs)，譬如 `coffee-rails` / `uglifier` / `turbolinks` / `bootstrap-sass` 等等，则还需要安装 JS 引擎，以在 Ruby 中执行 JS 代码。
+如果 Gemfile 直接或间接依赖了 [ExecJS](https://github.com/rails/execjs)，譬如 `coffee-rails` / `turbolinks` / `uglifier` / `bootstrap-sass` 等等，则还需要安装 JS 引擎，以在 Ruby 中执行 JS 代码。
 
 - 一种方法是在 Gemfile 中加上 `gem 'therubyracer'`，这是一个嵌入式的 V8 引擎。
-- 另一种方法是在服务器上安装 Node.js，这使用的也是 V8 引擎。安装 [Extra Packages for Enterprise Linux (EPEL)](https://fedoraproject.org/wiki/EPEL/zh-cn) 后可以直接通过 yum 安装 node，但版本会比较旧；与 RVM 类似，Node.js 也有更好用的 [NVM](https://github.com/creationix/nvm) 来安装和管理版本，这里不再赘述。
+- 另一种方法是直接在服务器上安装 Node.js，这使用的也是 V8 引擎。安装 [Extra Packages for Enterprise Linux (EPEL)](https://fedoraproject.org/wiki/EPEL/zh-cn) 后可以直接通过 yum 安装 node，但版本会比较旧；与 RVM 类似，Node.js 也有 [NVM](https://github.com/creationix/nvm) 来安装和管理版本，这里不再赘述。
 
 ## 安装 Nginx + Passenger
 
-yum 原来的源（repo）中没有 Nginx 和 Passenger，可以导入 [Passenger 自己的源](https://www.phusionpassenger.com/library/install/nginx/install/oss/el7/)，安装已包含 Passenger 模块的 Nginx 版本（这样就不必去运行 `passenger-install-nginx-module` 了）和 Passenger 本体：
+yum 原本的源中没有 Nginx 和 Passenger，可以导入 [Passenger 自己的源](https://www.phusionpassenger.com/library/install/nginx/install/oss/el7/)，安装已包含 Passenger 模块的 Nginx 版本（这样就不必去运行 `passenger-install-nginx-module` 了）和 Passenger 本体：
 
 ``` sh
 $ curl --fail -sSLo /etc/yum.repos.d/passenger.repo https://oss-binaries.phusionpassenger.com/yum/definitions/el-passenger.repo
@@ -95,7 +95,7 @@ $ createuser sample-app
 $ createdb -O sample-app sample-app
 ```
 
-`Gemfile` 中也需要加入 PostgreSQL 的 Ruby 接口：
+Gemfile 中也需要加入 PostgreSQL 的接口：
 
 ``` ruby
 gem 'pg', group: :production
@@ -129,7 +129,7 @@ $ cd /srv/sample-app
 $ bundle install --deployment --without development test
 ```
 
-接下来检查一下 `config/database.yml` 和 `config/secrets.yml`，前者即上文提到的数据库配置，后者存储的是用来加密 cookies / sessions 的密钥，生产环境默认从环境变量读取密钥，以防开发者手滑将其上传到 public repo：
+接下来检查一下 `config/database.yml` 和 `config/secrets.yml`，前者即上文提到的数据库配置，后者存储的是用来加密 cookies 的密钥，生产环境默认从环境变量读取密钥，以防开发者手滑将其上传到 public repo：
 
 ``` yaml
 # Do not keep production secrets in the repository, instead read values from the environment.
@@ -137,21 +137,16 @@ production:
   secret_key_base: <%= ENV["SECRET_KEY_BASE"] %>
 ```
 
-密钥可通过 `bundle exec rake secret` 生成，然后在 `~/.bashrc` 或 `/srv/sample-app/.env.production`（使用了 [gem 'dotenv-rails'](https://github.com/bkeepers/dotenv) 的话）设置环境变量：
+密钥可通过 `bundle exec rake secret` 生成，至于如何写入环境变量，包括但不限于以下几种方式：
 
-``` sh
-export SECRET_KEY_BASE=...
-```
+- 把 `export SECRET_KEY_BASE=...` 直接写进 `~/.bashrc` 或是其他 shell 的启动文件；
+- 在 Gemfile 中加入 [dotenv-rails](https://github.com/bkeepers/dotenv)，使用 `.env.production` 文件管理生产环境；
+- 不少开发者会使用 [Foreman](https://github.com/ddollar/foreman) 启动各种服务，它会自动读取 `.env` 文件；
+- 在集成了 Passenger 的 Nginx 配置文件中加上 `passenger_env_var SECRET_KEY_BASE ...`。
 
-我个人比较喜欢的做法是在后面提到的 Nginx 配置文件中加上：
+当然单单在 shell 里敲一行 export 命令是不行的，这只会在当前 shell 及其子进程中生效。另外**不要随意更改密钥**，这会使原先加密的 cookies 失效。
 
-``` nginx
-passenger_env_var SECRET_KEY_BASE ...;
-```
-
-但千万不要直接在 shell 里输 export 命令，这只会在当前 shell 及其子进程中生效。也不要随意更改密钥，这会使原先加密的 cookies 失效。
-
-最后让 [Asset Pipeline](http://guides.ruby-china.org/asset_pipeline.html) 对静态资源做预编译，让 Active Record 做数据库迁移，记得别忘了加 **`RAILS_ENV=production`**：
+最后让 [Asset Pipeline](http://guides.ruby-china.org/asset_pipeline.html) 对静态资源做预编译，让 Active Record 做数据库迁移，别忘了**指定生产环境**：
 
 ``` sh
 $ bundle exec rake assets:precompile db:migrate RAILS_ENV=production
@@ -178,9 +173,9 @@ $ systemctl start nginx
 $ systemctl enable nginx
 ```
 
-理论上你的 app 已经部署成功了～ 🎉
+理论上 app 已经部署成功了～ 🎉
 
-之后如果需要让 Passenger 重启 app，或是要重载 Nginx：
+之后如果需要让 Passenger 重启 app，或是更改了配置需要重载 Nginx：
 
 ``` sh
 $ touch /srv/sample-app/tmp/restart.txt
@@ -191,7 +186,7 @@ $ systemctl reload nginx
 
 - 如果在本地测试**生产环境**时，发现静态文件未能加载：
   - 其一可能是因为没有做预编译，Rails 认为生产环境的静态资源应该已经事先编译好了，所以 Asset Pipeline 的实时编译是关闭的；
-  - 其二可能是因为 Rails 默认没有启用静态文件服务，你可以通过设置 `RAILS_SERVE_STATIC_FILES` 环境变量来开启它，但这在生产环境中低效且不安全，应该让 Nginx / Apache 来处理它们。
+  - 其二可能是因为 Rails 默认没有启用静态文件服务，可以通过设置 `RAILS_SERVE_STATIC_FILES` 环境变量来开启它，但这在生产环境中低效且不安全，应该让 Nginx / Apache 来处理它们。
   - 上述默认配置均在 `config/environments/production.rb` 文件中：
 
 ``` ruby
@@ -202,9 +197,9 @@ config.assets.compile = false
 config.serve_static_files = ENV['RAILS_SERVE_STATIC_FILES'].present?
 ```
 
-- 访问网站时显示「Incomplete response received from application」一般是没有设置 `secret_key_base`，具体参见前文「部署 Rails」。
+- 访问网站时显示「Incomplete response received from application」一般是没有设置 `secret_key_base`，具体参见前文「[部署 Rails](#部署-rails)」。
 - 如果在 `gem install pg` 时报告找不到头文件 `libpq-fe.h`，那是因为没有 `yum install postgresql-devel`，或者在 Debian 系的 APT 中这个包叫 `libpq-dev`。
-- 如果在 `rake assets:precompile` 时显示「Killed」，很可能是内存不足导致的。最简单的解决方法就是花钱💰去升级 VPS 的内存，或者你可以创建 SWAP 文件用于虚拟内存：
+- 如果在 `rake assets:precompile` 时显示「Killed」，很可能是内存不足导致的。最简单的解决方法就是花钱💰去升级 VPS 的内存，或者可以创建 SWAP 文件用于虚拟内存：
 
 ``` sh
 $ fallocate -l 1G /swapfile
