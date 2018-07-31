@@ -1,6 +1,6 @@
 ---
 title: 《C 陷阱与缺陷》笔记
-category: Tech
+category: Study
 author: 孙耀珠
 ---
 

@@ -1,6 +1,6 @@
 ---
 title: 求是潮手机站 V3 for iOS
-category: Diary
+category: Dev
 author: 求是潮
 ---
 

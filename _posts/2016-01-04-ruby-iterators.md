@@ -1,6 +1,6 @@
 ---
 title: "Ruby: collect, detect, inject, reject, select"
-category: Tech
+category: Study
 author: 孙耀珠
 ---
 

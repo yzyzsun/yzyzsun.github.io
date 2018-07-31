@@ -1,6 +1,6 @@
 ---
 title: Google Web Fonts 无法加载的解决方法
-category: Tech
+category: Dev
 author: 孙耀珠
 ---
 

@@ -1,5 +1,4 @@
 ---
-layout: post
 title: 东京一年
 category: Diary
 author: 孙耀珠

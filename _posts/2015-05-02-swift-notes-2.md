@@ -1,6 +1,6 @@
 ---
 title: Swift 学习笔记（二）
-category: Tech
+category: Study
 author: 孙耀珠
 ---
 

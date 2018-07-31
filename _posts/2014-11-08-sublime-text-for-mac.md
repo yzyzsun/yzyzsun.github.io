@@ -1,6 +1,6 @@
 ---
 title: Sublime Text for Mac 使用配置
-category: Tech
+category: Dev
 author: 孙耀珠
 ---
 

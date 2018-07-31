@@ -1,6 +1,6 @@
 ---
 title: Qt 多线程解决 UI 阻塞
-category: Tech
+category: Dev
 author: 孙耀珠
 ---
 

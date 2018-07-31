@@ -1,6 +1,6 @@
 ---
 title: 使用 fastlane 自动化 iOS 部署
-category: Tech
+category: Dev
 author: 孙耀珠
 ---
 

@@ -348,6 +348,10 @@ table {
   &:last-child {
     border-bottom: none;
   }
+  .category {
+    font-variant: small-caps;
+    margin-left: 5px;
+  }
 }
 
 .footnote {

@@ -11,10 +11,13 @@ permalink: /archive/
         {% if category.first == "Diary" %}
           <i class="fas fa-book"></i>
         {% endif %}
-        {% if category.first == "Tech" %}
+        {% if category.first == "Dev" %}
           <i class="fas fa-code"></i>
         {% endif %}
-        <span class="category">{{ category.first | upcase }}</span>
+        {% if category.first == "Study" %}
+          <i class="fas fa-pencil-ruler"></i>
+        {% endif %}
+        <span class="category">{{ category.first }}</span>
       </h2>
       <ul>
         {% for post in category.last %}
