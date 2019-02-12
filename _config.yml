@@ -93,8 +93,3 @@ defaults:
       type: posts
     values:
       layout: post
-  -
-    scope:
-      path: pages
-    values:
-      layout: page
