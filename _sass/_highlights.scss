@@ -12,7 +12,15 @@ div.highlight {
 
 code {
   font-family: Monaco, Menlo, Consolas, monospace;
-  font-size: 95%;
+  font-size: 85%;
+  background: rgba(27,31,35,0.1);
+  border-radius: 3px;
+  padding: 0.2em 0.4em;
+}
+
+pre code {
+  background: none;
+  padding: 0;
 }
 
 .highlight .c { color: #586E75 } /* Comment */
