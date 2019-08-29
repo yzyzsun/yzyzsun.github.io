@@ -1,7 +1,7 @@
 ---
 title: 幽灵・熔毁・预兆
-category: Study
 author: 孙耀珠
+tags: 综述
 ---
 
 ![](/images/spectre-meltdown-foreshadow-00.png)

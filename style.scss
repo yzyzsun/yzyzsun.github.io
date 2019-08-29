@@ -342,15 +342,17 @@ table {
   color: gray;
 }
 
+.tags {
+  vertical-align: super;
+  font-size: smaller;
+  color: gray;
+}
+
 .archive {
   line-height: 32px;
   border-bottom: 1px solid $lightGray;
   &:last-child {
     border-bottom: none;
-  }
-  .category {
-    font-variant: small-caps;
-    margin-left: 5px;
   }
 }
 

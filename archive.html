@@ -4,29 +4,15 @@ title: ARCHIVE
 permalink: /archive/
 ---
 
-<div class="archives">
-  {% for category in site.categories %}
-    <div class="archive">
-      <h2>
-        {% if category.first == "Diary" %}
-          <i class="fa fa-book"></i>
-        {% endif %}
-        {% if category.first == "Dev" %}
-          <i class="fa fa-code"></i>
-        {% endif %}
-        {% if category.first == "Study" %}
-          <i class="fa fa-pencil"></i>
-        {% endif %}
-        <span class="category">{{ category.first }}</span>
-      </h2>
-      <ul>
-        {% for post in category.last %}
-          <li>
-            <span class="date">{{ post.date | date: "%Y-%m-%d" }}</span>
-            <a href="{{ site.baseurl }}{{ post.url }}">{{ post.title }}</a>
-          </li>
-        {% endfor %}
-      </ul>
-    </div>
-  {% endfor %}
+<h1>ARCHIVE</h1>
+<div class="archive">
+  <ul>
+    {% for post in site.posts %}
+      <li>
+        <span class="date">{{ post.date | date: "%Y-%m-%d" }}</span>
+        <a href="{{ site.baseurl }}{{ post.url }}">{{ post.title }}</a>
+        <span class="tags">{{ post.tags | join: "、" }}</sup>
+      </li>
+    {% endfor %}
+  </ul>
 </div>

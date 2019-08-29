@@ -1,7 +1,7 @@
 ---
 title: 求是潮手机站 V3 for iOS
-category: Dev
 author: 求是潮
+tags: 广告
 ---
 
 ![](/images/qsc-mobile-ios-v3.jpg)

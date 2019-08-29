@@ -1,7 +1,7 @@
 ---
 title: Swift 学习笔记（一）
-category: Study
 author: 孙耀珠
+tags: 编程语言
 ---
 
 苹果自收购 NeXT 公司开始便使用 Objective-C 作为主力开发语言，至今已有近二十年了；而在这期间，各大科技公司都如火如荼地设计着更为现代的语言，譬如微软推出了 C# 和 F#、谷歌推出了 Go 和 Dart、Mozilla 推出了 Rust……虽然 Objective-C 随着 OS X 和 iOS 的迅速发展而越来越火，但相比之下它的语言设计已经落后于时代了，于是在这个大背景下 Swift 诞生了，开发者正是 LLVM / Clang 之父 Chris Lattner。

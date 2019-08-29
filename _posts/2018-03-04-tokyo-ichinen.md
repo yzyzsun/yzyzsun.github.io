@@ -1,7 +1,7 @@
 ---
 title: 东京一年
-category: Diary
 author: 孙耀珠
+tags: 游记
 ---
 
 ![東京工業大学](/images/tokyo-ichinen-00.jpg)

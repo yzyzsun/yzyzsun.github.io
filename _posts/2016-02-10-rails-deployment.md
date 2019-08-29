@@ -1,7 +1,7 @@
 ---
 title: Deploy Rails with PostgreSQL Using Passenger and Nginx on CentOS
-category: Dev
 author: 孙耀珠
+tags: 运维
 ---
 
 最近读完了 Michael Hartl 的《Ruby on Rails Tutorial》，于是想试着在自己的 Digital Ocean (CentOS 7) 上部署一下最终完成的 sample app。最简单的方法当然是：

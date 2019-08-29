@@ -1,7 +1,7 @@
 ---
 title: "Ruby: collect, detect, inject, reject, select"
-category: Study
 author: 孙耀珠
+tags: 编程语言
 ---
 
 在比较 Ruby 和 Python 的时候，很多人会说 Python 是一门简约的语言，而 Ruby 是一门魔幻的语言。之所以说 Ruby 魔幻，一方面是因为神奇的元编程和甜甜的语法糖，另一方面是在 Ruby 中总有不止一种方法去做一件事（[There's more than one way to do it](https://en.wikipedia.org/wiki/There%27s_more_than_one_way_to_do_it)），循环便是其中一例。

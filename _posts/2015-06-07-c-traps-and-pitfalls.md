@@ -1,7 +1,7 @@
 ---
 title: 《C 陷阱与缺陷》笔记
-category: Study
 author: 孙耀珠
+tags: 编程语言
 ---
 
 * 目录

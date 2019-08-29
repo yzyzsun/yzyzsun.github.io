@@ -1,7 +1,7 @@
 ---
 title: Swift 学习笔记（二）
-category: Study
 author: 孙耀珠
+tags: 编程语言
 ---
 
 * 目录
