@@ -6,9 +6,9 @@ tags: 编程语言
 
 苹果自收购 NeXT 公司开始便使用 Objective-C 作为主力开发语言，至今已有近二十年了；而在这期间，各大科技公司都如火如荼地设计着更为现代的语言，譬如微软推出了 C# 和 F#、谷歌推出了 Go 和 Dart、Mozilla 推出了 Rust……虽然 Objective-C 随着 OS X 和 iOS 的迅速发展而越来越火，但相比之下它的语言设计已经落后于时代了，于是在这个大背景下 Swift 诞生了，开发者正是 LLVM / Clang 之父 Chris Lattner。
 
-Swift 仍然是一门静态类型、面向对象的语言，不过它拥有很多现代的语言特性，譬如类型推断、模式匹配、泛型、函数作为一等公民等等，同时也有 Playgrounds 这样便利的交互式编程环境。Swift 非常强调安全性，不论是随处可见的可空类型、继承时复杂的构造规则，还是赋值没有返回值、控制流不能省略花括号，都是为了代码安全而考虑。另外 Swift 终于丢掉了 C 语言的包袱，语言层面上移除了指针，`switch` 语句不再需要 `break`，整型溢出会抛出运行时错误等等。
+Swift 仍然是一门静态类型、面向对象的语言，不过它拥有很多现代的语言特性，譬如类型推断、代数数据类型、模式匹配、泛型等等，同时也有 Playgrounds 这样便利的交互式编程环境。Swift 非常强调安全性，不论是随处可见的可空类型、继承时复杂的构造规则，还是赋值没有返回值、控制流不能省略花括号，都是为了代码安全而考虑。另外 Swift 终于丢掉了 C 语言的包袱，语言层面上移除了指针，`switch` 语句不再需要 `break`，整型溢出会抛出运行时错误等等。
 
-我们能够看出它本身还是构建在 Objective-C 的基础之上，两者能够很方便地交互和共存，Cocoa / Cocoa Touch 的 API 也是共通的。Swift 的语法目前仍在不断改进，从 [Swift Evolution](https://apple.github.io/swift-evolution/) 可见一斑；目前这三篇学习笔记已从初版更新到了 Swift 5.0（2019-03-25），这是第一个 ABI 稳定的版本，也就是说从 Swift 5.0 开始二进制接口将向下兼容。[^abi]
+就目前来讲，用 Swift 进行 iOS 开发依然离不开 Objective-C 运行时，不过两者能够很方便地交互和共存，从前所有 Objective-C 撰写的 API 均可供 Swift 使用。Swift 的语法目前仍在不断改进，从 [Swift Evolution](https://apple.github.io/swift-evolution/) 可见一斑；目前这三篇学习笔记已从初版更新到了 Swift 5.0（2019-03-25），这是第一个 ABI 稳定的版本，也就是说从 Swift 5.0 开始二进制接口将向下兼容。[^abi]
 
 [^abi]: [ABI Stability and More — Swift Blog](https://swift.org/blog/abi-stability-and-more/)
 
@@ -74,7 +74,7 @@ var s: String! = "Must not be nil!"
 s.count // = s!.count
 ```
 
-[^iuo]: 隐式解包可空值原本所属的 `ImplicitlyUnwrappedOptional<T>` 类型已于 Swift 4.2（[SE-0054](https://github.com/apple/swift-evolution/blob/master/proposals/0054-abolish-iuo.md)）被废除，取而代之的实现是为普通的可空类型加上 `@_autounwrapped` 属性。
+[^iuo]: 隐式解包可空值原本所属的 `ImplicitlyUnwrappedOptional<T>` 类型已于 Swift 4.2（[SE-0054](https://github.com/apple/swift-evolution/blob/master/proposals/0054-abolish-iuo.md)）被废除，取而代之的实现是为普通的可空类型加上 `@_autounwrapped`。
 
 
 ## 基本运算
@@ -111,7 +111,7 @@ a != nil ? a! : b // equivalent form
 - 半开区间运算符 `a..<b` 表示 [a, b)；
 - 单侧无界区间运算符 `a...` / `...a` / `..<a` 分别表示 [a, +∞) / (−∞, a] / (−∞, a)。[^range]
 
-[^range]: 单侧无界区间运算符于 Swift 4.0（[SE-0172](https://github.com/apple/swift-evolution/blob/master/proposals/0172-one-sided-ranges.md)）引入，用于简化集合类型的下标访问。
+[^range]: 单侧无界区间运算符于 Swift 4.0（[SE-0172](https://github.com/apple/swift-evolution/blob/master/proposals/0172-one-sided-ranges.md)）引入，用于简化合集类型的下标访问。
 
 
 ## 字符串和字符
@@ -119,7 +119,7 @@ a != nil ? a! : b // equivalent form
 - Swift 无论字符串还是字符都使用双引号而不用单引号，多行字符串字面量则可以放在三个双引号内。字符串之间可以通过 `+` 连接，将字符连接到字符串尾部可以使用 `append()` 方法，在字符串中插值（interpolation）可以使用 `"\()"`。
 - 因为一个字符占用的空间可能不同，所以需要使用特殊的 `String.Index` 类型作为下标获取字符串指定位置的字符，如 `string[string.index(string.endIndex, offsetBy: -7)]`。[^index]
 
-[^index]: Swift 3.0（[SE-0065](https://github.com/apple/swift-evolution/blob/master/proposals/0065-collections-move-indices.md)）对集合类型及其下标访问进行了一次大改，本来由索引类型负责的遍历工作转交给集合类型本身，这样索引对象就不必再持有对集合对象的引用了。比如要取集合对象 `c` 的第二个元素的索引，原来是  `c.startIndex.successor()`，现在是 `c.index(after: c.startIndex)`。
+[^index]: Swift 3.0（[SE-0065](https://github.com/apple/swift-evolution/blob/master/proposals/0065-collections-move-indices.md)）对合集类型及其下标访问进行了一次大改，本来由索引类型负责的遍历工作转交给合集类型本身，这样索引对象就不必再持有对合集对象的引用了。比如要取合集对象 `c` 的第二个元素的索引，原来是  `c.startIndex.successor()`，现在是 `c.index(after: c.startIndex)`。
 
 ### Unicode
 
@@ -133,10 +133,10 @@ a != nil ? a! : b // equivalent form
 ![Swift String Views](https://developer.apple.com/swift/blog/images/swift-string-views_2x.png)
 
 
-## 集合类型
+## 合集类型
 
-- 集合类型（Collection types）包括数组（Array）、集合（Set）[^set] 和字典（Dictionary），其存储的元素类型必须相同；实际上，上一章节介绍的字符串 [^string] 也遵循 `Collection` 协议。集合类型均由结构体通过泛型实现，为**值类型**。
-- 根据集合类型协议的要求，`count` 属性能获取其元素个数，`isEmpty` 属性能判断是否为空，下标访问既可以使用索引也可以使用索引区间（即 `Range<Self.Index>`）等等。
+- 合集类型（Collection types）包括数组（Array）、集合（Set）[^set] 和字典（Dictionary），其存储的元素类型必须相同；实际上，上一章节介绍的字符串 [^string] 也遵循 `Collection` 协议。合集类型均由结构体通过泛型实现，为**值类型**。
+- 根据合集类型协议的要求，`count` 属性能获取其元素个数，`isEmpty` 属性能判断是否为空，下标访问既可以使用索引也可以使用索引区间（即 `Range<Self.Index>`）等等。
 
 [^set]: [Swift 1.2](https://developer.apple.com/library/archive/documentation/Xcode/Conceptual/RN-Xcode-Archive/Chapters/xc6_release_notes.html#//apple_ref/doc/uid/TP40016994-CH4-SW6) 引入了原生的 `Set` 类型，与原先的 `NSSet` 桥接。
 

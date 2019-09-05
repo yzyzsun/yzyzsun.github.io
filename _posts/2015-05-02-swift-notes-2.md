@@ -11,7 +11,7 @@ tags: 编程语言
 
 - 结构体（Structure）和类（Class）有以下共同特性：属性（property）、方法（method）、下标（subscript）、构造器（initializer）、扩展（extension）、协议（protocol）；另外类还有以下独有特性：继承（inheritance）、类型转换（type casting）、析构器（deinitializer）、自动引用计数（ARC）。
 - 结构体是**值类型**，当其进行赋值操作或参数传递时会发生值拷贝，当然编译器也会在此基础上做 copy-on-write 优化；而类是**引用类型**，相当于通过指针间接访问，因此不会发生值拷贝，但同时 `let` 关键字和参数传递时不再能保证其指向的内容不被修改。[^valuetype]
-- 对于类的实例来说，相等不意味着恒等，我们可以通过 `===` / `!==` 来判断是不是同一个对象。
+- 对于类的实例来说，相等（equality）不意味着相同（identity），我们可以通过 `===` / `!==` 来判断是不是同一个对象。
 
 [^valuetype]: 对结构体和值类型的进一步讨论可以参见 [ObjC 中国](http://objccn.io/issue-16-2/)，对于是选用结构体还是类可以参见 [官方文档](https://developer.apple.com/documentation/swift/choosing_between_structures_and_classes)（优先选用结构体）。
 
@@ -331,7 +331,7 @@ func fatalError(_ message: @autoclosure () -> String = String(),
                      line: UInt = #line) -> Never
 ```
 
-- 返回类型 `Never` 表示这个函数一定不会正常返回，Swift 3.0（[SE-0102](https://github.com/apple/swift-evolution/blob/master/proposals/0102-noreturn-bottom-type.md)）之前是在函数上用 `@noreturn` 属性来标识。
+- 返回类型 `Never` 表示这个函数一定不会正常返回，Swift 3.0（[SE-0102](https://github.com/apple/swift-evolution/blob/master/proposals/0102-noreturn-bottom-type.md)）之前是在函数上用 `@noreturn` 来标识。
 
 [^fatalerror]: [fatalError — Swifter.tips](http://swifter.tips/fatalerror/)
 
