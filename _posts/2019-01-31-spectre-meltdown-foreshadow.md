@@ -79,7 +79,7 @@ char tmp = array[data * 4096];
 
 ### KAISER
 
-虽然 KASLR 增加了攻击的难度，但不能杜绝黑客访问到内核映像。2017 年，格拉茨科技大学的研究人员提出了**有效移除旁路的内核地址隔离**（Kernel Address Isolation to have Side-channels Efficiently Removed）补丁来进一步加固，恰好这个补丁对后来的熔毁漏洞也十分有效。KAISER 提议内核态和用户态使用两张不同的页表，内核态的页表还跟原来一样，而用户态的页表中不再暴露内核地址空间，除了少量 x86 架构必需的部分。不过其缺点也很明显，切换页表和清空转译后备缓冲器（Translation Lookaside Buffer）带来了不少额外的性能开销。
+虽然 KASLR 增加了攻击的难度，但不能杜绝黑客访问到内核映像。2017 年，格拉茨科技大学的研究人员提出了**高效移除旁路的内核地址隔离**（Kernel Address Isolation to have Side-channels Efficiently Removed）补丁来进一步加固，恰好这个补丁对后来的熔毁漏洞也十分有效。KAISER 提议内核态和用户态使用两张不同的页表，内核态的页表还跟原来一样，而用户态的页表中不再暴露内核地址空间，除了少量 x86 架构必需的部分。不过其缺点也很明显，切换页表和清空转译后备缓冲器（Translation Lookaside Buffer）带来了不少额外的性能开销。
 
 ### KPTI
 
