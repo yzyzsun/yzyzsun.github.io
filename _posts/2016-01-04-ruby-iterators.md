@@ -74,7 +74,7 @@ n timesRepeat: [ …… ].
 
 ## #collect (#map)
 
-``` 
+```
 collect { |obj| block } → array
 collect → an_enumerator
 ```
@@ -88,7 +88,7 @@ collect → an_enumerator
 
 ## #detect (#find)
 
-``` 
+```
 detect(ifnone = nil) { |obj| block } → obj or nil
 detect(ifnone = nil) → an_enumerator
 ```
@@ -102,7 +102,7 @@ detect(ifnone = nil) → an_enumerator
 
 ## #inject (#reduce)
 
-``` 
+```
 inject(initial, sym) → obj
 inject(sym) → obj
 inject(initial) { |memo, obj| block } → obj
@@ -120,7 +120,7 @@ inject { |memo, obj| block } → obj
 
 ## #reject
 
-``` 
+```
 reject { |obj| block } → array
 reject → an_enumerator
 ```
@@ -134,7 +134,7 @@ reject → an_enumerator
 
 ## #select (#find_all)
 
-``` 
+```
 select { |obj| block } → array
 select → an_enumerator
 ```
@@ -145,3 +145,12 @@ select → an_enumerator
 (1..10).select { |x| x % 4 == 0 }
 #=> [4, 8]
 ```
+
+------
+
+最后的最后，让我们用一首《Ruby》来给本文画上一个完美的句号。
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/aplayer/dist/APlayer.min.css">
+<script src="https://cdn.jsdelivr.net/npm/aplayer/dist/APlayer.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/meting@2/dist/Meting.min.js"></script>
+<meting-js auto="https://y.qq.com/n/yqq/song/004THqOS24AWae.html"></meting-js>
