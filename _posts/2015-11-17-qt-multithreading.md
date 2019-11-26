@@ -1,5 +1,5 @@
 ---
-title: Qt 多线程解决 UI 阻塞
+title: 使用 Qt 多线程避免事件循环阻塞
 author: 孙耀珠
 tags: 调库
 ---
@@ -10,11 +10,11 @@ tags: 调库
 
 因为实验模拟是个计算密集型的任务，整个计算函数要跑很长时间，如果直接调用它，必然会**阻塞**事件循环。这样一来，GUI 所有的绘制和交互都被阻塞在事件队列中，整个程序就失去响应了。
 
+<!--more-->
+
 对于这样的阻塞一般有两种解决办法：一是在计算任务中不停地调用静态成员函数 `QCoreApplication::processEvents()` 来手动运行事件循环，它会在处理完队列中所有事件后返回。不过这样做毕竟没有从根本上解决问题，另外如果两次函数调用之间间隔的时间不够短，用户仍能明显感觉到程序卡顿。
 
 第二种解决办法就是为任务新开一个线程，这样就能在不干扰 GUI 线程的情况下完成计算了。Qt 提供了三种控制线程的方式：QThread、QRunnable / QThreadPool、QtConcurrent，其中最通用、也是最常见的是 QThread。
-
-<!--more-->
 
 **QRunnable** 是一个非常轻量的抽象类，它的主体是纯虚函数 `QRunnable::run()`，我们需要继承它并实现这个函数。使用时需要将其子类的实例放进 **QThreadPool** 的执行队列，线程池默认会在运行后自动删除这个实例。每个应用都有一个全局的线程池，我们可以直接使用它，这就不需要手动创建和管理线程池了。不过因为 QRunnable 不是 QObject 的子类，它没有内建与外界通信的手段，所以真正在使用时没那么实用。
 
@@ -51,7 +51,7 @@ WorkerThread *workerThread = new WorkerThread;
 workerThread->start();
 ```
 
-但现在的 Qt 版本中 `QThread::run()` 不再是纯虚函数，其默认实现是调用 `QThread::exec()` 开启一个事件循环。因此继承 QThread 实现多线程已不再是推荐的做法，，**更加优雅**的做法是将计算任务和线程管理分离，即在一个 QObject 中处理任务，并使用 `QObject::moveToThread` 改变其线程关联（thread affinity）。
+但现在的 Qt 版本中 `QThread::run()` 不再是纯虚函数，其默认实现是调用 `QThread::exec()` 开启一个事件循环。因此，继承 QThread 实现多线程已不再是推荐的做法，**更加优雅**的做法是将计算任务和线程管理分离，即由专门的对象处理计算任务，再由线程管理器用 `QObject::moveToThread()` 为其分配合适的线程。
 
 ```cpp
 class Worker : public QObject
@@ -101,18 +101,18 @@ signals:
 };
 ```
 
-在新线程中执行计算任务时，我们会发现这时不能再访问 UI 了，这是因为 QWidget 及其子类都不是**可重入的**（reentrant），只能通过主线程访问。这样的设计虽然对开发者来说有些麻烦，但避免了可能导致的死锁或是复杂的 UI 同步。总之若要更新 UI 或是做其他交互，我们需要进行线程间通信。一种方法是调用静态函数 `QMetaObject::invokeMethod()`：
+在新线程中执行计算任务时，我们会发现这时不能再访问 UI 了，这是因为 QWidget 及其子类都不是**可重入的**（reentrant），只能通过主线程访问。这样的设计虽然对开发者来说有些麻烦，但避免了可能导致的死锁或是复杂的 UI 同步。总之若要更新 UI 或是做其他交互，我们需要进行跨线程的对象间通信。这一任务可以通过静态函数 `QMetaObject::invokeMethod()` 来完成：
 
 ```cpp
-QMetaObject::invokeMethod(object, "methodName",
+QMetaObject::invokeMethod(object, "factorial",
                           Qt::QueuedConnection,
                           Q_RETURN_ARG(QString, retVal),
                           Q_ARG(int, 48));
 ```
 
-其中 `Qt::QueuedConnection` 意味着向对象所在进程发送事件，进入目标线程的事件循环以待执行。另一种方法则更加简单——使用跨线程的信号槽，`QObject::connect()` 的最后一个参数可以指定连接类型，默认值 `Qt::AutoConnection` 表示如果目标线程就是当前进程则用 `Qt::DirectConnection`，否则采用 `Qt::QueuedConnection` 连接。
+其中 `Qt::QueuedConnection` 意味着向对象所属进程发送事件，进入其事件循环以待执行。而 Qt 惯用的信号槽机制正基于此支持了跨线程通信，`QObject::connect()` 的最后一个参数可以指定连接类型，默认值 `Qt::AutoConnection` 表示如果目标线程就是当前进程则用 `Qt::DirectConnection`，否则采用 `Qt::QueuedConnection` 连接。
 
-因为这一机制依赖 Qt 元对象编译器（moc）提供的内省（introspection），所以只有信号、槽和用 `Q_INVOKABLE` 宏标记的函数才能从别的线程调用。另外值得注意的是，如果所调函数的参数类型不是内建数据类型、不属于 QVariant，会抛出错误「QObject::connect: Cannot queue arguments of type '...'」，即该类型的参数无法进入信号队列。这时需要我们在类的声明之后调用宏 `Q_DECLARE_METATYPE(MyClass)`，当然前提是该类提供了公有的构造函数、拷贝构造函数和析构函数，并且要在跨线程通信前使用函数 `qRegisterMetaType<MyClass>("MyClass")` 来注册这个类型。
+因为这一机制依赖 Qt 元对象编译器（moc）提供的内省（introspection），所以只有信号、槽和用 `Q_INVOKABLE` 宏标记的函数才能从别的线程调用。另外值得注意的是，如果所调函数的参数类型不是内建数据类型、不属于 QVariant，会抛出错误「QObject::connect: Cannot queue arguments of type 'MyClass'」，即该类型的参数无法进入信号队列。要解决这个问题，我们可以在类的声明之后加上宏 `Q_DECLARE_METATYPE(MyClass)`、并调用 `qRegisterMetaType<MyClass>("MyClass")` 来将其注册为元类型，不过成为元类型的前提是该类提供了公有的构造函数、拷贝构造函数和析构函数。
 
 > 参考文档：
 > 

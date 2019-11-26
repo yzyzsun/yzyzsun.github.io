@@ -12,6 +12,8 @@ $ rails server -e production -b 0.0.0.0 -p 80
 
 但 Rails 内建的 WEBrick + SQLite 性能较差，而且这样部署也不够灵活，还是上 Apache / Nginx 比较主流。与 Apache 相比 Nginx 的异步模型能更好地处理高并发的场景，Passenger 性能不错并且可以直接集成于 Apache / Nginx 而不必反向代理，而 PostgreSQL 比 MySQL / MariaDB 功能更强大，这三者是 Ruby 服务器的最佳实践之一，因此我决定折腾一下 Nginx + Passenger + PostgreSQL。
 
+<!--more-->
+
 * 目录
 {:toc}
 
@@ -20,7 +22,7 @@ $ rails server -e production -b 0.0.0.0 -p 80
 直接使用 yum 安装当然是可行的，但 [Ruby Version Manager (RVM)](https://rvm.io) 能够更方便地安装并管理 Ruby 版本，因此下面以 RVM 为例。安装 RVM：
 
 ``` sh
-$ gpg --keyserver hkp://keys.gnupg.net --recv-keys 409B6B1796C275462A1703113804BB82D39DC0E3
+$ gpg --recv-keys 409B6B1796C275462A1703113804BB82D39DC0E3 7D2BAF1CF37B13E2069D6956105BD0E739499BDB
 $ curl -sSL https://get.rvm.io | bash -s stable
 ```
 
@@ -30,8 +32,6 @@ $ curl -sSL https://get.rvm.io | bash -s stable
 $ rvm install X.X.X
 $ rvm --default use X.X.X
 ```
-
-<!--more-->
 
 为了管理项目依赖，还需要安装一下 [Bundler](http://bundler.io)：
 
@@ -182,7 +182,7 @@ $ touch /srv/sample-app/tmp/restart.txt
 $ systemctl reload nginx
 ```
 
-## Tips
+## 常见问题
 
 - 如果在本地测试**生产环境**时，发现静态文件未能加载：
   - 其一可能是因为没有做预编译，Rails 认为生产环境的静态资源应该已经事先编译好了，所以 Asset Pipeline 的实时编译是关闭的；
@@ -211,7 +211,7 @@ $ echo "/swapfile swap swap defaults 0 0" >> /etc/fstab
 
 - Bundler 会将所有 `--without` 的组保存在 `.bundle/config` 中，因此之后的 `bundle install` 永远不会包含这些组。如果被这个特性所困扰，可以通过删除配置文件相关内容或使用 `--with` 选项来解决。
 
-## 版本信息
+## 测试环境
 
 CentOS 7 x86_64 (1511) / Nginx 1.8.1 / Passenger 5.0.24 / PostgreSQL 9.2.14 / Bundler 1.11.2 / Rails 4.2.5 / Ruby 2.3.0
 
