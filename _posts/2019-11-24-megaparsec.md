@@ -5,7 +5,7 @@ tags: 译文
 ---
 
 > 原文标题：Megaparsec tutorial from IH book  
-> 原文链接：<https://markkarpov.com/megaparsec/megaparsec.html>
+> 原文链接：<https://markkarpov.com/tutorial/megaparsec.html>
 
 <!--more-->
 
@@ -17,7 +17,7 @@ tags: 译文
 在上一章「例：编写自己的语法分析组合子」中编写的玩具性质的语法分析组合子并不适合实际使用，因此我们继续来看看 Haskell 生态圈中能够解决相同问题的库，并请留意它们各自的利弊权衡：
 
 - [parsec](https://hackage.haskell.org/package/parsec) 过去一直是 Haskell 的「默认」语法分析库。该库比较关注错误信息的质量，但其测试覆盖率不高，并且目前处于仅维护的状态。
-- [attoparsec](https://hackage.haskell.org/package/attoparsec) 是个健壮而高性能的语法分析库。它是在列的库中唯一一个完整支持增量语法分析的，其缺点是错误信息质量不佳、用不了单子变换子、只支持部分输入流类型。
+- [attoparsec](https://hackage.haskell.org/package/attoparsec) 是个健壮而高性能的语法分析库。它是在列的库中唯一一个完整支持增量语法分析的，其缺点是错误信息质量不佳、不支持单子变换、只支持部分输入流类型。
 - [trifecta](https://hackage.haskell.org/package/trifecta) 错误信息的质量不错，但文档不足导致难以理解。对 `String` 和 `ByteString` 的语法分析可以做到开箱即用，但 `Text` 则不行。
 - [megaparsec](https://hackage.haskell.org/package/megaparsec) 是 `parsec` 的一个分支，在过去数年里保持着积极的开发。当前版本尝试在速度、灵活性和错误信息质量之间找到一个最佳平衡。因为是 `parsec` 的非官方继任者，使用过 `parsec` 或者读过其教程的用户一定会对它感到十分亲切。
 
@@ -25,11 +25,11 @@ tags: 译文
 
 ## `ParsecT` 和 `Parsec` 单子
 
-`ParsecT` 是 `megaparsec` 中主要的语法分析单子变换子和核心数据类型。`ParsecT e s m a` 各参数分别表示：
+`ParsecT` 是 `megaparsec` 中主要的语法分析单子变换和核心数据类型。`ParsecT e s m a` 各参数分别表示：
 
 - `e` 是用来表示错误信息的自定义组件的类型。如果我们不想做自定义（目前我们确实不想），那么用 `Data.Void` 模块中的 `Void` 就行了。
 - `s` 是输入流的类型。`megaparsec` 对于 `String`、严格或惰性的 `Text`、严格或惰性的 `ByteString` 都是开箱即用的，当然自定义输入流也是可用的。
-- `m` 是 `ParsecT` 单子变换子的内部单子。
+- `m` 是 `ParsecT` 单子变换的内部单子。
 - `a` 是单子中的值，作为语法分析的结果。
 
 因为大多数时候 `m` 就是 `Identity`，所以 `Parsec` 这个类型别名非常有用：
@@ -38,9 +38,9 @@ tags: 译文
 type Parsec e s a = ParsecT e s Identity a
 ```
 
-简而言之，`Parsec` 就是没有单子变换子的 `ParsecT`。
+简而言之，`Parsec` 就是没有单子变换的 `ParsecT`。
 
-我们还可以把 `megaparsec` 的单子变换子类比于 MTL 单子变换子和类型类。确实，我们还有 `MonadParsec` 类型类的用途与 `MonadState` 和 `MonadReader` 相近。我们会在[后面的章节](#monadparsec-类型类)详细讨论 `MonadParsec`。
+我们还可以把 `megaparsec` 的单子变换类比于 MTL 单子变换和类型类。确实，我们还有 `MonadParsec` 类型类的用途与 `MonadState` 和 `MonadReader` 相近。我们会在[后面的章节](#monadparsec-类型类)详细讨论 `MonadParsec`。
 
 说到类型别名，开始使用 `megaparsec` 的最佳方式就是为自己的语法分析器定义一个类型别名。这有两个好处：
 
@@ -934,13 +934,13 @@ runParser
 
 第二个参数只是用来在错误信息中显示的文件名，`megaparsec` 并不会尝试去读这个文件，因为真正的输入是这个函数的第三个参数。
 
-`runParser` 允许我们运行 `Parsec` 单子，我们已经知道，它就是没有单子变换子的 `ParsecT`：
+`runParser` 允许我们运行 `Parsec` 单子，我们已经知道，它就是没有单子变换的 `ParsecT`：
 
 ```haskell
 type Parsec e s = ParsecT e s Identity
 ```
 
-`runParser` 有三个姊妹：`runParser'`、`runParserT` 和 `runParserT'`。有后缀 `T` 的版本可以运行 `ParsecT` 单子变换子，而有一撇的版本接受并返回语法分析器状态。让我们把它们列进一张表：
+`runParser` 有三个姊妹：`runParser'`、`runParserT` 和 `runParserT'`。有后缀 `T` 的版本可以进行 `ParsecT` 单子变换，而有一撇的版本接受并返回语法分析器状态。让我们把它们列进一张表：
 
 | 参数           | 运行 `Parsec` | 运行 `ParsecT` |
 | -------------- | ------------- | -------------- |
@@ -962,7 +962,7 @@ runParser'
 
 `megaparsec` 中的所有工具都可用于 `MonadParsec` 类型类的任何实例。该类型类抽象了「组合子原语」，即所有 `megaparsec` 语法分析器的基本单元，这些组合子无法用其它组合子来表示。
 
-将组合子原语定义为类型类，让 `ParsecT` 主要的具体单子变换子得以包装在我们熟悉的 MTL 系变换子中，从而实现在单子栈各层之间的不同交互。为了更好地理解其动机，请回忆一下单子栈各层的顺序很重要。如果我们这样组合 `ReaderT` 和 `State`：
+将组合子原语定义为类型类，让 `ParsecT` 具体的主要单子变换得以包装在我们熟悉的 MTL 系单子变换中，从而实现在单子栈各层之间的不同交互。为了更好地理解其动机，请回忆一下单子栈各层的顺序很重要。如果我们这样组合 `ReaderT` 和 `State`：
 
 ```haskell
 type MyStack a = ReaderT MyContext (State MyState) a
@@ -991,7 +991,7 @@ instance Alternative m => Alternative (ReaderT r m) where
   ReaderT m <|> ReaderT n = ReaderT $ \r -> m r <|> n r
 ```
 
-这很棒，因为 `ReaderT` 是个「无状态」的单子变换子，并且很容易将实际工作委托给内部单子（在这里 `m` 的 `Alternative` 实例很有用），而无需组合 `ReaderT` 自身的单子状态（它并没有）。
+这很棒，因为 `ReaderT` 是个「无状态」的单子变换，并且很容易将实际工作委托给内部单子（在这里 `m` 的 `Alternative` 实例很有用），而无需组合 `ReaderT` 自身的单子状态（它并没有）。
 
 现在我们来看看 `State`，因为 `State s a` 只是 `StateT s Identity a` 的别名，我们应该看看 `StateT s m` 的 `Alternative` 实例：
 
@@ -1132,7 +1132,7 @@ instance MonadWriter w m => MonadWriter w (StateT s m) where …
 instance MonadParsec e s m => MonadParsec e s (StateT st m) where …
 ```
 
-`megaparsec` 为所有 MTL 单子变换子定义了 `MonadParsec` 的实例，这样用户就可以自由地在 `ParsecT` 中插入变换子，或是把 `ParsecT` 包装在那些变换子中，从而实现在单子栈各层之间的不同交互。
+`megaparsec` 为所有 MTL 单子变换定义了 `MonadParsec` 的实例，这样用户就可以自由地在 `ParsecT` 中插入单子变换，或是把 `ParsecT` 包装在那些单子变换中，从而实现在单子栈各层之间的不同交互。
 
 ## 词法分析
 
@@ -1788,8 +1788,8 @@ pLineFold = L.lineFold scn $ \sc' ->
 
 这里有一些常见的建议：
 
-- 如果你的语法分析器用的是单子栈而非普通的 `Parsec` 单子（回忆一下，这是使用 `Identity` 的 `ParsecT` 单子变换子，非常轻量），请确保 `transformers` 库的版本不低于 0.5，`megaparsec` 的版本不低于 7.0。这两个库在上述版本均有关键性的性能提升，只要升级就能变快。
-- `Parsec` 单子总是比基于 `ParsecT` 的单子变换子更快。除非绝对必要，请避免使用 `StateT`、`WriterT` 或者其它单子变换子。往单子栈里加得越多，语法分析就越慢。
+- 如果你的语法分析器用的是单子栈而非普通的 `Parsec` 单子（回忆一下，这是使用 `Identity` 的 `ParsecT` 单子变换，非常轻量），请确保 `transformers` 库的版本不低于 0.5，`megaparsec` 的版本不低于 7.0。这两个库在上述版本均有关键性的性能提升，只要升级就能变快。
+- `Parsec` 单子总是比基于 `ParsecT` 的单子变换更快。除非绝对必要，请避免使用 `StateT`、`WriterT` 或者其它单子变换。往单子栈里加得越多，语法分析就越慢。
 - 回溯是个代价高昂的操作。请避免构建冗长的选择链，其中的每个选择都有可能在失败前陷得很深。
 - 除非确实有理由，请避免让语法分析器保持多态。最好指定一下语法分析器的具体类型，比如 `type Parser = Parsec Void Text`。这样能让 GHC 更好地进行优化。
 - 尽可能内联（当然，是在合理的地方）。内联的巨大作用可能会令你难以置信，特别是对于那些很短的函数。这对跨模块使用的语法分析器尤其有用，因为 `INLINE` 和 `INLINEABLE` 编译指令能让 GHC 把函数定义转储到接口文件，这有助于进行特化。
