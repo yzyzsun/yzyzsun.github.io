@@ -83,7 +83,7 @@ char tmp = array[data * 4096];
 
 ### KPTI
 
-在得知熔毁漏洞之后，Linux 社区开始着手从软件层面进行修补。开发团队在 KAISER 的基础上加入了一些优化，譬如支持进程上下文标识符（PCID）以避免清空页表缓存从而降低性能影响，并将其改名为**内核页表隔离**（Kernel Page-Table Isolation）最终并入了 Linux 4.15。
+在得知熔毁漏洞之后，Linux 社区开始着手从软件层面进行修补。开发团队在 KAISER 的基础上加入了一些优化，譬如支持进程上下文标识符（Process-Context Identifier）以避免清空页表缓存从而降低性能影响，并将其改名为**内核页表隔离**（Kernel Page-Table Isolation）最终并入了 Linux 4.15。
 
 ## 幽灵（Spectre）
 
