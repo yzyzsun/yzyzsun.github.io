@@ -6,13 +6,17 @@ permalink: /archive/
 
 <h1>ARCHIVE</h1>
 <div class="archive">
-  <ul>
-    {% for post in site.posts %}
-      <li>
-        <span class="date">{{ post.date | date: "%Y-%m-%d" }}</span>
-        <a href="{{ site.baseurl }}{{ post.url }}">{{ post.title }}</a>
-        <span class="tags">{{ post.tags | join: "、" }}</sup>
-      </li>
-    {% endfor %}
-  </ul>
+  {% assign posts_by_year = site.posts | group_by_exp: "post", "post.date | date: '%Y'" %}
+  {% for year in posts_by_year %}
+    <h4>{{ year.name }}</h4>
+    <ul>
+      {% for post in year.items %}
+        <li>
+          <span class="date">{{ post.date | date: "%m-%d" }}</span>
+          <a href="{{ site.baseurl }}{{ post.url }}">{{ post.title }}</a>
+          <span class="tags">{{ post.tags | join: "、" }}</span>
+        </li>
+      {% endfor %}
+    </ul>
+  {% endfor %}
 </div>
