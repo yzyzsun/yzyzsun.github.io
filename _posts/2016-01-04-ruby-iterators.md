@@ -132,7 +132,7 @@ reject → an_enumerator
 #=> [1, 2, 3, 5, 6, 7, 9, 10]
 ```
 
-## #select (#find_all)
+## #select (#find_all / #filter)
 
 ```
 select { |obj| block } → array
