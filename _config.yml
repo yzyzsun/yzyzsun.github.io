@@ -81,7 +81,6 @@ exclude:
   - Gemfile.lock
   - LICENSE
   - README.md
-  - CNAME
 
 # Front matter defaults
 defaults:
