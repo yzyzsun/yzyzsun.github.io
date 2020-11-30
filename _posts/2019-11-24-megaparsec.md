@@ -295,7 +295,7 @@ expecting "foo"
 
 好的，我们可以匹配单个单词和一大块输入了。下一步我们将要学习如何组合这些积木来编写更有趣的语法分析器。
 
-## 单子式和应用函子式语法
+## 单子式和可应用函子式语法
 
 最简单的组合语法分析器的方式是连续执行它们。`ParsecT` 和 `Parsec` 是单子，而单子绑定正好可以顺序执行语法分析器：
 
@@ -333,7 +333,7 @@ unexpected 'd'
 expecting 'b'
 ```
 
-因为所有单子亦是应用函子，所以我们也可以使用应用函子式的语法来顺序执行：
+因为所有单子亦是可应用函子，所以我们也可以使用可应用函子式的语法来顺序执行：
 
 ```haskell
 mySequence :: Parser (Char, Char, Char)
@@ -343,11 +343,11 @@ mySequence =
        <*> char 'c'
 ```
 
-第二种方法跟第一种运行结果完全相同，使用哪种风格通常取决于个人品味。单子风格可以说是更冗长但有时更清晰，而应用函子风格通常更简洁。话说回来，显然单子风格的表达能力更强，因为单子比应用函子更强大。
+第二种方法跟第一种运行结果完全相同，使用哪种风格通常取决于个人品味。单子风格可以说是更冗长但有时更清晰，而可应用函子风格通常更简洁。话说回来，显然单子风格的表达能力更强，因为单子比可应用函子更强大。
 
 ## 用 `eof` 耗尽输入
 
-应用函子通常已经足够强大，足以做一些有趣的事情。如果配上拥有单位元且满足结合律的运算符，我们就得到了应用函子上的幺半群，在 Haskell 中表示为 `Alternative` 类型类。[parser-combinators](https://hackage.haskell.org/package/parser-combinators) 包提供了不少基于 `Applicative` 和 `Alternative` 概念的抽象组合子，`Text.Megaparsec` 模块重新导出了这些来自 `Control.Applicative.Combinators` 的组合子。
+可应用函子通常已经足够强大，足以做一些有趣的事情。如果配上拥有单位元且满足结合律的运算符，我们就得到了可应用函子上的单位半群，在 Haskell 中表示为 `Alternative` 类型类。[parser-combinators](https://hackage.haskell.org/package/parser-combinators) 包提供了不少基于 `Applicative` 和 `Alternative` 概念的抽象组合子，`Text.Megaparsec` 模块重新导出了这些来自 `Control.Applicative.Combinators` 的组合子。
 
 一个最常见的组合子是 `many`，它允许我们将给定的语法分析器运行零次或多次：
 
