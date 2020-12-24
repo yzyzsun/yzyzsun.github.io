@@ -112,11 +112,13 @@ Mustache 完全去除了代码逻辑，而 Handlebars 又稍稍加回了一些�
 
 后来，Flask 的作者 Armin Ronacher 参考 DTL 的设计实现了独立于后端框架的 **Jinja** 模板引擎；而 Mozilla 提供了一个 JavaScript 上的实现 **Nunjucks**；Shopify 在 Ruby 上也有十分相似的 **Liquid** 模板引擎，并被用于 GitHub Pages 默认的静态站点生成器 Jekyll。
 
+Go 语言标准库的模板也可以算是 Django 风格，但它没有 `{% … %}` 只有 `{{ … }}`。比如前面 DTL 的 `{% for user in users %} … {% endfor %}` 写作 `{{ range $user := .Users }} … {{ end }}`，而渲染变量和字段写作 `{{ $variable }}` 和 `{{ .Field }}`，函数链式调用亦可用管道表达。
+
 ## 模板属性语言
 
-上述三种风格，其实都可以归类于往 HTML 里面插各种 HTML 语法以外的 `<% … %>` `{{ … }}`，那么还有没有别的方式嵌入动态内容呢？有一种有趣的设计叫做「模板属性语言」(TAL)，也就是说我们把动态内容写在正常 HTML 标签的自定义属性里。TAL 最大的好处是简化了开发者和设计师的协作，因为 TAL 能直接加在设计原型上，加上之后仍然是照常显示的 HTML，不经后端渲染直接用浏览器打开也不会感知到动态代码的存在。
+上述三种风格，其实都可以归类于往 HTML 里面插各种 HTML 语法以外的 `<% … %>` `{{ … }}`，那么还有没有别的方式嵌入动态内容呢？有一种有趣的设计叫做「模板属性语言」(TAL)，也就是说我们把动态内容写在正常 HTML 标签的自定义属性里。TAL 最大的好处是简化了开发者和设计师的协作，因为 TAL 能直接加在设计原型上，加上之后仍然是照常显示的 HTML，不经后端渲染直接用浏览器打开也不会感知到动态代码的存在。最早提出 TAL 的是 Python 编写的 Zope 2，其模板引擎 **Zope Page Templates** 使用了一系列 `tal:` 属性来引入动态内容。
 
-最早提出 TAL 的是 Python 编写的 Zope 2，其模板引擎 **Zope Page Templates** 使用了一系列 `tal:` 属性来引入动态内容。如今较为纯粹的例子是 Java 上的模板引擎 **Thymeleaf**，自称「自然模板」。下面是自然模板的一个示例，其中 `th:text` 会替换掉标签内的原有内容、`th:each` 会进行迭代：
+如今较为纯粹的例子是 Java 上的模板引擎 **Thymeleaf**，自称「自然模板」。下面是自然模板的一个示例，其中 `th:text` 会替换掉标签内的原有内容、`th:each` 会进行迭代：
 
 ```html
 <table>
@@ -137,7 +139,9 @@ Mustache 完全去除了代码逻辑，而 Handlebars 又稍稍加回了一些�
 
 ## 标签库
 
-既然能自定义 HTML 属性，那么可不可以自定义 HTML 标签呢？JSP 标准标签库（JSR-52: JSTL）便实践了这一想法，虽然自定义标签不再有自然模板的好处，但写起来会更方便不少。JSTL 定义了 `<c:if test="${age >= 20}">` `<fmt:message key="i18n">` `<sql:query … >` `<x:parse … >` 等四类标签，在属性上还可以使用表达式语言（JSR-341: EL）来插入动态内容，就像前述 `<c:if>` 中的 `${age >= 20}` 那样。当然，JSP 也允许用户定义 JSTL 以外的自定义标签，这不禁让我们联想起了如今的 **Web Components**：
+既然能自定义 HTML 属性，那么可不可以自定义 HTML 标签呢？JSP 标准标签库（JSR-52: JSTL）便实践了这一想法，虽然自定义标签不再有自然模板的好处，但写起来会更方便不少。JSTL 定义了 `<c:if test="${age >= 20}">` `<fmt:message key="i18n">` `<sql:query … >` `<x:parse … >` 等四类标签，在属性上还可以使用表达式语言（JSR-341: EL）来插入动态内容，就像前述 `<c:if>` 中的 `${age >= 20}` 那样。
+
+JSP 也允许用户定义 JSTL 以外的自定义标签，这不禁让我们联想起了如今的 **Web Components**：
 
 ```javascript
 class PopUpInfo extends HTMLElement {
