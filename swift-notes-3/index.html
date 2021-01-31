@@ -1,0 +1,1691 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+  <head>
+    <title>Swift 学习笔记（三） | 孙耀珠的博客</title>
+
+    <meta charset="utf-8" />
+    <meta content="text/html; charset=utf-8" http-equiv="Content-Type" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1.0, maximum-scale=1.0"
+    />
+    <meta
+      name="google-site-verification"
+      content="zYt2wigM41vmyHtpvOvLHk4Yetcfbv5Bz9pdvsTRT3Y"
+    />
+
+    <!-- Begin Jekyll SEO tag v2.7.1 -->
+    <meta name="generator" content="Jekyll v4.2.0" />
+    <meta property="og:title" content="Swift 学习笔记（三）" />
+    <meta name="author" content="孙耀珠" />
+    <meta property="og:locale" content="en_US" />
+    <meta
+      name="description"
+      content="Objective-C API 初始化 Objective-C API 为了让 Swift 继承 Objective-C 的成熟生态，苹果开发了 Clang Importer 将 Objective-C API 引入 Swift，并自动进行了若干命名转换。而 Swift 3 更是对命名原则做了大规模的调整，使之更清晰、更适应于 Swift，详见 SE-0005、SE-0006 两份提案，并且最终形成了一份 API Design Guidelines。 初始化 使用 Swift 调用 Objective-C 类的构造器时，方法名中的 init 和 initWith 前缀会被截去，其余各部分依次变为构造器的参数名。alloc 方法不必再手动调用，Swift 会自己处理内存分配。 简洁起见，Objective-C 类的工厂方法也被映射成了 Swift 的便利构造器。 在 Objective-C 中可能返回 nil 的构造器，在 Swift 中会被映射为可失败构造器。 // Objective-C UITableView *myTableView = [[UITableView alloc] initWithFrame:CGRectZero style:UITableViewStyleGrouped]; UIColor *color = [UIColor colorWithRed:0.5 green:0.0 blue:0.5 alpha:1.0]; // Swift let myTableView = UITableView(frame: .zero, style: .grouped) let color = UIColor(red: 0.5, green: 0.0, blue: 0.5, alpha: 1.0)"
+    />
+    <meta
+      property="og:description"
+      content="Objective-C API 初始化 Objective-C API 为了让 Swift 继承 Objective-C 的成熟生态，苹果开发了 Clang Importer 将 Objective-C API 引入 Swift，并自动进行了若干命名转换。而 Swift 3 更是对命名原则做了大规模的调整，使之更清晰、更适应于 Swift，详见 SE-0005、SE-0006 两份提案，并且最终形成了一份 API Design Guidelines。 初始化 使用 Swift 调用 Objective-C 类的构造器时，方法名中的 init 和 initWith 前缀会被截去，其余各部分依次变为构造器的参数名。alloc 方法不必再手动调用，Swift 会自己处理内存分配。 简洁起见，Objective-C 类的工厂方法也被映射成了 Swift 的便利构造器。 在 Objective-C 中可能返回 nil 的构造器，在 Swift 中会被映射为可失败构造器。 // Objective-C UITableView *myTableView = [[UITableView alloc] initWithFrame:CGRectZero style:UITableViewStyleGrouped]; UIColor *color = [UIColor colorWithRed:0.5 green:0.0 blue:0.5 alpha:1.0]; // Swift let myTableView = UITableView(frame: .zero, style: .grouped) let color = UIColor(red: 0.5, green: 0.0, blue: 0.5, alpha: 1.0)"
+    />
+    <link rel="canonical" href="https://blog.yzsun.me/swift-notes-3/" />
+    <meta property="og:url" content="https://blog.yzsun.me/swift-notes-3/" />
+    <meta property="og:site_name" content="孙耀珠的博客" />
+    <meta property="og:type" content="article" />
+    <meta
+      property="article:published_time"
+      content="2015-05-05T00:00:00+00:00"
+    />
+    <meta name="twitter:card" content="summary" />
+    <meta property="twitter:title" content="Swift 学习笔记（三）" />
+    <script type="application/ld+json">
+      {
+        "description": "Objective-C API 初始化 Objective-C API 为了让 Swift 继承 Objective-C 的成熟生态，苹果开发了 Clang Importer 将 Objective-C API 引入 Swift，并自动进行了若干命名转换。而 Swift 3 更是对命名原则做了大规模的调整，使之更清晰、更适应于 Swift，详见 SE-0005、SE-0006 两份提案，并且最终形成了一份 API Design Guidelines。 初始化 使用 Swift 调用 Objective-C 类的构造器时，方法名中的 init 和 initWith 前缀会被截去，其余各部分依次变为构造器的参数名。alloc 方法不必再手动调用，Swift 会自己处理内存分配。 简洁起见，Objective-C 类的工厂方法也被映射成了 Swift 的便利构造器。 在 Objective-C 中可能返回 nil 的构造器，在 Swift 中会被映射为可失败构造器。 // Objective-C UITableView *myTableView = [[UITableView alloc] initWithFrame:CGRectZero style:UITableViewStyleGrouped]; UIColor *color = [UIColor colorWithRed:0.5 green:0.0 blue:0.5 alpha:1.0]; // Swift let myTableView = UITableView(frame: .zero, style: .grouped) let color = UIColor(red: 0.5, green: 0.0, blue: 0.5, alpha: 1.0)",
+        "url": "https://blog.yzsun.me/swift-notes-3/",
+        "@type": "BlogPosting",
+        "headline": "Swift 学习笔记（三）",
+        "dateModified": "2015-05-05T00:00:00+00:00",
+        "datePublished": "2015-05-05T00:00:00+00:00",
+        "mainEntityOfPage": {
+          "@type": "WebPage",
+          "@id": "https://blog.yzsun.me/swift-notes-3/"
+        },
+        "author": { "@type": "Person", "name": "孙耀珠" },
+        "@context": "https://schema.org"
+      }
+    </script>
+    <!-- End Jekyll SEO tag -->
+
+    <link
+      type="application/atom+xml"
+      rel="alternate"
+      href="https://blog.yzsun.me/feed.xml"
+      title="孙耀珠的博客"
+    />
+
+    <!--[if lt IE 9]>
+      <script src="//cdnjs.cloudflare.com/ajax/libs/html5shiv/r29/html5.min.js"></script>
+    <![endif]-->
+
+    <link rel="stylesheet" href="/style.css" />
+  </head>
+
+  <body>
+    <div class="wrapper-masthead">
+      <div class="container">
+        <header class="masthead clearfix">
+          <a href="/" class="site-avatar"
+            ><img src="/images/avatar.jpg" alt="avatar"
+          /></a>
+
+          <div class="site-info">
+            <h1 class="site-domain"><a href="/">yzsun.me</a></h1>
+            <p class="site-name">孙耀珠的博客</p>
+          </div>
+
+          <nav>
+            <a href="/">首页</a>
+            <a href="/archive/">归档</a>
+            <a href="/about/">关于</a>
+          </nav>
+        </header>
+      </div>
+    </div>
+
+    <div id="main" role="main" class="container">
+      <article class="post">
+        <h1>Swift 学习笔记（三）</h1>
+
+        <div class="info">
+          <span>
+            <i class="fa fa-calendar"></i>
+            2015-05-05
+          </span>
+          <span>
+            <i class="fa fa-user"></i>
+            孙耀珠
+          </span>
+          <span>
+            <i class="fa fa-tags"></i>
+            编程语言
+          </span>
+        </div>
+
+        <div class="entry">
+          <ul id="markdown-toc">
+            <li>
+              <a href="#objective-c-api" id="markdown-toc-objective-c-api"
+                >Objective-C API</a
+              >
+              <ul>
+                <li><a href="#初始化" id="markdown-toc-初始化">初始化</a></li>
+                <li><a href="#属性" id="markdown-toc-属性">属性</a></li>
+                <li><a href="#可空性" id="markdown-toc-可空性">可空性</a></li>
+                <li>
+                  <a href="#id" id="markdown-toc-id"
+                    ><code class="language-plaintext highlighter-rouge"
+                      >id</code
+                    ></a
+                  >
+                </li>
+                <li><a href="#闭包" id="markdown-toc-闭包">闭包</a></li>
+                <li><a href="#判等" id="markdown-toc-判等">判等</a></li>
+                <li>
+                  <a href="#selector" id="markdown-toc-selector">Selector</a>
+                </li>
+                <li>
+                  <a href="#key--key-path" id="markdown-toc-key--key-path"
+                    >Key / Key Path</a
+                  >
+                </li>
+              </ul>
+            </li>
+            <li>
+              <a href="#cocoa-框架" id="markdown-toc-cocoa-框架">Cocoa 框架</a>
+              <ul>
+                <li><a href="#字符串" id="markdown-toc-字符串">字符串</a></li>
+                <li><a href="#数字" id="markdown-toc-数字">数字</a></li>
+                <li>
+                  <a href="#合集类型" id="markdown-toc-合集类型">合集类型</a>
+                </li>
+                <li>
+                  <a href="#core-foundation" id="markdown-toc-core-foundation"
+                    >Core Foundation</a
+                  >
+                </li>
+                <li>
+                  <a href="#日志记录" id="markdown-toc-日志记录">日志记录</a>
+                </li>
+              </ul>
+            </li>
+            <li>
+              <a href="#cocoa-设计模式" id="markdown-toc-cocoa-设计模式"
+                >Cocoa 设计模式</a
+              >
+              <ul>
+                <li><a href="#委托" id="markdown-toc-委托">委托</a></li>
+                <li>
+                  <a href="#错误处理" id="markdown-toc-错误处理">错误处理</a>
+                </li>
+                <li><a href="#单例" id="markdown-toc-单例">单例</a></li>
+                <li><a href="#内省" id="markdown-toc-内省">内省</a></li>
+                <li><a href="#序列化" id="markdown-toc-序列化">序列化</a></li>
+                <li>
+                  <a href="#命令行参数" id="markdown-toc-命令行参数"
+                    >命令行参数</a
+                  >
+                </li>
+              </ul>
+            </li>
+            <li>
+              <a href="#c-api" id="markdown-toc-c-api">C API</a>
+              <ul>
+                <li>
+                  <a href="#基本类型" id="markdown-toc-基本类型">基本类型</a>
+                </li>
+                <li><a href="#指针" id="markdown-toc-指针">指针</a></li>
+                <li><a href="#枚举" id="markdown-toc-枚举">枚举</a></li>
+                <li>
+                  <a href="#预处理指令" id="markdown-toc-预处理指令"
+                    >预处理指令</a
+                  >
+                </li>
+              </ul>
+            </li>
+            <li>
+              <a
+                href="#swift--objective-c-混编"
+                id="markdown-toc-swift--objective-c-混编"
+                >Swift / Objective-C 混编</a
+              >
+              <ul>
+                <li>
+                  <a href="#应用内混编" id="markdown-toc-应用内混编"
+                    >应用内混编</a
+                  >
+                </li>
+                <li>
+                  <a href="#框架内混编" id="markdown-toc-框架内混编"
+                    >框架内混编</a
+                  >
+                </li>
+                <li><a href="#小提示" id="markdown-toc-小提示">小提示</a></li>
+                <li>
+                  <a href="#objc" id="markdown-toc-objc"
+                    ><code class="language-plaintext highlighter-rouge"
+                      >@objc</code
+                    ></a
+                  >
+                </li>
+              </ul>
+            </li>
+          </ul>
+
+          <h2 id="objective-c-api">Objective-C API</h2>
+
+          <p>
+            为了让 Swift 继承 Objective-C 的成熟生态，苹果开发了 Clang Importer
+            将 Objective-C API 引入 Swift，并自动进行了若干命名转换。而 Swift 3
+            更是对命名原则做了大规模的调整，使之更清晰、更适应于 Swift，详见
+            <a
+              href="https://github.com/apple/swift-evolution/blob/master/proposals/0005-objective-c-name-translation.md"
+              >SE-0005</a
+            >、<a
+              href="https://github.com/apple/swift-evolution/blob/master/proposals/0006-apply-api-guidelines-to-the-standard-library.md"
+              >SE-0006</a
+            >
+            两份提案，并且最终形成了一份
+            <a href="https://swift.org/documentation/api-design-guidelines/"
+              >API Design Guidelines</a
+            >。
+          </p>
+
+          <h3 id="初始化">初始化</h3>
+
+          <ul>
+            <li>
+              使用 Swift 调用 Objective-C 类的构造器时，方法名中的
+              <code class="language-plaintext highlighter-rouge">init</code> 和
+              <code class="language-plaintext highlighter-rouge">initWith</code>
+              前缀会被截去，其余各部分依次变为构造器的参数名。<code
+                class="language-plaintext highlighter-rouge"
+                >alloc</code
+              >
+              方法不必再手动调用，Swift 会自己处理内存分配。
+            </li>
+            <li>
+              简洁起见，Objective-C 类的工厂方法也被映射成了 Swift
+              的便利构造器。
+            </li>
+            <li>
+              在 Objective-C 中可能返回
+              <code class="language-plaintext highlighter-rouge">nil</code>
+              的构造器，在 Swift 中会被映射为可失败构造器。
+            </li>
+          </ul>
+
+          <div class="language-objc highlighter-rouge">
+            <div class="highlight">
+              <pre
+                class="highlight"
+              ><code><span class="c1">// Objective-C</span>
+<span class="n">UITableView</span> <span class="o">*</span><span class="n">myTableView</span> <span class="o">=</span> <span class="p">[[</span><span class="n">UITableView</span> <span class="nf">alloc</span><span class="p">]</span> <span class="nf">initWithFrame</span><span class="p">:</span><span class="n">CGRectZero</span> <span class="nf">style</span><span class="p">:</span><span class="n">UITableViewStyleGrouped</span><span class="p">];</span>
+<span class="n">UIColor</span> <span class="o">*</span><span class="n">color</span> <span class="o">=</span> <span class="p">[</span><span class="n">UIColor</span> <span class="nf">colorWithRed</span><span class="p">:</span><span class="mi">0</span><span class="p">.</span><span class="mi">5</span> <span class="nf">green</span><span class="p">:</span><span class="mi">0</span><span class="p">.</span><span class="mi">0</span> <span class="n">blue</span><span class="o">:</span><span class="mi">0</span><span class="p">.</span><span class="mi">5</span> <span class="n">alpha</span><span class="o">:</span><span class="mi">1</span><span class="p">.</span><span class="mi">0</span><span class="p">];</span>
+</code></pre>
+            </div>
+          </div>
+
+          <div class="language-swift highlighter-rouge">
+            <div class="highlight">
+              <pre class="highlight"><code><span class="c1">// Swift</span>
+<span class="k">let</span> <span class="nv">myTableView</span> <span class="o">=</span> <span class="kt">UITableView</span><span class="p">(</span><span class="nv">frame</span><span class="p">:</span> <span class="o">.</span><span class="n">zero</span><span class="p">,</span> <span class="nv">style</span><span class="p">:</span> <span class="o">.</span><span class="n">grouped</span><span class="p">)</span>
+<span class="k">let</span> <span class="nv">color</span> <span class="o">=</span> <span class="kt">UIColor</span><span class="p">(</span><span class="nv">red</span><span class="p">:</span> <span class="mf">0.5</span><span class="p">,</span> <span class="nv">green</span><span class="p">:</span> <span class="mf">0.0</span><span class="p">,</span> <span class="nv">blue</span><span class="p">:</span> <span class="mf">0.5</span><span class="p">,</span> <span class="nv">alpha</span><span class="p">:</span> <span class="mf">1.0</span><span class="p">)</span>
+</code></pre>
+            </div>
+          </div>
+
+          <!--more-->
+
+          <h3 id="属性">属性</h3>
+
+          <ul>
+            <li>
+              Objective-C 中使用
+              <code class="language-plaintext highlighter-rouge"
+                >@property</code
+              >
+              语法定义的属性会被映射为 Swift
+              中的属性；而不带参数且有返回值的方法虽然在 Objective-C
+              可以用点语法调用，但在 Swift 中仍然是普通的方法。
+            </li>
+            <li>
+              Objective-C 属性声明中形如
+              <code class="language-plaintext highlighter-rouge"
+                >(attribute)</code
+              >
+              的特性在 Swift 中会特殊处理：
+              <ul>
+                <li>
+                  <code class="language-plaintext highlighter-rouge"
+                    >readonly</code
+                  >
+                  会被映射为 Swift 中带
+                  <code class="language-plaintext highlighter-rouge"
+                    >{ get }</code
+                  >
+                  的计算属性；
+                </li>
+                <li>
+                  Swift 的
+                  <code class="language-plaintext highlighter-rouge">weak</code>
+                  /
+                  <code class="language-plaintext highlighter-rouge"
+                    >unowned(unsafe)</code
+                  >
+                  关键字分别对应原来的
+                  <code class="language-plaintext highlighter-rouge">weak</code>
+                  /
+                  <code class="language-plaintext highlighter-rouge"
+                    >unsafe_unretained</code
+                  >；Swift 没有基本类型的概念，不考虑
+                  <code class="language-plaintext highlighter-rouge"
+                    >assign</code
+                  >；Swift 的值类型赋值默认进行拷贝，引用类型可以添加
+                  <code class="language-plaintext highlighter-rouge"
+                    >@NSCopying</code
+                  >，皆对应于
+                  <code class="language-plaintext highlighter-rouge">copy</code
+                  >。
+                </li>
+                <li>
+                  Objective-C
+                  中的属性默认拥有原子性，即会加锁以防止多线程同时访问；而 Swift
+                  语言并没有该特性，即不保证原子性。Objective-C 中的
+                  <code class="language-plaintext highlighter-rouge"
+                    >atomic</code
+                  >
+                  和
+                  <code class="language-plaintext highlighter-rouge"
+                    >nonatomic</code
+                  >
+                  将不会反映在 Swift 的属性声明上，但其 Objective-C
+                  实现仍然会保证其原子性。
+                </li>
+              </ul>
+            </li>
+          </ul>
+
+          <h3 id="可空性">可空性</h3>
+
+          <ul>
+            <li>
+              Objective-C 中的裸指针均可为
+              <code class="language-plaintext highlighter-rouge">NULL</code> 或
+              <code class="language-plaintext highlighter-rouge">nil</code
+              >，前者为
+              <code class="language-plaintext highlighter-rouge"
+                >(void *) 0</code
+              >
+              后者为
+              <code class="language-plaintext highlighter-rouge">(id) 0</code
+              >；而 Swift
+              中所有类型默认是不可空的，并有更安全的可空类型来处理可空性。为了弥合语言间的不协调，Xcode
+              6.3（<a href="https://developer.apple.com/swift/blog/?id=25"
+                >官方博客</a
+              >）为 Objective-C 引入了新的语法：
+              <ul>
+                <li>
+                  类型声明默认为
+                  <code class="language-plaintext highlighter-rouge"
+                    >null_unspecified</code
+                  >，将被映射为<strong>隐式解包可空类型</strong>；
+                </li>
+                <li>
+                  <code class="language-plaintext highlighter-rouge"
+                    >nullable</code
+                  >
+                  将被映射为<strong>可空类型</strong>；
+                </li>
+                <li>
+                  <code class="language-plaintext highlighter-rouge"
+                    >nonnull</code
+                  >
+                  将被映射为<strong>非可空类型</strong>。
+                </li>
+              </ul>
+            </li>
+          </ul>
+
+          <h3 id="id">
+            <code class="language-plaintext highlighter-rouge">id</code>
+          </h3>
+
+          <ul>
+            <li>
+              Objective-C 定义了
+              <code class="language-plaintext highlighter-rouge"
+                >typedef struct objc_object *id</code
+              >，即
+              <code class="language-plaintext highlighter-rouge">id</code>
+              可以指向任意 Objective-C 类的对象，与 Swift 中的
+              <code class="language-plaintext highlighter-rouge"
+                >AnyObject</code
+              >
+              类似。不过为了充分发挥 Swift 值类型的特性，Swift 3（<a
+                href="https://github.com/apple/swift-evolution/blob/master/proposals/0116-id-as-any.md"
+                >SE-0116</a
+              >，<a href="https://developer.apple.com/swift/blog/?id=39"
+                >官方博客</a
+              >）将其桥接范围扩展到了
+              <code class="language-plaintext highlighter-rouge">Any</code
+              >，因此引入了一些额外的桥接规则。
+            </li>
+            <li>
+              为了将
+              <code class="language-plaintext highlighter-rouge">Any</code>
+              桥接到
+              <code class="language-plaintext highlighter-rouge">id</code
+              >，编译器引入了<strong>通用桥接转换</strong>（universal bridging
+              conversion）：
+              <ul>
+                <li>
+                  引用类型的类在 Swift 和 Objective-C 中都存在，所以能直接转换；
+                </li>
+                <li>
+                  可桥接的值类型如
+                  <code class="language-plaintext highlighter-rouge"
+                    >String</code
+                  >，会借助
+                  <code class="language-plaintext highlighter-rouge"
+                    >_ObjectiveCBridgeable</code
+                  >
+                  协议转换到对应的 Objective-C 类如
+                  <code class="language-plaintext highlighter-rouge"
+                    >NSString</code
+                  >；
+                </li>
+                <li>
+                  不可桥接的值类型会被封装在一个不可变类的实例中，我们不期待在
+                  Objective-C 中能使用它，只求它能保证
+                  <code class="language-plaintext highlighter-rouge">id</code>
+                  兼容性、能在语言间往返即可。
+                </li>
+              </ul>
+            </li>
+            <li>
+              将
+              <code class="language-plaintext highlighter-rouge">id</code>
+              桥接到
+              <code class="language-plaintext highlighter-rouge">Any</code>
+              则需要利用运行时<strong>模棱两可的动态转换</strong>（ambivalent
+              dynamic casting），因为无法预先得知 Objective-C
+              对象是希望被桥接到值类型还是引用类型，因此会在动态类型转换时再决定。譬如
+              <code class="language-plaintext highlighter-rouge">NSString</code>
+              对象在桥接后既可以
+              <code class="language-plaintext highlighter-rouge"
+                >as? String</code
+              >
+              也可以
+              <code class="language-plaintext highlighter-rouge"
+                >as? NSString</code
+              >。
+            </li>
+            <li>
+              另外，<code class="language-plaintext highlighter-rouge"
+                >AnyObject</code
+              >
+              允许在不进行类型转换的情况下调用任何 Objective-C
+              的方法和属性。因为动态方法查找失败会触发运行时错误，所以 Swift
+              用可空类型对其进行了包装，<code
+                class="language-plaintext highlighter-rouge"
+                >AnyObject</code
+              >
+              上的方法调用行为类似于隐式解包可空值，可空链式调用等特性亦可适用。
+            </li>
+          </ul>
+
+          <div class="language-swift highlighter-rouge">
+            <div class="highlight">
+              <pre
+                class="highlight"
+              ><code><span class="k">let</span> <span class="nv">myObject</span><span class="p">:</span> <span class="kt">AnyObject</span> <span class="o">=</span> <span class="kt">NSDate</span><span class="p">()</span>
+<span class="n">myObject</span><span class="o">.</span><span class="nf">character</span><span class="p">(</span><span class="nv">at</span><span class="p">:</span> <span class="mi">5</span><span class="p">)</span> <span class="c1">// Unrecognized selector error!</span>
+<span class="n">myObject</span><span class="o">.</span><span class="nf">character</span><span class="p">?(</span><span class="nv">at</span><span class="p">:</span> <span class="mi">5</span><span class="p">)</span> <span class="c1">// : unichar? = nil</span>
+</code></pre>
+            </div>
+          </div>
+
+          <h3 id="闭包">闭包</h3>
+
+          <ul>
+            <li>Objective-C 中的代码块和 Swift 中的闭包是互相兼容的：</li>
+          </ul>
+
+          <div class="language-objc highlighter-rouge">
+            <div class="highlight">
+              <pre
+                class="highlight"
+              ><code><span class="c1">// Objective-C</span>
+<span class="kt">void</span> <span class="p">(</span><span class="o">^</span><span class="n">completionBlock</span><span class="p">)(</span><span class="n">NSData</span> <span class="o">*</span><span class="p">)</span> <span class="o">=</span> <span class="o">^</span><span class="p">(</span><span class="n">NSData</span> <span class="o">*</span><span class="n">data</span><span class="p">)</span> <span class="p">{</span> <span class="err">…</span> <span class="p">}</span>
+</code></pre>
+            </div>
+          </div>
+
+          <div class="language-swift highlighter-rouge">
+            <div class="highlight">
+              <pre class="highlight"><code><span class="c1">// Swift</span>
+<span class="k">let</span> <span class="nv">completionBlock</span><span class="p">:</span> <span class="p">(</span><span class="kt">Data</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kt">Void</span> <span class="o">=</span> <span class="p">{</span> <span class="n">data</span> <span class="k">in</span> <span class="err">…</span> <span class="p">}</span>
+</code></pre>
+            </div>
+          </div>
+
+          <ul>
+            <li>
+              然而闭包和代码块有一个关键性的不同：闭包中的变量是可修改的，而不像代码块那样使用值拷贝。换句话说，Swift
+              闭包捕获的变量相当于都在 Objective-C 的变量声明中加了
+              <code class="language-plaintext highlighter-rouge">__block</code
+              >。
+            </li>
+          </ul>
+
+          <h3 id="判等">判等</h3>
+
+          <ul>
+            <li>
+              Objective-C 只有一种等号，而 Swift 有两种：相等（<code
+                class="language-plaintext highlighter-rouge"
+                >==</code
+              >）和相同（<code class="language-plaintext highlighter-rouge"
+                >===</code
+              >）。
+              <ul>
+                <li>
+                  Swift 让所有继承自
+                  <code class="language-plaintext highlighter-rouge"
+                    >NSObject</code
+                  >
+                  的类遵循了
+                  <code class="language-plaintext highlighter-rouge"
+                    >Equtable</code
+                  >
+                  协议，其
+                  <code class="language-plaintext highlighter-rouge">==</code>
+                  运算符的默认实现直接返回了 Objective-C
+                  <code class="language-plaintext highlighter-rouge"
+                    >isEqual:</code
+                  >
+                  方法的结果；
+                </li>
+                <li>
+                  全局定义的
+                  <code class="language-plaintext highlighter-rouge"
+                    >func === (lhs: AnyObject?, rhs: AnyObject?) -&gt;
+                    Bool</code
+                  >
+                  会判断对象指针是否相等。
+                </li>
+              </ul>
+            </li>
+          </ul>
+
+          <h3 id="selector">Selector</h3>
+
+          <ul>
+            <li>
+              Selector 可以在运行时表示 Objective-C 方法名，类似于成员函数指针。
+            </li>
+            <li>
+              <code class="language-plaintext highlighter-rouge">Selector</code>
+              结构体可以用字符串构造，不过对于字面量 Swift 2.2（<a
+                href="https://github.com/apple/swift-evolution/blob/master/proposals/0022-objc-selectors.md"
+                >SE-0022</a
+              >）引入了一种更安全的做法：通过
+              <code class="language-plaintext highlighter-rouge"
+                >#selector</code
+              >
+              表达式来构造，编译器会检查方法是否存在。
+            </li>
+          </ul>
+
+          <div class="language-swift highlighter-rouge">
+            <div class="highlight">
+              <pre
+                class="highlight"
+              ><code><span class="k">let</span> <span class="nv">string</span><span class="p">:</span> <span class="kt">NSString</span> <span class="o">=</span> <span class="s">"Sapientia et Virtus"</span>
+<span class="k">let</span> <span class="nv">selector</span> <span class="o">=</span> <span class="kd">#selector(</span><span class="nf">NSString.lowercased(with:)</span><span class="kd">)</span>
+<span class="k">if</span> <span class="k">let</span> <span class="nv">result</span> <span class="o">=</span> <span class="n">string</span><span class="o">.</span><span class="nf">perform</span><span class="p">(</span><span class="n">selector</span><span class="p">,</span> <span class="nv">with</span><span class="p">:</span> <span class="kt">Locale</span><span class="o">.</span><span class="n">current</span><span class="p">)</span> <span class="p">{</span>
+  <span class="nf">print</span><span class="p">(</span><span class="n">result</span><span class="o">.</span><span class="nf">takeUnretainedValue</span><span class="p">())</span> <span class="c1">// result : Unmanaged&lt;AnyObject&gt;</span>
+<span class="p">}</span>
+</code></pre>
+            </div>
+          </div>
+
+          <h3 id="key--key-path">Key / Key Path</h3>
+
+          <ul>
+            <li>
+              Key 可以在运行时表示 Objective-C 对象的属性，而 Key Path
+              还能表示多级的链式路径。
+            </li>
+            <li>
+              Key Path
+              常常用于<strong>键值编码</strong>（KVC）和<strong>键值观察</strong>（KVO）：前者可以间接访问任意对象的属性，如
+              <code class="language-plaintext highlighter-rouge"
+                >value(forKeyPath:)</code
+              >
+              和
+              <code class="language-plaintext highlighter-rouge"
+                >setValue(_:forKeyPath:)</code
+              >；后者用于观察任意对象属性的修改，如
+              <code class="language-plaintext highlighter-rouge"
+                >addObserver(_:forKeyPath:options:context:)</code
+              >。
+            </li>
+            <li>
+              Key Path 本质上就是以点分隔的字符串，不过 Swift 3（<a
+                href="https://github.com/apple/swift-evolution/blob/master/proposals/0062-objc-keypaths.md"
+                >SE-0062</a
+              >）和 Swift 4（<a
+                href="https://github.com/apple/swift-evolution/blob/master/proposals/0161-key-paths.md"
+                >SE-0161</a
+              >）分别引入了新的构造方式：
+              <ul>
+                <li>
+                  通过
+                  <code class="language-plaintext highlighter-rouge"
+                    >#keyPath</code
+                  >
+                  表达式来构造，如
+                  <code class="language-plaintext highlighter-rouge"
+                    >#keyPath(Member.name)</code
+                  >，经编译器验证后会变成字符串
+                  <code class="language-plaintext highlighter-rouge"
+                    >"Member.name"</code
+                  >；
+                </li>
+                <li>
+                  形如
+                  <code class="language-plaintext highlighter-rouge"
+                    >\Member.name</code
+                  >
+                  的表达式则会生成
+                  <code class="language-plaintext highlighter-rouge"
+                    >KeyPath</code
+                  >
+                  对象，保留了各种类型信息，还可以通过
+                  <code class="language-plaintext highlighter-rouge"
+                    >member[keyPath: \.name]</code
+                  >
+                  的语法来访问属性。
+                </li>
+              </ul>
+            </li>
+          </ul>
+
+          <h2 id="cocoa-框架">Cocoa 框架</h2>
+
+          <ul>
+            <li>
+              Swift 3（<a
+                href="https://github.com/apple/swift-evolution/blob/master/proposals/0086-drop-foundation-ns.md"
+                >SE-0086</a
+              >）去掉了 Foundation 框架大部分类型名中的
+              <code class="language-plaintext highlighter-rouge">NS</code>
+              前缀，除了一些例外：
+              <ul>
+                <li>
+                  与 Objective-C 联系十分紧密的类：<code
+                    class="language-plaintext highlighter-rouge"
+                    >NSObject</code
+                  >
+                  <code class="language-plaintext highlighter-rouge"
+                    >NSAutoreleasePool</code
+                  >
+                  <code class="language-plaintext highlighter-rouge"
+                    >NSException</code
+                  >
+                  等；
+                </li>
+                <li>
+                  用于特定平台的类，它们虽然位于 Foundation 但其实应当属于
+                  AppKit / UIKit 这些更高层的框架：<code
+                    class="language-plaintext highlighter-rouge"
+                    >NSUserNotification</code
+                  >
+                  <code class="language-plaintext highlighter-rouge"
+                    >NSBackgroundActivity</code
+                  >
+                  <code class="language-plaintext highlighter-rouge"
+                    >NSXPCConnection</code
+                  >
+                  等；
+                </li>
+                <li>
+                  在 Swift 中有值类型等价物的类，详见
+                  <a
+                    href="https://github.com/apple/swift-evolution/blob/master/proposals/0069-swift-mutability-for-foundation.md"
+                    >SE-0069</a
+                  >：<code class="language-plaintext highlighter-rouge"
+                    >NSString</code
+                  >
+                  <code class="language-plaintext highlighter-rouge"
+                    >NSDictionary</code
+                  >
+                  <code class="language-plaintext highlighter-rouge"
+                    >NSURL</code
+                  >
+                  等。
+                </li>
+              </ul>
+            </li>
+            <li>
+              Foundation 中还定义了很多枚举和常量，在 Swift
+              中它们会成为相关类型的嵌套类型，如
+              <code class="language-plaintext highlighter-rouge"
+                >NSJSONReadingOptions</code
+              >
+              会成为
+              <code class="language-plaintext highlighter-rouge"
+                >JSONSerialization.ReadingOptions</code
+              >。
+            </li>
+          </ul>
+
+          <h3 id="字符串">字符串</h3>
+
+          <ul>
+            <li>
+              在 Swift 中应当尽量使用值类型的
+              <code class="language-plaintext highlighter-rouge">String</code
+              >，避免引用类型的
+              <code class="language-plaintext highlighter-rouge">NSString</code>
+              /
+              <code class="language-plaintext highlighter-rouge"
+                >NSMutableString</code
+              >。因为值类型可以使用 Swift 原生的
+              <code class="language-plaintext highlighter-rouge">let</code> /
+              <code class="language-plaintext highlighter-rouge">var</code>
+              来控制对象内容是否可变，而引用类型则需要使用不同的类来实现。
+            </li>
+            <li>
+              Objective-C 中有四种
+              <code class="language-plaintext highlighter-rouge"
+                >NSLocalizedString</code
+              >
+              开头的宏来对字符串进行本地化，而 Swift 中这被简化为了单个函数
+              <code class="language-plaintext highlighter-rouge"
+                >NSLocalizedString(_:tableName:bundle:value:comment:)</code
+              >，其中后三个参数有默认值。
+            </li>
+          </ul>
+
+          <h3 id="数字">数字</h3>
+
+          <ul>
+            <li>
+              <code class="language-plaintext highlighter-rouge">Int</code> /
+              <code class="language-plaintext highlighter-rouge">Double</code> /
+              <code class="language-plaintext highlighter-rouge">Bool</code>
+              等数字类型均可用
+              <code class="language-plaintext highlighter-rouge">as</code>
+              安全地桥接到
+              <code class="language-plaintext highlighter-rouge">NSNumber</code
+              >，但反过来需要使用
+              <code class="language-plaintext highlighter-rouge">as?</code> 或
+              <code class="language-plaintext highlighter-rouge">as!</code
+              >，因为
+              <code class="language-plaintext highlighter-rouge">NSNumber</code>
+              可以表示多种类型。
+            </li>
+          </ul>
+
+          <h3 id="合集类型">合集类型</h3>
+
+          <ul>
+            <li>
+              <code class="language-plaintext highlighter-rouge">NSArray</code>
+              /
+              <code class="language-plaintext highlighter-rouge">NSSet</code> /
+              <code class="language-plaintext highlighter-rouge"
+                >NSDictionary</code
+              >
+              这三种合集类型，一开始是桥接到
+              <code class="language-plaintext highlighter-rouge"
+                >[AnyObject]</code
+              >
+              /
+              <code class="language-plaintext highlighter-rouge"
+                >Set&lt;NSObject&gt;</code
+              >
+              /
+              <code class="language-plaintext highlighter-rouge"
+                >[NSObject: AnyObject]</code
+              >。得益于 Swift 3 的两份提案
+              <a
+                href="https://github.com/apple/swift-evolution/blob/master/proposals/0116-id-as-any.md"
+                >SE-0116</a
+              >、<a
+                href="https://github.com/apple/swift-evolution/blob/master/proposals/0131-anyhashable.md"
+                >SE-0131</a
+              >，现在已桥接到
+              <code class="language-plaintext highlighter-rouge">[Any]</code> /
+              <code class="language-plaintext highlighter-rouge"
+                >Set&lt;AnyHashable&gt;</code
+              >
+              /
+              <code class="language-plaintext highlighter-rouge"
+                >[AnyHashable: Any]</code
+              >。
+            </li>
+            <li>
+              <a
+                href="https://developer.apple.com/library/archive/documentation/Xcode/Conceptual/RN-Xcode-Archive/Chapters/xc7_release_notes.html#//apple_ref/doc/uid/TP40016994-CH5-SW46"
+                >Xcode 7.0</a
+              >
+              为 Objective-C
+              引入了轻量级的泛型，允许指定合集的元素类型，以方便与 Swift
+              桥接，如
+              <code class="language-plaintext highlighter-rouge"
+                >NSArray&lt;NSData*&gt;*</code
+              >
+              将桥接到
+              <code class="language-plaintext highlighter-rouge">[Data]</code>。
+            </li>
+          </ul>
+
+          <h3 id="core-foundation">Core Foundation</h3>
+
+          <ul>
+            <li>
+              在 Swift 中，Core Foundation 所有类型的
+              <code class="language-plaintext highlighter-rouge">Ref</code>
+              后缀都会自动删掉，因为 Swift
+              的类一定是引用类型的。另外，可以指向任意 Core Foundation 类型的
+              <code class="language-plaintext highlighter-rouge"
+                >CFTypeRef</code
+              >
+              桥接到了
+              <code class="language-plaintext highlighter-rouge">AnyObject</code
+              >。
+            </li>
+            <li>
+              对于已经标注过的 CF API，Swift 会自动进行内存管理，不再需要
+              <code class="language-plaintext highlighter-rouge">CFRetain</code>
+              或
+              <code class="language-plaintext highlighter-rouge">CFRelease</code
+              >；否则需要手动进行标注或是手动管理
+              <code class="language-plaintext highlighter-rouge"
+                >Unmanaged</code
+              >
+              对象，详见
+              <a href="https://nshipster.cn/unmanaged/">NSHipster 的文章</a>。
+            </li>
+          </ul>
+
+          <h3 id="日志记录">日志记录</h3>
+
+          <ul>
+            <li>
+              在 macOS 10.12 / iOS 10.0 / watchOS 3.0 / tvOS 10.0
+              及更高版本的平台上，统一日志记录系统于
+              <code class="language-plaintext highlighter-rouge">os.log</code>
+              模块提供了
+              <code class="language-plaintext highlighter-rouge">os_log</code>
+              函数来记录日志，以此取代 Foundation 中的
+              <code class="language-plaintext highlighter-rouge">NSLog</code>。
+            </li>
+          </ul>
+
+          <h2 id="cocoa-设计模式">Cocoa 设计模式</h2>
+
+          <h3 id="委托">委托</h3>
+
+          <ul>
+            <li>
+              不论是 Swift 还是
+              Objective-C，委托均由协议来表达。被委托类型遵循委托协议并实现了一系列委托方法，而委托对象则会保存一个被委托类型的实例，并在各种事件发生时委托其处理。
+            </li>
+          </ul>
+
+          <div class="language-swift highlighter-rouge">
+            <div class="highlight">
+              <pre
+                class="highlight"
+              ><code><span class="kd">class</span> <span class="kt">MyDelegate</span><span class="p">:</span> <span class="kt">NSObject</span><span class="p">,</span> <span class="kt">NSWindowDelegate</span> <span class="p">{</span>
+  <span class="kd">func</span> <span class="nf">window</span><span class="p">(</span><span class="n">_</span> <span class="nv">window</span><span class="p">:</span> <span class="kt">NSWindow</span><span class="p">,</span> <span class="n">willUseFullScreenContentSize</span> <span class="nv">proposedSize</span><span class="p">:</span> <span class="kt">NSSize</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kt">NSSize</span> <span class="p">{</span>
+    <span class="k">return</span> <span class="n">proposedSize</span>
+  <span class="p">}</span>
+<span class="p">}</span>
+<span class="n">myWindow</span><span class="o">.</span><span class="n">delegate</span> <span class="o">=</span> <span class="kt">MyDelegate</span><span class="p">()</span>
+<span class="k">if</span> <span class="k">let</span> <span class="nv">fullScreenSize</span> <span class="o">=</span> <span class="n">myWindow</span><span class="o">.</span><span class="n">delegate</span><span class="p">?</span><span class="o">.</span><span class="nf">window</span><span class="p">(</span><span class="n">myWindow</span><span class="p">,</span> <span class="nv">willUseFullScreenContentSize</span><span class="p">:</span> <span class="n">mySize</span><span class="p">)</span> <span class="p">{</span>
+  <span class="nf">print</span><span class="p">(</span><span class="kt">NSStringFromSize</span><span class="p">(</span><span class="n">fullScreenSize</span><span class="p">))</span>
+<span class="p">}</span>
+</code></pre>
+            </div>
+          </div>
+
+          <h3 id="错误处理">错误处理</h3>
+
+          <ul>
+            <li>
+              按照 Objective-C 的惯例，可能产生错误的方法接受一个
+              <code class="language-plaintext highlighter-rouge"
+                >NSError**</code
+              >
+              作为输出参数，并返回
+              <code class="language-plaintext highlighter-rouge">BOOL</code>
+              值表示方法调用是否成功。
+            </li>
+            <li>
+              在 Swift 1 时代，这些 Objective-C API 没有什么变动，依然需要传入
+              <code class="language-plaintext highlighter-rouge">NSError</code>
+              对象指针。
+            </li>
+            <li>
+              在 Swift 2
+              时代，引入了语言原生的错误处理机制，所有错误参数被替换为
+              <code class="language-plaintext highlighter-rouge">throws</code>
+              关键字，返回类型从
+              <code class="language-plaintext highlighter-rouge">BOOL</code>
+              改为
+              <code class="language-plaintext highlighter-rouge">Void</code>。
+            </li>
+          </ul>
+
+          <h3 id="单例">单例</h3>
+
+          <ul>
+            <li>
+              单例模式使用一个全局共享的实例，以提供资源或服务的统一接入点。
+            </li>
+            <li>
+              在 Objective-C 中，可以用
+              <code class="language-plaintext highlighter-rouge"
+                >dispatch_once</code
+              >
+              保证单例只被创建一次。
+            </li>
+          </ul>
+
+          <div class="language-objc highlighter-rouge">
+            <div class="highlight">
+              <pre
+                class="highlight"
+              ><code><span class="k">+</span> <span class="p">(</span><span class="n">instancetype</span><span class="p">)</span><span class="n">sharedInstance</span> <span class="p">{</span>
+    <span class="k">static</span> <span class="n">id</span> <span class="n">_sharedInstance</span> <span class="o">=</span> <span class="nb">nil</span><span class="p">;</span>
+    <span class="k">static</span> <span class="n">dispatch_once_t</span> <span class="n">onceToken</span><span class="p">;</span>
+    <span class="n">dispatch_once</span><span class="p">(</span><span class="o">&amp;</span><span class="n">onceToken</span><span class="p">,</span> <span class="o">^</span><span class="p">{</span>
+        <span class="n">_sharedInstance</span> <span class="o">=</span> <span class="p">[[</span><span class="n">self</span> <span class="nf">alloc</span><span class="p">]</span> <span class="nf">init</span><span class="p">];</span>
+    <span class="p">});</span>
+    <span class="k">return</span> <span class="n">_sharedInstance</span><span class="p">;</span>
+<span class="p">}</span>
+</code></pre>
+            </div>
+          </div>
+
+          <ul>
+            <li>
+              在 Swift
+              中，可以直接使用惰性初始化的类型属性。如果调用构造器之后还要做其他初始化工作，可以写一个立即执行的闭包（<a
+                href="https://en.wikipedia.org/wiki/Immediately_invoked_function_expression"
+                >IIFE</a
+              >）。
+            </li>
+          </ul>
+
+          <div class="language-swift highlighter-rouge">
+            <div class="highlight">
+              <pre
+                class="highlight"
+              ><code><span class="kd">class</span> <span class="kt">Singleton</span> <span class="p">{</span>
+    <span class="kd">static</span> <span class="k">let</span> <span class="nv">sharedInstance</span><span class="p">:</span> <span class="kt">Singleton</span> <span class="o">=</span> <span class="p">{</span>
+        <span class="k">let</span> <span class="nv">instance</span> <span class="o">=</span> <span class="kt">Singleton</span><span class="p">()</span>
+        <span class="c1">// Setup…</span>
+        <span class="k">return</span> <span class="n">instance</span>
+    <span class="p">}()</span>
+<span class="p">}</span>
+</code></pre>
+            </div>
+          </div>
+
+          <h3 id="内省">内省</h3>
+
+          <ul>
+            <li>
+              内省（Introspection）即运行时类型检查，Objective-C 中的
+              <code class="language-plaintext highlighter-rouge"
+                >isKindOfClass:</code
+              >
+              和
+              <code class="language-plaintext highlighter-rouge"
+                >conformsToProtocol:</code
+              >
+              方法、Swift 中的
+              <code class="language-plaintext highlighter-rouge">is</code> 和
+              <code class="language-plaintext highlighter-rouge">as?</code>
+              运算符均属于此类。
+            </li>
+            <li>
+              另外，从 Swift 3 开始可以用
+              <code class="language-plaintext highlighter-rouge"
+                >type(of:)</code
+              >
+              来获取一个对象的动态类型（<a
+                href="https://github.com/apple/swift-evolution/blob/master/proposals/0096-dynamictype.md"
+                >SE-0096</a
+              >
+              之前是对象的
+              <code class="language-plaintext highlighter-rouge"
+                >dynamicType</code
+              >
+              属性）。
+            </li>
+          </ul>
+
+          <h3 id="序列化">序列化</h3>
+
+          <ul>
+            <li>
+              在 Swift 中，遵循
+              <code class="language-plaintext highlighter-rouge">Codable</code>
+              协议的类型即可使用
+              <code class="language-plaintext highlighter-rouge"
+                >JSON{En,De}coder</code
+              >
+              和
+              <code class="language-plaintext highlighter-rouge"
+                >PropertyList{En,De}coder</code
+              >
+              进行序列化和反序列化，处理自定义类型详见<a
+                href="https://developer.apple.com/documentation/foundation/archives_and_serialization/encoding_and_decoding_custom_types"
+                >官方文档</a
+              >。
+            </li>
+          </ul>
+
+          <h3 id="命令行参数">命令行参数</h3>
+
+          <ul>
+            <li>
+              可以通过
+              <code class="language-plaintext highlighter-rouge"
+                >CommandLine.arguments</code
+              >
+              来访问命令行参数，这和
+              <code class="language-plaintext highlighter-rouge"
+                >ProcessInfo.processInfo.arguments</code
+              >
+              等价。
+            </li>
+          </ul>
+
+          <h2 id="c-api">C API</h2>
+
+          <h3 id="基本类型">基本类型</h3>
+
+          <ul>
+            <li>
+              Swift 为 C 语言的基本类型提供了等价的类型，但它们不会隐式转换为
+              Swift 原生的数字类型。
+            </li>
+          </ul>
+
+          <table>
+            <thead>
+              <tr>
+                <th>C</th>
+                <th>Swift</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>bool</td>
+                <td>CBool</td>
+              </tr>
+              <tr>
+                <td>char, signed char</td>
+                <td>CChar</td>
+              </tr>
+              <tr>
+                <td>unsigned char</td>
+                <td>CUnsignedChar</td>
+              </tr>
+              <tr>
+                <td>short</td>
+                <td>CShort</td>
+              </tr>
+              <tr>
+                <td>unsigned short</td>
+                <td>CUnsignedShort</td>
+              </tr>
+              <tr>
+                <td>int</td>
+                <td>CInt</td>
+              </tr>
+              <tr>
+                <td>unsigned int</td>
+                <td>CUnsignedInt</td>
+              </tr>
+              <tr>
+                <td>long</td>
+                <td>CLong</td>
+              </tr>
+              <tr>
+                <td>unsigned long</td>
+                <td>CUnsignedLong</td>
+              </tr>
+              <tr>
+                <td>long long</td>
+                <td>CLongLong</td>
+              </tr>
+              <tr>
+                <td>unsigned long long</td>
+                <td>CUnsignedLongLong</td>
+              </tr>
+              <tr>
+                <td>wchar_t</td>
+                <td>CWideChar</td>
+              </tr>
+              <tr>
+                <td>char16_t</td>
+                <td>CChar16</td>
+              </tr>
+              <tr>
+                <td>char32_t</td>
+                <td>CChar32</td>
+              </tr>
+              <tr>
+                <td>float</td>
+                <td>CFloat</td>
+              </tr>
+              <tr>
+                <td>double</td>
+                <td>CDouble</td>
+              </tr>
+            </tbody>
+          </table>
+
+          <h3 id="指针">指针</h3>
+
+          <ul>
+            <li>
+              Swift
+              尽可能避免了直接使用指针，但仍然提供了多种指针类型以操作内存地址：
+            </li>
+          </ul>
+
+          <table>
+            <thead>
+              <tr>
+                <th>C</th>
+                <th>Swift</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>const T *</td>
+                <td>UnsafePointer&lt;T&gt;</td>
+              </tr>
+              <tr>
+                <td>T *</td>
+                <td>UnsafeMutablePointer&lt;T&gt;</td>
+              </tr>
+            </tbody>
+          </table>
+
+          <ul>
+            <li>对于类对象而言：</li>
+          </ul>
+
+          <table>
+            <thead>
+              <tr>
+                <th>C</th>
+                <th>Swift</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>T * const *</td>
+                <td>UnsafePointer&lt;T&gt;</td>
+              </tr>
+              <tr>
+                <td>T * __strong *</td>
+                <td>UnsafeMutablePointer&lt;T&gt;</td>
+              </tr>
+              <tr>
+                <td>T **</td>
+                <td>AutoreleasingUnsafeMutablePointer&lt;T&gt;</td>
+              </tr>
+            </tbody>
+          </table>
+
+          <ul>
+            <li>
+              从 Swift 3（<a
+                href="https://github.com/apple/swift-evolution/blob/master/proposals/0107-unsaferawpointer.md"
+                >SE-0107</a
+              >）开始，指向未知类型内存的指针是：
+            </li>
+          </ul>
+
+          <table>
+            <thead>
+              <tr>
+                <th>C</th>
+                <th>Swift</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>const void *</td>
+                <td>UnsafeRawPointer</td>
+              </tr>
+              <tr>
+                <td>void *</td>
+                <td>UnsafeMutableRawPointer</td>
+              </tr>
+            </tbody>
+          </table>
+
+          <ul>
+            <li>
+              以<strong>常量指针</strong>为参数的函数可以接受以下值：
+              <ul>
+                <li>常量指针、变量指针或自动释放指针；</li>
+                <li>
+                  （如果
+                  <code class="language-plaintext highlighter-rouge">T</code> 为
+                  <code class="language-plaintext highlighter-rouge">Int8</code>
+                  /
+                  <code class="language-plaintext highlighter-rouge">UInt8</code
+                  >）字符串，以 UTF-8 编码；
+                </li>
+                <li>
+                  <code class="language-plaintext highlighter-rouge"
+                    >inout T</code
+                  >，即相应类型值前加
+                  <code class="language-plaintext highlighter-rouge">&amp;</code
+                  >；
+                </li>
+                <li>
+                  数组
+                  <code class="language-plaintext highlighter-rouge">[T]</code
+                  >。
+                </li>
+              </ul>
+            </li>
+            <li>
+              以<strong>变量指针</strong>为参数的函数可以接受以下值：
+              <ul>
+                <li>变量指针；</li>
+                <li>
+                  <code class="language-plaintext highlighter-rouge"
+                    >inout T</code
+                  >；
+                </li>
+                <li>
+                  <code class="language-plaintext highlighter-rouge"
+                    >inout [T]</code
+                  >。
+                </li>
+              </ul>
+            </li>
+            <li>
+              以<strong>自动释放指针</strong>为参数的函数可以接受以下值：
+              <ul>
+                <li>自动释放指针；</li>
+                <li>
+                  <code class="language-plaintext highlighter-rouge"
+                    >inout T</code
+                  >，不过传递的指针指向一个回写临时缓冲区。
+                </li>
+              </ul>
+            </li>
+          </ul>
+
+          <h3 id="枚举">枚举</h3>
+
+          <ul>
+            <li>
+              Swift 会将所有用
+              <code class="language-plaintext highlighter-rouge">NS_ENUM</code>
+              宏标记的 C 枚举导入为 Swift 枚举，<code
+                class="language-plaintext highlighter-rouge"
+                >NS_OPTION</code
+              >
+              导入为遵循
+              <code class="language-plaintext highlighter-rouge"
+                >OptionSet</code
+              >
+              的结构体和一系列类型属性，而没有用宏标记的 C 枚举则导入为遵循
+              <code class="language-plaintext highlighter-rouge"
+                >RawRepresentable</code
+              >
+              的结构体和一系列全局变量。
+            </li>
+            <li>
+              <a
+                href="https://developer.apple.com/documentation/macos_release_notes/macos_mojave_10_14_release_notes/appkit_release_notes_for_macos_10_14"
+                >Xcode 10.0</a
+              >
+              引入了相仿的
+              <code class="language-plaintext highlighter-rouge"
+                >NS_TYPED_ENUM</code
+              >
+              宏，Swift 会将一系列全局常量导入为遵循
+              <code class="language-plaintext highlighter-rouge"
+                >RawRepresentable</code
+              >
+              的结构体和一系列类型属性，详见<a
+                href="https://developer.apple.com/documentation/swift/objective-c_and_c_code_customization/grouping_related_objective-c_constants"
+                >官方文档</a
+              >。
+            </li>
+          </ul>
+
+          <h3 id="预处理指令">预处理指令</h3>
+
+          <ul>
+            <li>
+              因为 Swift 编译器不包含预处理器，所以 Swift
+              没有预处理指令（preprocessor directives）。
+            </li>
+            <li>
+              不过 Swift 仍支持条件编译，编译条件包括字面值
+              <code class="language-plaintext highlighter-rouge">true</code> /
+              <code class="language-plaintext highlighter-rouge">false</code
+              >、条件编译标志（<code
+                class="language-plaintext highlighter-rouge"
+                >swift -D &lt;#flag#&gt;</code
+              >）和平台条件函数：
+            </li>
+          </ul>
+
+          <table>
+            <thead>
+              <tr>
+                <th>平台条件函数</th>
+                <th>有效参数</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>os()</td>
+                <td>macOS, iOS, watchOS, tvOS, Linux</td>
+              </tr>
+              <tr>
+                <td>arch()</td>
+                <td>x86_64, arm, arm64, i386</td>
+              </tr>
+              <tr>
+                <td>swift()</td>
+                <td>&gt;=x.x</td>
+              </tr>
+            </tbody>
+          </table>
+
+          <div class="language-swift highlighter-rouge">
+            <div class="highlight">
+              <pre
+                class="highlight"
+              ><code><span class="cp">#if arch(arm) || arch(arm64)</span>
+<span class="nf">print</span><span class="p">(</span><span class="s">"Using ARM code"</span><span class="p">)</span>
+<span class="cp">#elseif arch(x86_64)</span>
+<span class="nf">print</span><span class="p">(</span><span class="s">"Using 64-bit x86 code"</span><span class="p">)</span>
+<span class="cp">#else</span>
+<span class="nf">print</span><span class="p">(</span><span class="s">"Using general code"</span><span class="p">)</span>
+<span class="cp">#endif</span>
+</code></pre>
+            </div>
+          </div>
+
+          <ul>
+            <li>
+              顺便一提，因为没有宏系统来支持元编程，Swift 团队维护了一个名叫
+              GYB（Generate Your Boilerplate）的轻量级模板工具，详见
+              <a href="https://nshipster.cn/swift-gyb/">NSHipster 的文章</a>。
+            </li>
+          </ul>
+
+          <h2 id="swift--objective-c-混编">Swift / Objective-C 混编</h2>
+
+          <h3 id="应用内混编">应用内混编</h3>
+
+          <table>
+            <thead>
+              <tr>
+                <th> </th>
+                <th>导入到 Swift</th>
+                <th>导入到 Objective-C</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>Swift 代码</td>
+                <td>不需要导入语句</td>
+                <td>
+                  <code class="language-plaintext highlighter-rouge"
+                    >#import "ProductModuleName-Swift.h"</code
+                  >
+                </td>
+              </tr>
+              <tr>
+                <td>Objective-C 代码</td>
+                <td>不需要导入语句，但需要配置桥接头文件</td>
+                <td>
+                  <code class="language-plaintext highlighter-rouge"
+                    >#import "Header.h"</code
+                  >
+                </td>
+              </tr>
+            </tbody>
+          </table>
+
+          <ul>
+            <li>
+              将 Swift 代码导入 Objective-C，只需
+              <code class="language-plaintext highlighter-rouge">#import</code>
+              Xcode 为 Swift 自动生成的头文件，它声明了所有 Swift
+              中定义的公开接口，如果已经配置了桥接头文件则亦会声明所有内部接口。
+            </li>
+            <li>
+              将 Objective-C 代码导入到 Swift，需要在配置好的 Objective-C
+              桥接头文件（文件名为
+              <code class="language-plaintext highlighter-rouge"
+                >ProductModuleName-Bridging-Header.h</code
+              >）中
+              <code class="language-plaintext highlighter-rouge">#import</code>
+              相关头文件。
+            </li>
+          </ul>
+
+          <h3 id="框架内混编">框架内混编</h3>
+
+          <table>
+            <thead>
+              <tr>
+                <th> </th>
+                <th>导入到 Swift</th>
+                <th>导入到 Objective-C</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>Swift 代码</td>
+                <td>不需要导入语句</td>
+                <td>
+                  <code class="language-plaintext highlighter-rouge"
+                    >#import &lt;ProductName/ProductModuleName-Swift.h&gt;</code
+                  >
+                </td>
+              </tr>
+              <tr>
+                <td>Objective-C 代码</td>
+                <td>不需要导入语句，但依赖框架的伞头文件</td>
+                <td>
+                  <code class="language-plaintext highlighter-rouge"
+                    >#import "Header.h"</code
+                  >
+                </td>
+              </tr>
+            </tbody>
+          </table>
+
+          <ul>
+            <li>
+              将 Swift 代码导入到 Objective-C，只需
+              <code class="language-plaintext highlighter-rouge">#import</code>
+              Xcode 为 Swift 自动生成的头文件，它声明了所有 Swift
+              中定义的公开接口。
+            </li>
+            <li>
+              将 Objective-C 代码导入到 Swift，需要在框架的 Objective-C
+              伞头文件（文件名为
+              <code class="language-plaintext highlighter-rouge"
+                >ProductModuleName.h</code
+              >）中
+              <code class="language-plaintext highlighter-rouge">#import</code>
+              相关头文件，当然它们也就成为了公开接口。
+            </li>
+          </ul>
+
+          <h3 id="小提示">小提示</h3>
+
+          <ul>
+            <li>
+              为避免循环引用，千万别把 Swift 导入到 Objective-C
+              头文件中，但可以用
+              <code class="language-plaintext highlighter-rouge"
+                >@class MyClass; @protocol MyProtocol;</code
+              >
+              来前向声明 Swift 的类或协议。
+            </li>
+            <li>
+              上文多次提到的 product module name，默认与用户设定的 product name
+              相同，不过其中的非字母数字字符会被下划线替代。
+            </li>
+          </ul>
+
+          <h3 id="objc">
+            <code class="language-plaintext highlighter-rouge">@objc</code>
+          </h3>
+
+          <ul>
+            <li>
+              将 Swift 导入到 Objective-C 之后，便可访问标为
+              <code class="language-plaintext highlighter-rouge">@objc</code> 或
+              <code class="language-plaintext highlighter-rouge"
+                >@objc(&lt;#name#&gt;)</code
+              >
+              的 API。
+            </li>
+            <li>
+              Swift 的独有特性不可以被标为
+              <code class="language-plaintext highlighter-rouge">@objc</code
+              >：泛型、元组、非
+              <code class="language-plaintext highlighter-rouge">Int</code>
+              原始值的枚举、结构体、全局函数、全局变量、类型别名、可变参数、嵌套类型、柯里化的函数。
+            </li>
+            <li>
+              从 Swift 4（<a
+                href="https://github.com/apple/swift-evolution/blob/master/proposals/0160-objc-inference.md"
+                >SE-0160</a
+              >）开始，继承自
+              <code class="language-plaintext highlighter-rouge">NSObject</code>
+              的类及其属性和方法不再自动标为
+              <code class="language-plaintext highlighter-rouge">@objc</code
+              >，现在仍然自动标为
+              <code class="language-plaintext highlighter-rouge">@objc</code>
+              的情况只剩下几种确保语义一致性的情况：
+              <ul>
+                <li>该类继承自 Objective-C 中定义的类；</li>
+                <li>
+                  其声明重写了父类中的
+                  <code class="language-plaintext highlighter-rouge"
+                    >@objc</code
+                  >
+                  声明；
+                </li>
+                <li>
+                  其声明满足了一项
+                  <code class="language-plaintext highlighter-rouge"
+                    >@objc</code
+                  >
+                  协议的要求；
+                </li>
+                <li>
+                  已被标为
+                  <code class="language-plaintext highlighter-rouge"
+                    >@IBAction</code
+                  >
+                  /
+                  <code class="language-plaintext highlighter-rouge"
+                    >@IBOutlet</code
+                  >
+                  /
+                  <code class="language-plaintext highlighter-rouge"
+                    >@IBDesignable</code
+                  >
+                  /
+                  <code class="language-plaintext highlighter-rouge"
+                    >@IBInspectable</code
+                  >
+                  /
+                  <code class="language-plaintext highlighter-rouge"
+                    >@GKInspectable</code
+                  >
+                  /
+                  <code class="language-plaintext highlighter-rouge"
+                    >@NSManaged</code
+                  >。
+                </li>
+              </ul>
+            </li>
+            <li>
+              可以用
+              <code class="language-plaintext highlighter-rouge"
+                >@objcMembers</code
+              >
+              让一个类本身、其扩展、其子类、其子类的扩展都被自动标为
+              <code class="language-plaintext highlighter-rouge">@objc</code
+              >，另外也有
+              <code class="language-plaintext highlighter-rouge">@nonobjc</code>
+              显式取消隐式的
+              <code class="language-plaintext highlighter-rouge">@objc</code>。
+            </li>
+            <li>
+              在 Objective-C 中调用的 Swift API
+              必须支持<strong>动态派发</strong>（dynamic
+              dispatch），但这并不意味着在 Swift 中编译器不会将
+              <code class="language-plaintext highlighter-rouge">@objc</code>
+              方法优化成静态派发。如果一定要使用 Objective-C 运行时中的
+              <a href="https://nshipster.cn/key-value-observing/">KVO</a>、<a
+                href="https://nshipster.cn/method-swizzling/"
+                >Method Swizzling</a
+              >
+              等动态特性，得用
+              <code class="language-plaintext highlighter-rouge"
+                >@objc dynamic</code
+              >
+              来强制方法进行动态派发。
+            </li>
+            <li>Objective-C 的类不可以继承自 Swift 的类。</li>
+          </ul>
+
+          <blockquote>
+            <p>
+              <strong>&lt;Prev&gt;</strong>
+              <a href="/swift-notes-2/">Swift 学习笔记（二）</a>
+            </p>
+          </blockquote>
+        </div>
+
+        <div class="comments">
+          <div id="disqus_thread"></div>
+          <script>
+            var disqus_config = function () {
+              this.page.url = "https://blog.yzsun.me/swift-notes-3/";
+              this.page.identifier = "/swift-notes-3/";
+            };
+            (function () {
+              var d = document,
+                s = d.createElement("script");
+              s.src = "//yzyzsun.disqus.com/embed.js";
+              s.setAttribute("data-timestamp", +new Date());
+              (d.head || d.body).appendChild(s);
+            })();
+          </script>
+          <noscript
+            >Please enable JavaScript to view the
+            <a href="https://disqus.com/?ref_noscript"
+              >comments powered by Disqus.</a
+            ></noscript
+          >
+        </div>
+      </article>
+    </div>
+
+    <div class="wrapper-footer">
+      <div class="container">
+        <footer class="footer">
+          <a href="https://github.com/yzyzsun"
+            ><i class="svg-icon github"></i
+          ></a>
+
+          <a href="/feed.xml"><i class="svg-icon rss"></i></a>
+        </footer>
+      </div>
+    </div>
+
+    <!-- Google Analytics -->
+    <script>
+      (function (i, s, o, g, r, a, m) {
+        i["GoogleAnalyticsObject"] = r;
+        (i[r] =
+          i[r] ||
+          function () {
+            (i[r].q = i[r].q || []).push(arguments);
+          }),
+          (i[r].l = 1 * new Date());
+        (a = s.createElement(o)), (m = s.getElementsByTagName(o)[0]);
+        a.async = 1;
+        a.src = g;
+        m.parentNode.insertBefore(a, m);
+      })(
+        window,
+        document,
+        "script",
+        "//www.google-analytics.com/analytics.js",
+        "ga"
+      );
+
+      ga("create", "UA-65994616-1", "auto");
+      ga("send", "pageview", {
+        page: "/swift-notes-3/",
+        title: "Swift 学习笔记（三）",
+      });
+    </script>
+    <!-- End Google Analytics -->
+  </body>
+</html>

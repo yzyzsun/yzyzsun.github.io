@@ -1,0 +1,852 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+  <head>
+    <title>
+      Deploy Rails with PostgreSQL Using Passenger and Nginx on CentOS |
+      孙耀珠的博客
+    </title>
+
+    <meta charset="utf-8" />
+    <meta content="text/html; charset=utf-8" http-equiv="Content-Type" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1.0, maximum-scale=1.0"
+    />
+    <meta
+      name="google-site-verification"
+      content="zYt2wigM41vmyHtpvOvLHk4Yetcfbv5Bz9pdvsTRT3Y"
+    />
+
+    <!-- Begin Jekyll SEO tag v2.7.1 -->
+    <meta name="generator" content="Jekyll v4.2.0" />
+    <meta
+      property="og:title"
+      content="Deploy Rails with PostgreSQL Using Passenger and Nginx on CentOS"
+    />
+    <meta name="author" content="孙耀珠" />
+    <meta property="og:locale" content="en_US" />
+    <meta
+      name="description"
+      content="最近读完了 Michael Hartl 的《Ruby on Rails Tutorial》，于是想试着在自己的 Digital Ocean (CentOS 7) 上部署一下最终完成的 sample app。最简单的方法当然是： $ rails server -e production -b 0.0.0.0 -p 80 但 Rails 内建的 WEBrick + SQLite 性能较差，而且这样部署也不够灵活，还是上 Apache / Nginx 比较主流。与 Apache 相比 Nginx 的异步模型能更好地处理高并发的场景，Passenger 性能不错并且可以直接集成于 Apache / Nginx 而不必反向代理，而 PostgreSQL 比 MySQL / MariaDB 功能更强大，这三者是 Ruby 服务器的最佳实践之一，因此我决定折腾一下 Nginx + Passenger + PostgreSQL。"
+    />
+    <meta
+      property="og:description"
+      content="最近读完了 Michael Hartl 的《Ruby on Rails Tutorial》，于是想试着在自己的 Digital Ocean (CentOS 7) 上部署一下最终完成的 sample app。最简单的方法当然是： $ rails server -e production -b 0.0.0.0 -p 80 但 Rails 内建的 WEBrick + SQLite 性能较差，而且这样部署也不够灵活，还是上 Apache / Nginx 比较主流。与 Apache 相比 Nginx 的异步模型能更好地处理高并发的场景，Passenger 性能不错并且可以直接集成于 Apache / Nginx 而不必反向代理，而 PostgreSQL 比 MySQL / MariaDB 功能更强大，这三者是 Ruby 服务器的最佳实践之一，因此我决定折腾一下 Nginx + Passenger + PostgreSQL。"
+    />
+    <link rel="canonical" href="https://blog.yzsun.me/rails-deployment/" />
+    <meta property="og:url" content="https://blog.yzsun.me/rails-deployment/" />
+    <meta property="og:site_name" content="孙耀珠的博客" />
+    <meta property="og:type" content="article" />
+    <meta
+      property="article:published_time"
+      content="2016-02-10T00:00:00+00:00"
+    />
+    <meta name="twitter:card" content="summary" />
+    <meta
+      property="twitter:title"
+      content="Deploy Rails with PostgreSQL Using Passenger and Nginx on CentOS"
+    />
+    <script type="application/ld+json">
+      {
+        "description": "最近读完了 Michael Hartl 的《Ruby on Rails Tutorial》，于是想试着在自己的 Digital Ocean (CentOS 7) 上部署一下最终完成的 sample app。最简单的方法当然是： $ rails server -e production -b 0.0.0.0 -p 80 但 Rails 内建的 WEBrick + SQLite 性能较差，而且这样部署也不够灵活，还是上 Apache / Nginx 比较主流。与 Apache 相比 Nginx 的异步模型能更好地处理高并发的场景，Passenger 性能不错并且可以直接集成于 Apache / Nginx 而不必反向代理，而 PostgreSQL 比 MySQL / MariaDB 功能更强大，这三者是 Ruby 服务器的最佳实践之一，因此我决定折腾一下 Nginx + Passenger + PostgreSQL。",
+        "url": "https://blog.yzsun.me/rails-deployment/",
+        "@type": "BlogPosting",
+        "headline": "Deploy Rails with PostgreSQL Using Passenger and Nginx on CentOS",
+        "dateModified": "2016-02-10T00:00:00+00:00",
+        "datePublished": "2016-02-10T00:00:00+00:00",
+        "mainEntityOfPage": {
+          "@type": "WebPage",
+          "@id": "https://blog.yzsun.me/rails-deployment/"
+        },
+        "author": { "@type": "Person", "name": "孙耀珠" },
+        "@context": "https://schema.org"
+      }
+    </script>
+    <!-- End Jekyll SEO tag -->
+
+    <link
+      type="application/atom+xml"
+      rel="alternate"
+      href="https://blog.yzsun.me/feed.xml"
+      title="孙耀珠的博客"
+    />
+
+    <!--[if lt IE 9]>
+      <script src="//cdnjs.cloudflare.com/ajax/libs/html5shiv/r29/html5.min.js"></script>
+    <![endif]-->
+
+    <link rel="stylesheet" href="/style.css" />
+  </head>
+
+  <body>
+    <div class="wrapper-masthead">
+      <div class="container">
+        <header class="masthead clearfix">
+          <a href="/" class="site-avatar"
+            ><img src="/images/avatar.jpg" alt="avatar"
+          /></a>
+
+          <div class="site-info">
+            <h1 class="site-domain"><a href="/">yzsun.me</a></h1>
+            <p class="site-name">孙耀珠的博客</p>
+          </div>
+
+          <nav>
+            <a href="/">首页</a>
+            <a href="/archive/">归档</a>
+            <a href="/about/">关于</a>
+          </nav>
+        </header>
+      </div>
+    </div>
+
+    <div id="main" role="main" class="container">
+      <article class="post">
+        <h1>
+          Deploy Rails with PostgreSQL Using Passenger and Nginx on CentOS
+        </h1>
+
+        <div class="info">
+          <span>
+            <i class="fa fa-calendar"></i>
+            2016-02-10
+          </span>
+          <span>
+            <i class="fa fa-user"></i>
+            孙耀珠
+          </span>
+          <span>
+            <i class="fa fa-tags"></i>
+            运维
+          </span>
+        </div>
+
+        <div class="entry">
+          <p>
+            最近读完了 Michael Hartl 的《Ruby on Rails
+            Tutorial》，于是想试着在自己的 Digital Ocean (CentOS 7)
+            上部署一下最终完成的 sample app。最简单的方法当然是：
+          </p>
+
+          <div class="language-sh highlighter-rouge">
+            <div class="highlight">
+              <pre
+                class="highlight"
+              ><code><span class="nv">$ </span>rails server <span class="nt">-e</span> production <span class="nt">-b</span> 0.0.0.0 <span class="nt">-p</span> 80
+</code></pre>
+            </div>
+          </div>
+
+          <p>
+            但 Rails 内建的 WEBrick + SQLite
+            性能较差，而且这样部署也不够灵活，还是上 Apache / Nginx 比较主流。与
+            Apache 相比 Nginx 的异步模型能更好地处理高并发的场景，Passenger
+            性能不错并且可以直接集成于 Apache / Nginx 而不必反向代理，而
+            PostgreSQL 比 MySQL / MariaDB 功能更强大，这三者是 Ruby
+            服务器的最佳实践之一，因此我决定折腾一下 Nginx + Passenger +
+            PostgreSQL。
+          </p>
+
+          <!--more-->
+
+          <ul id="markdown-toc">
+            <li>
+              <a href="#安装-ruby" id="markdown-toc-安装-ruby">安装 Ruby</a>
+            </li>
+            <li>
+              <a
+                href="#安装-javascript-引擎"
+                id="markdown-toc-安装-javascript-引擎"
+                >安装 JavaScript 引擎</a
+              >
+            </li>
+            <li>
+              <a
+                href="#安装-nginx--passenger"
+                id="markdown-toc-安装-nginx--passenger"
+                >安装 Nginx + Passenger</a
+              >
+            </li>
+            <li>
+              <a href="#安装-postgresql" id="markdown-toc-安装-postgresql"
+                >安装 PostgreSQL</a
+              >
+            </li>
+            <li>
+              <a href="#部署-rails" id="markdown-toc-部署-rails">部署 Rails</a>
+            </li>
+            <li>
+              <a href="#启动-nginx" id="markdown-toc-启动-nginx">启动 Nginx</a>
+            </li>
+            <li><a href="#常见问题" id="markdown-toc-常见问题">常见问题</a></li>
+            <li><a href="#测试环境" id="markdown-toc-测试环境">测试环境</a></li>
+          </ul>
+
+          <h2 id="安装-ruby">安装 Ruby</h2>
+
+          <p>
+            直接使用 yum 安装当然是可行的，但
+            <a href="https://rvm.io">Ruby Version Manager (RVM)</a>
+            能够更方便地安装并管理 Ruby 版本，因此下面以 RVM 为例。安装 RVM：
+          </p>
+
+          <div class="language-sh highlighter-rouge">
+            <div class="highlight">
+              <pre
+                class="highlight"
+              ><code><span class="nv">$ </span>gpg <span class="nt">--recv-keys</span> 409B6B1796C275462A1703113804BB82D39DC0E3 7D2BAF1CF37B13E2069D6956105BD0E739499BDB
+<span class="nv">$ </span>curl <span class="nt">-sSL</span> https://get.rvm.io | bash <span class="nt">-s</span> stable
+</code></pre>
+            </div>
+          </div>
+
+          <p>
+            接着就能轻松地安装任意版本的 Ruby 了（<code
+              class="language-plaintext highlighter-rouge"
+              >rvm list known</code
+            >
+            可以列出已知的版本）：
+          </p>
+
+          <div class="language-sh highlighter-rouge">
+            <div class="highlight">
+              <pre
+                class="highlight"
+              ><code><span class="nv">$ </span>rvm <span class="nb">install </span>X.X.X
+<span class="nv">$ </span>rvm <span class="nt">--default</span> use X.X.X
+</code></pre>
+            </div>
+          </div>
+
+          <p>
+            为了管理项目依赖，还需要安装一下
+            <a href="http://bundler.io">Bundler</a>：
+          </p>
+
+          <div class="language-sh highlighter-rouge">
+            <div class="highlight">
+              <pre
+                class="highlight"
+              ><code><span class="nv">$ </span>gem <span class="nb">install </span>bundler <span class="nt">--no-rdoc</span> <span class="nt">--no-ri</span>
+</code></pre>
+            </div>
+          </div>
+
+          <p>
+            如果服务器在国内，由于众所周知的原因，也许会频繁遭遇网络连接失败，这时候可以考虑使用
+            Ruby China 的
+            <a href="https://ruby-china.org/wiki/ruby-mirror"
+              >Ruby 源代码镜像</a
+            >
+            和 <a href="https://gems.ruby-china.org">RubyGems 镜像</a>：
+          </p>
+
+          <div class="language-sh highlighter-rouge">
+            <div class="highlight">
+              <pre
+                class="highlight"
+              ><code><span class="nv">$ </span><span class="nb">echo</span> <span class="s2">"ruby_url=https://cache.ruby-china.org/pub/ruby"</span> <span class="o">&gt;</span> <span class="nv">$rvm_path</span>/user/db
+<span class="nv">$ </span>gem sources <span class="nt">-a</span> https://gems.ruby-china.org/ <span class="nt">-r</span> https://rubygems.org/
+<span class="nv">$ </span>bundle config mirror.https://rubygems.org https://gems.ruby-china.org
+</code></pre>
+            </div>
+          </div>
+
+          <h2 id="安装-javascript-引擎">安装 JavaScript 引擎</h2>
+
+          <p>
+            如果 Gemfile 直接或间接依赖了
+            <a href="https://github.com/rails/execjs">ExecJS</a>，譬如
+            <code class="language-plaintext highlighter-rouge"
+              >coffee-rails</code
+            >
+            /
+            <code class="language-plaintext highlighter-rouge">turbolinks</code>
+            /
+            <code class="language-plaintext highlighter-rouge">uglifier</code> /
+            <code class="language-plaintext highlighter-rouge"
+              >bootstrap-sass</code
+            >
+            等等，则还需要安装 JS 引擎，以在 Ruby 中执行 JS 代码。
+          </p>
+
+          <ul>
+            <li>
+              一种方法是在 Gemfile 中加上
+              <code class="language-plaintext highlighter-rouge"
+                >gem 'therubyracer'</code
+              >，这是一个嵌入式的 V8 引擎。
+            </li>
+            <li>
+              另一种方法是直接在服务器上安装 Node.js，这使用的也是 V8 引擎。安装
+              <a href="https://fedoraproject.org/wiki/EPEL/zh-cn"
+                >Extra Packages for Enterprise Linux (EPEL)</a
+              >
+              后可以直接通过 yum 安装 node，但版本会比较旧；与 RVM 类似，Node.js
+              也有
+              <a href="https://github.com/creationix/nvm">NVM</a>
+              来安装和管理版本，这里不再赘述。
+            </li>
+          </ul>
+
+          <h2 id="安装-nginx--passenger">安装 Nginx + Passenger</h2>
+
+          <p>
+            yum 原本的源中没有 Nginx 和 Passenger，可以导入
+            <a
+              href="https://www.phusionpassenger.com/library/install/nginx/install/oss/el7/"
+              >Passenger 自己的源</a
+            >，安装已包含 Passenger 模块的 Nginx 版本（这样就不必去运行
+            <code class="language-plaintext highlighter-rouge"
+              >passenger-install-nginx-module</code
+            >
+            了）和 Passenger 本体：
+          </p>
+
+          <div class="language-sh highlighter-rouge">
+            <div class="highlight">
+              <pre
+                class="highlight"
+              ><code><span class="nv">$ </span>curl <span class="nt">--fail</span> <span class="nt">-sSLo</span> /etc/yum.repos.d/passenger.repo https://oss-binaries.phusionpassenger.com/yum/definitions/el-passenger.repo
+<span class="nv">$ </span>yum <span class="nt">-y</span> <span class="nb">install </span>nginx passenger
+</code></pre>
+            </div>
+          </div>
+
+          <p>
+            接着在
+            <code class="language-plaintext highlighter-rouge"
+              >/etc/nginx/conf.d/passenger.conf</code
+            >
+            中解除下面三行的注释：
+          </p>
+
+          <div class="language-nginx highlighter-rouge">
+            <div class="highlight">
+              <pre
+                class="highlight"
+              ><code><span class="k">passenger_root</span> <span class="n">/usr/share/ruby/vendor_ruby/phusion_passenger/locations.ini</span><span class="p">;</span>
+<span class="k">passenger_ruby</span> <span class="n">/usr/bin/ruby</span><span class="p">;</span>
+<span class="k">passenger_instance_registry_dir</span> <span class="n">/var/run/passenger-instreg</span><span class="p">;</span>
+</code></pre>
+            </div>
+          </div>
+
+          <h2 id="安装-postgresql">安装 PostgreSQL</h2>
+
+          <p>先从 yum 安装 PostgreSQL：</p>
+
+          <div class="language-sh highlighter-rouge">
+            <div class="highlight">
+              <pre
+                class="highlight"
+              ><code><span class="nv">$ </span>yum <span class="nt">-y</span> <span class="nb">install </span>postgresql-server postgresql-devel
+<span class="nv">$ </span>postgresql-setup initdb
+</code></pre>
+            </div>
+          </div>
+
+          <p>
+            接着用
+            <a href="https://fedoraproject.org/wiki/Systemd/zh-cn">systemd</a
+            >（在 CentOS 7 中它取代了 Upstart 和
+            SysVinit）启动数据库并设为开机启动项：
+          </p>
+
+          <div class="language-sh highlighter-rouge">
+            <div class="highlight">
+              <pre
+                class="highlight"
+              ><code><span class="nv">$ </span>systemctl start postgresql
+<span class="nv">$ </span>systemctl <span class="nb">enable </span>postgresql
+</code></pre>
+            </div>
+          </div>
+
+          <p>
+            PostgreSQL 默认的超级用户是
+            <code class="language-plaintext highlighter-rouge">postgres</code
+            >，使用同名的操作系统账户可以直接登录，这里为数据库新建一个用户，该用户<strong
+              >应与后文的 Linux 用户同名</strong
+            >以便免密码连接数据库：
+          </p>
+
+          <div class="language-sh highlighter-rouge">
+            <div class="highlight">
+              <pre
+                class="highlight"
+              ><code><span class="nv">$ </span>su - postgres
+<span class="nv">$ </span>createuser sample-app
+<span class="nv">$ </span>createdb <span class="nt">-O</span> sample-app sample-app
+</code></pre>
+            </div>
+          </div>
+
+          <p>Gemfile 中也需要加入 PostgreSQL 的接口：</p>
+
+          <div class="language-ruby highlighter-rouge">
+            <div class="highlight">
+              <pre
+                class="highlight"
+              ><code><span class="n">gem</span> <span class="s1">'pg'</span><span class="p">,</span> <span class="ss">group: :production</span>
+</code></pre>
+            </div>
+          </div>
+
+          <p>
+            如果创建 app 的时候没有指定数据库（譬如
+            <code class="language-plaintext highlighter-rouge"
+              >rails new sample-app -d postgresql</code
+            >），那么 Rails 默认使用的是 SQLite 3，我们还需要提前修改一下 Rails
+            的配置文件
+            <code class="language-plaintext highlighter-rouge"
+              >config/database.yml</code
+            >：
+          </p>
+
+          <div class="language-yaml highlighter-rouge">
+            <div class="highlight">
+              <pre
+                class="highlight"
+              ><code><span class="na">production</span><span class="pi">:</span>
+  <span class="na">adapter</span><span class="pi">:</span> <span class="s">postgresql</span>
+  <span class="na">encoding</span><span class="pi">:</span> <span class="s">unicode</span>
+  <span class="na">pool</span><span class="pi">:</span> <span class="m">5</span>
+  <span class="na">database</span><span class="pi">:</span> <span class="s">sample-app</span>
+  <span class="na">username</span><span class="pi">:</span> <span class="s">sample-app</span>
+</code></pre>
+            </div>
+          </div>
+
+          <h2 id="部署-rails">部署 Rails</h2>
+
+          <p>
+            为了安全考虑，最好为每个 app 创建一个同名的 Linux 用户，Passenger
+            也提供了相应的<a
+              href="https://www.phusionpassenger.com/library/deploy/nginx/user_sandboxing.html"
+              >用户账户沙盒</a
+            >功能，默认会以
+            <code class="language-plaintext highlighter-rouge">config.ru</code>
+            的所有者运行 app。下面的部署工作都在该账户下完成（以下假设 app 在
+            <code class="language-plaintext highlighter-rouge"
+              >/srv/sample-app</code
+            >）：
+          </p>
+
+          <div class="language-sh highlighter-rouge">
+            <div class="highlight">
+              <pre
+                class="highlight"
+              ><code><span class="nv">$ </span>adduser sample-app
+<span class="nv">$ </span><span class="nb">chown</span> <span class="nt">-R</span> sample-app: /srv/sample-app
+<span class="nv">$ </span>su - sample-app
+</code></pre>
+            </div>
+          </div>
+
+          <p>
+            首先是通过 Bundler 安装 app 的依赖项，因为是部署模式所以
+            <code class="language-plaintext highlighter-rouge"
+              >Gemfile.lock</code
+            >
+            应当提前已经生成好：
+          </p>
+
+          <div class="language-sh highlighter-rouge">
+            <div class="highlight">
+              <pre
+                class="highlight"
+              ><code><span class="nv">$ </span><span class="nb">cd</span> /srv/sample-app
+<span class="nv">$ </span>bundle <span class="nb">install</span> <span class="nt">--deployment</span> <span class="nt">--without</span> development <span class="nb">test</span>
+</code></pre>
+            </div>
+          </div>
+
+          <p>
+            接下来检查一下
+            <code class="language-plaintext highlighter-rouge"
+              >config/database.yml</code
+            >
+            和
+            <code class="language-plaintext highlighter-rouge"
+              >config/secrets.yml</code
+            >，前者即上文提到的数据库配置，后者存储的是用来加密 cookies
+            的密钥，生产环境默认从环境变量读取密钥，以防开发者手滑将其上传到
+            public repo：
+          </p>
+
+          <div class="language-yaml highlighter-rouge">
+            <div class="highlight">
+              <pre
+                class="highlight"
+              ><code><span class="c1"># Do not keep production secrets in the repository, instead read values from the environment.</span>
+<span class="na">production</span><span class="pi">:</span>
+  <span class="na">secret_key_base</span><span class="pi">:</span> <span class="s">&lt;%= ENV["SECRET_KEY_BASE"] %&gt;</span>
+</code></pre>
+            </div>
+          </div>
+
+          <p>
+            密钥可通过
+            <code class="language-plaintext highlighter-rouge"
+              >bundle exec rake secret</code
+            >
+            生成，至于如何写入环境变量，包括但不限于以下几种方式：
+          </p>
+
+          <ul>
+            <li>
+              把
+              <code class="language-plaintext highlighter-rouge"
+                >export SECRET_KEY_BASE=...</code
+              >
+              直接写进
+              <code class="language-plaintext highlighter-rouge"
+                >~/.bashrc</code
+              >
+              或是其他 shell 的启动文件；
+            </li>
+            <li>
+              在 Gemfile 中加入
+              <a href="https://github.com/bkeepers/dotenv">dotenv-rails</a
+              >，使用
+              <code class="language-plaintext highlighter-rouge"
+                >.env.production</code
+              >
+              文件管理生产环境；
+            </li>
+            <li>
+              不少开发者会使用
+              <a href="https://github.com/ddollar/foreman">Foreman</a>
+              启动各种服务，它会自动读取
+              <code class="language-plaintext highlighter-rouge">.env</code>
+              文件；
+            </li>
+            <li>
+              在集成了 Passenger 的 Nginx 配置文件中加上
+              <code class="language-plaintext highlighter-rouge"
+                >passenger_env_var SECRET_KEY_BASE ...</code
+              >。
+            </li>
+          </ul>
+
+          <p>
+            当然单单在 shell 里敲一行 export 命令是不行的，这只会在当前 shell
+            及其子进程中生效。另外<strong>不要随意更改密钥</strong>，这会使原先加密的
+            cookies 失效。
+          </p>
+
+          <p>
+            最后让
+            <a href="http://guides.ruby-china.org/asset_pipeline.html"
+              >Asset Pipeline</a
+            >
+            对静态资源做预编译，让 Active Record
+            做数据库迁移，别忘了<strong>指定生产环境</strong>：
+          </p>
+
+          <div class="language-sh highlighter-rouge">
+            <div class="highlight">
+              <pre
+                class="highlight"
+              ><code><span class="nv">$ </span>bundle <span class="nb">exec </span>rake assets:precompile db:migrate <span class="nv">RAILS_ENV</span><span class="o">=</span>production
+</code></pre>
+            </div>
+          </div>
+
+          <h2 id="启动-nginx">启动 Nginx</h2>
+
+          <p>
+            回到管理员账户，创建 Nginx 配置文件
+            <code class="language-plaintext highlighter-rouge"
+              >/etc/nginx/conf.d/sample-app.conf</code
+            >，为自己的 app 添加一个虚拟主机，其中
+            <code class="language-plaintext highlighter-rouge"
+              >passenger_ruby</code
+            >
+            的路径可以通过
+            <code class="language-plaintext highlighter-rouge"
+              >passenger-config about ruby-command</code
+            >
+            命令获知，<code class="language-plaintext highlighter-rouge"
+              >passenger_app_root</code
+            >
+            默认是虚拟主机
+            <code class="language-plaintext highlighter-rouge">root</code>
+            的上级目录：
+          </p>
+
+          <div class="language-nginx highlighter-rouge">
+            <div class="highlight">
+              <pre
+                class="highlight"
+              ><code><span class="k">server</span> <span class="p">{</span>
+    <span class="kn">listen</span> <span class="mi">80</span><span class="p">;</span>
+    <span class="kn">server_name</span> <span class="s">sample-app.example.com</span><span class="p">;</span>
+    <span class="kn">root</span> <span class="n">/srv/sample-app/public</span><span class="p">;</span>
+    <span class="kn">passenger_enabled</span> <span class="no">on</span><span class="p">;</span>
+    <span class="kn">passenger_ruby</span> <span class="n">/usr/local/rvm/gems/ruby-X.X.X/wrappers/ruby</span><span class="p">;</span>
+<span class="p">}</span>
+</code></pre>
+            </div>
+          </div>
+
+          <p>
+            <code class="language-plaintext highlighter-rouge"
+              >/etc/nginx/nginx.conf</code
+            >
+            里默认有一行
+            <code class="language-plaintext highlighter-rouge"
+              >include /etc/nginx/conf.d/*.conf;</code
+            >
+            所以我们不需要去更改其他配置。于是现在可以正式启动 Nginx 了：
+          </p>
+
+          <div class="language-sh highlighter-rouge">
+            <div class="highlight">
+              <pre
+                class="highlight"
+              ><code><span class="nv">$ </span>systemctl start nginx
+<span class="nv">$ </span>systemctl <span class="nb">enable </span>nginx
+</code></pre>
+            </div>
+          </div>
+
+          <p>理论上 app 已经部署成功了～ 🎉</p>
+
+          <p>
+            之后如果需要让 Passenger 重启 app，或是更改了配置需要重载 Nginx：
+          </p>
+
+          <div class="language-sh highlighter-rouge">
+            <div class="highlight">
+              <pre
+                class="highlight"
+              ><code><span class="nv">$ </span><span class="nb">touch</span> /srv/sample-app/tmp/restart.txt
+<span class="nv">$ </span>systemctl reload nginx
+</code></pre>
+            </div>
+          </div>
+
+          <h2 id="常见问题">常见问题</h2>
+
+          <ul>
+            <li>
+              如果在本地测试<strong>生产环境</strong>时，发现静态文件未能加载：
+              <ul>
+                <li>
+                  其一可能是因为没有做预编译，Rails
+                  认为生产环境的静态资源应该已经事先编译好了，所以 Asset
+                  Pipeline 的实时编译是关闭的；
+                </li>
+                <li>
+                  其二可能是因为 Rails 默认没有启用静态文件服务，可以通过设置
+                  <code class="language-plaintext highlighter-rouge"
+                    >RAILS_SERVE_STATIC_FILES</code
+                  >
+                  环境变量来开启它，但这在生产环境中低效且不安全，应该让 Nginx /
+                  Apache 来处理它们。
+                </li>
+                <li>
+                  上述默认配置均在
+                  <code class="language-plaintext highlighter-rouge"
+                    >config/environments/production.rb</code
+                  >
+                  文件中：
+                </li>
+              </ul>
+            </li>
+          </ul>
+
+          <div class="language-ruby highlighter-rouge">
+            <div class="highlight">
+              <pre
+                class="highlight"
+              ><code><span class="c1"># Do not fallback to assets pipeline if a precompiled asset is missed.</span>
+<span class="n">config</span><span class="p">.</span><span class="nf">assets</span><span class="p">.</span><span class="nf">compile</span> <span class="o">=</span> <span class="kp">false</span>
+
+<span class="c1"># Disable serving static files from the `/public` folder by default since Apache or NGINX already handles this.</span>
+<span class="n">config</span><span class="p">.</span><span class="nf">serve_static_files</span> <span class="o">=</span> <span class="no">ENV</span><span class="p">[</span><span class="s1">'RAILS_SERVE_STATIC_FILES'</span><span class="p">].</span><span class="nf">present?</span>
+</code></pre>
+            </div>
+          </div>
+
+          <ul>
+            <li>
+              访问网站时显示「Incomplete response received from
+              application」一般是没有设置
+              <code class="language-plaintext highlighter-rouge"
+                >secret_key_base</code
+              >，具体参见前文「<a href="#部署-rails">部署 Rails</a>」。
+            </li>
+            <li>
+              如果在
+              <code class="language-plaintext highlighter-rouge"
+                >gem install pg</code
+              >
+              时报告找不到头文件
+              <code class="language-plaintext highlighter-rouge"
+                >libpq-fe.h</code
+              >，那是因为没有
+              <code class="language-plaintext highlighter-rouge"
+                >yum install postgresql-devel</code
+              >，或者在 Debian 系的 APT 中这个包叫
+              <code class="language-plaintext highlighter-rouge">libpq-dev</code
+              >。
+            </li>
+            <li>
+              如果在
+              <code class="language-plaintext highlighter-rouge"
+                >rake assets:precompile</code
+              >
+              时显示「Killed」，很可能是内存不足导致的。最简单的解决方法就是花钱💰去升级
+              VPS 的内存，或者可以创建 SWAP 文件用于虚拟内存：
+            </li>
+          </ul>
+
+          <div class="language-sh highlighter-rouge">
+            <div class="highlight">
+              <pre
+                class="highlight"
+              ><code><span class="nv">$ </span>fallocate <span class="nt">-l</span> 1G /swapfile
+<span class="nv">$ </span><span class="nb">chmod </span>600 /swapfile
+<span class="nv">$ </span>mkswap /swapfile
+<span class="nv">$ </span>swapon /swapfile
+<span class="nv">$ </span><span class="nb">echo</span> <span class="s2">"/swapfile swap swap defaults 0 0"</span> <span class="o">&gt;&gt;</span> /etc/fstab
+</code></pre>
+            </div>
+          </div>
+
+          <ul>
+            <li>
+              Bundler 会将所有
+              <code class="language-plaintext highlighter-rouge"
+                >--without</code
+              >
+              的组保存在
+              <code class="language-plaintext highlighter-rouge"
+                >.bundle/config</code
+              >
+              中，因此之后的
+              <code class="language-plaintext highlighter-rouge"
+                >bundle install</code
+              >
+              永远不会包含这些组。如果被这个特性所困扰，可以通过删除配置文件相关内容或使用
+              <code class="language-plaintext highlighter-rouge">--with</code>
+              选项来解决。
+            </li>
+          </ul>
+
+          <h2 id="测试环境">测试环境</h2>
+
+          <p>
+            CentOS 7 x86_64 (1511) / Nginx 1.8.1 / Passenger 5.0.24 / PostgreSQL
+            9.2.14 / Bundler 1.11.2 / Rails 4.2.5 / Ruby 2.3.0
+          </p>
+
+          <blockquote>
+            <p>参考文档：</p>
+
+            <p>
+              <a
+                href="https://www.phusionpassenger.com/library/walkthroughs/deploy/ruby/"
+                >Deploying a Ruby app with Passenger to production - Passenger
+                Library</a
+              ><br />
+              <a
+                href="https://www.phusionpassenger.com/library/config/nginx/reference/"
+                >Configuration reference for Nginx - Passenger Library</a
+              ><br />
+              <a
+                href="https://www.nginx.com/resources/admin-guide/nginx-web-server/"
+                >Configuring NGINX Plus as a Web Server | NGINX Admin Guide</a
+              ><br />
+              <a
+                href="http://www.postgresql.org/docs/current/interactive/tutorial.html"
+                >PostgreSQL Documentation: Tutorial</a
+              ><br />
+              <a href="http://guides.rubyonrails.org/configuring.html"
+                >Configuring Rails Applications - Ruby on Rails Guides</a
+              ><br />
+              <a href="http://guides.rubyonrails.org/security.html"
+                >Ruby on Rails Security Guide - Ruby on Rails Guides</a
+              ><br />
+              <a
+                href="https://access.redhat.com/documentation/en-US/Red_Hat_Enterprise_Linux/7/html/Storage_Administration_Guide/ch-swapspace.html"
+                >Chapter 14. Swap Space - Storage Administration Guide - Red Hat
+                Enterprise Linux 7</a
+              >
+            </p>
+          </blockquote>
+        </div>
+
+        <div class="comments">
+          <div id="disqus_thread"></div>
+          <script>
+            var disqus_config = function () {
+              this.page.url = "https://blog.yzsun.me/rails-deployment/";
+              this.page.identifier = "/rails-deployment/";
+            };
+            (function () {
+              var d = document,
+                s = d.createElement("script");
+              s.src = "//yzyzsun.disqus.com/embed.js";
+              s.setAttribute("data-timestamp", +new Date());
+              (d.head || d.body).appendChild(s);
+            })();
+          </script>
+          <noscript
+            >Please enable JavaScript to view the
+            <a href="https://disqus.com/?ref_noscript"
+              >comments powered by Disqus.</a
+            ></noscript
+          >
+        </div>
+      </article>
+    </div>
+
+    <div class="wrapper-footer">
+      <div class="container">
+        <footer class="footer">
+          <a href="https://github.com/yzyzsun"
+            ><i class="svg-icon github"></i
+          ></a>
+
+          <a href="/feed.xml"><i class="svg-icon rss"></i></a>
+        </footer>
+      </div>
+    </div>
+
+    <!-- Google Analytics -->
+    <script>
+      (function (i, s, o, g, r, a, m) {
+        i["GoogleAnalyticsObject"] = r;
+        (i[r] =
+          i[r] ||
+          function () {
+            (i[r].q = i[r].q || []).push(arguments);
+          }),
+          (i[r].l = 1 * new Date());
+        (a = s.createElement(o)), (m = s.getElementsByTagName(o)[0]);
+        a.async = 1;
+        a.src = g;
+        m.parentNode.insertBefore(a, m);
+      })(
+        window,
+        document,
+        "script",
+        "//www.google-analytics.com/analytics.js",
+        "ga"
+      );
+
+      ga("create", "UA-65994616-1", "auto");
+      ga("send", "pageview", {
+        page: "/rails-deployment/",
+        title:
+          "Deploy Rails with PostgreSQL Using Passenger and Nginx on CentOS",
+      });
+    </script>
+    <!-- End Google Analytics -->
+  </body>
+</html>

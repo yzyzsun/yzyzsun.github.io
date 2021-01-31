@@ -1,0 +1,432 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+  <head>
+    <title>使用 fastlane 自动化 iOS 部署 | 孙耀珠的博客</title>
+
+    <meta charset="utf-8" />
+    <meta content="text/html; charset=utf-8" http-equiv="Content-Type" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1.0, maximum-scale=1.0"
+    />
+    <meta
+      name="google-site-verification"
+      content="zYt2wigM41vmyHtpvOvLHk4Yetcfbv5Bz9pdvsTRT3Y"
+    />
+
+    <!-- Begin Jekyll SEO tag v2.7.1 -->
+    <meta name="generator" content="Jekyll v4.2.0" />
+    <meta property="og:title" content="使用 fastlane 自动化 iOS 部署" />
+    <meta name="author" content="孙耀珠" />
+    <meta property="og:locale" content="en_US" />
+    <meta
+      name="description"
+      content="对于 iOS 开发者来说，应用发布和代码签名证书大概是最令人头疼的两个环节了，这倒不是因为技术上有多难，而是它们的操作流程相当麻烦，尤其是在中国的网络环境下。 一般来讲，手动发布应用更新大致有以下流程：修改所有 Target 的版本号、用 Xcode 给项目 Archive、在 Xcode Organizer 中上传到 App Store、到 iTunes Connect 更新相关信息、提交给苹果审核。而其中上传那一步在不翻墙的情况下成功率极低，经常会卡在「Authenticating with the iTunes Store…」，而且系统 SOCKS 代理（如 Shadowsocks）在此时似乎并不起作用，只有使用 Proxifier 或者 VPN 才有效果。也是基于这个原因，我一般不会直接在 Organizer 中直接上传，而是先导出为 .ipa 文件，再使用 Xcode 附带的 Application Loader 上传，这样就免去了上传失败的话每次直接上传时将 .xcarchive 转为 .ipa 的时间。 当然以上还没考虑第一次发布时配置证书的流程，一个初学者面对苹果开发者中心琳琅满目的 Certificates / Identifiers / Provisioning Profiles 多半是一脸懵逼，不过幸运的是从 Xcode 8 开始已经能够比较完美地自动管理代码签名了，不再像以前一样需要自己去 Fix issues。 对于 iOS 应用的部署，如果你也像我一样饱受折磨，fastlane 也许是你的救星。"
+    />
+    <meta
+      property="og:description"
+      content="对于 iOS 开发者来说，应用发布和代码签名证书大概是最令人头疼的两个环节了，这倒不是因为技术上有多难，而是它们的操作流程相当麻烦，尤其是在中国的网络环境下。 一般来讲，手动发布应用更新大致有以下流程：修改所有 Target 的版本号、用 Xcode 给项目 Archive、在 Xcode Organizer 中上传到 App Store、到 iTunes Connect 更新相关信息、提交给苹果审核。而其中上传那一步在不翻墙的情况下成功率极低，经常会卡在「Authenticating with the iTunes Store…」，而且系统 SOCKS 代理（如 Shadowsocks）在此时似乎并不起作用，只有使用 Proxifier 或者 VPN 才有效果。也是基于这个原因，我一般不会直接在 Organizer 中直接上传，而是先导出为 .ipa 文件，再使用 Xcode 附带的 Application Loader 上传，这样就免去了上传失败的话每次直接上传时将 .xcarchive 转为 .ipa 的时间。 当然以上还没考虑第一次发布时配置证书的流程，一个初学者面对苹果开发者中心琳琅满目的 Certificates / Identifiers / Provisioning Profiles 多半是一脸懵逼，不过幸运的是从 Xcode 8 开始已经能够比较完美地自动管理代码签名了，不再像以前一样需要自己去 Fix issues。 对于 iOS 应用的部署，如果你也像我一样饱受折磨，fastlane 也许是你的救星。"
+    />
+    <link
+      rel="canonical"
+      href="https://blog.yzsun.me/automate-using-fastlane/"
+    />
+    <meta
+      property="og:url"
+      content="https://blog.yzsun.me/automate-using-fastlane/"
+    />
+    <meta property="og:site_name" content="孙耀珠的博客" />
+    <meta property="og:type" content="article" />
+    <meta
+      property="article:published_time"
+      content="2016-11-30T00:00:00+00:00"
+    />
+    <meta name="twitter:card" content="summary" />
+    <meta property="twitter:title" content="使用 fastlane 自动化 iOS 部署" />
+    <script type="application/ld+json">
+      {
+        "description": "对于 iOS 开发者来说，应用发布和代码签名证书大概是最令人头疼的两个环节了，这倒不是因为技术上有多难，而是它们的操作流程相当麻烦，尤其是在中国的网络环境下。 一般来讲，手动发布应用更新大致有以下流程：修改所有 Target 的版本号、用 Xcode 给项目 Archive、在 Xcode Organizer 中上传到 App Store、到 iTunes Connect 更新相关信息、提交给苹果审核。而其中上传那一步在不翻墙的情况下成功率极低，经常会卡在「Authenticating with the iTunes Store…」，而且系统 SOCKS 代理（如 Shadowsocks）在此时似乎并不起作用，只有使用 Proxifier 或者 VPN 才有效果。也是基于这个原因，我一般不会直接在 Organizer 中直接上传，而是先导出为 .ipa 文件，再使用 Xcode 附带的 Application Loader 上传，这样就免去了上传失败的话每次直接上传时将 .xcarchive 转为 .ipa 的时间。 当然以上还没考虑第一次发布时配置证书的流程，一个初学者面对苹果开发者中心琳琅满目的 Certificates / Identifiers / Provisioning Profiles 多半是一脸懵逼，不过幸运的是从 Xcode 8 开始已经能够比较完美地自动管理代码签名了，不再像以前一样需要自己去 Fix issues。 对于 iOS 应用的部署，如果你也像我一样饱受折磨，fastlane 也许是你的救星。",
+        "url": "https://blog.yzsun.me/automate-using-fastlane/",
+        "@type": "BlogPosting",
+        "headline": "使用 fastlane 自动化 iOS 部署",
+        "dateModified": "2016-11-30T00:00:00+00:00",
+        "datePublished": "2016-11-30T00:00:00+00:00",
+        "mainEntityOfPage": {
+          "@type": "WebPage",
+          "@id": "https://blog.yzsun.me/automate-using-fastlane/"
+        },
+        "author": { "@type": "Person", "name": "孙耀珠" },
+        "@context": "https://schema.org"
+      }
+    </script>
+    <!-- End Jekyll SEO tag -->
+
+    <link
+      type="application/atom+xml"
+      rel="alternate"
+      href="https://blog.yzsun.me/feed.xml"
+      title="孙耀珠的博客"
+    />
+
+    <!--[if lt IE 9]>
+      <script src="//cdnjs.cloudflare.com/ajax/libs/html5shiv/r29/html5.min.js"></script>
+    <![endif]-->
+
+    <link rel="stylesheet" href="/style.css" />
+  </head>
+
+  <body>
+    <div class="wrapper-masthead">
+      <div class="container">
+        <header class="masthead clearfix">
+          <a href="/" class="site-avatar"
+            ><img src="/images/avatar.jpg" alt="avatar"
+          /></a>
+
+          <div class="site-info">
+            <h1 class="site-domain"><a href="/">yzsun.me</a></h1>
+            <p class="site-name">孙耀珠的博客</p>
+          </div>
+
+          <nav>
+            <a href="/">首页</a>
+            <a href="/archive/">归档</a>
+            <a href="/about/">关于</a>
+          </nav>
+        </header>
+      </div>
+    </div>
+
+    <div id="main" role="main" class="container">
+      <article class="post">
+        <h1>使用 fastlane 自动化 iOS 部署</h1>
+
+        <div class="info">
+          <span>
+            <i class="fa fa-calendar"></i>
+            2016-11-30
+          </span>
+          <span>
+            <i class="fa fa-user"></i>
+            孙耀珠
+          </span>
+          <span>
+            <i class="fa fa-tags"></i>
+            运维
+          </span>
+        </div>
+
+        <div class="entry">
+          <p>
+            对于 iOS
+            开发者来说，应用发布和代码签名证书大概是最令人头疼的两个环节了，这倒不是因为技术上有多难，而是它们的操作流程相当麻烦，尤其是在中国的网络环境下。
+          </p>
+
+          <p>
+            一般来讲，手动发布应用更新大致有以下流程：修改所有 Target
+            的版本号、用 Xcode 给项目 Archive、在 Xcode Organizer 中上传到 App
+            Store、到 iTunes Connect
+            更新相关信息、提交给苹果审核。而其中上传那一步在不翻墙的情况下成功率极低，经常会卡在「Authenticating
+            with the iTunes Store…」，而且系统 SOCKS 代理（如
+            Shadowsocks）在此时似乎并不起作用，只有使用 Proxifier 或者 VPN
+            才有效果。也是基于这个原因，我一般不会直接在 Organizer
+            中直接上传，而是先导出为 .ipa 文件，再使用 Xcode 附带的 Application
+            Loader 上传，这样就免去了上传失败的话每次直接上传时将 .xcarchive
+            转为 .ipa 的时间。
+          </p>
+
+          <p>
+            当然以上还没考虑第一次发布时配置证书的流程，一个初学者面对苹果开发者中心琳琅满目的
+            Certificates / Identifiers / Provisioning Profiles
+            多半是一脸懵逼，不过幸运的是从 Xcode 8
+            开始已经能够比较完美地自动管理代码签名了，不再像以前一样需要自己去
+            Fix issues。
+          </p>
+
+          <p>
+            对于 iOS 应用的部署，如果你也像我一样饱受折磨，fastlane
+            也许是你的救星。
+          </p>
+
+          <!--more-->
+
+          <h2 id="fastlane">fastlane</h2>
+
+          <p>
+            <a href="https://fastlane.tools"
+              ><img
+                src="https://raw.githubusercontent.com/fastlane/fastlane/master/fastlane/assets/fastlane_text.png"
+                alt=""
+            /></a>
+          </p>
+
+          <p>
+            简而言之，fastlane 是一套用 Ruby 编写的 iOS
+            命令行工具集（后来也支持了 Android），主要组件包括：
+          </p>
+
+          <ul>
+            <li>
+              <code class="language-plaintext highlighter-rouge">match</code> /
+              <code class="language-plaintext highlighter-rouge">cert</code> /
+              <code class="language-plaintext highlighter-rouge">sigh</code>
+              协助管理代码签名
+            </li>
+            <li>
+              <code class="language-plaintext highlighter-rouge">pem</code>
+              自动生成 APNs 证书
+            </li>
+            <li>
+              <code class="language-plaintext highlighter-rouge">scan</code>
+              自动化测试
+            </li>
+            <li>
+              <code class="language-plaintext highlighter-rouge">gym</code>
+              自动化编译并打包生成签名的 .ipa 文件
+            </li>
+            <li>
+              <code class="language-plaintext highlighter-rouge">snapshot</code>
+              /
+              <code class="language-plaintext highlighter-rouge">frameit</code>
+              协助处理 iOS 屏幕快照
+            </li>
+            <li>
+              <code class="language-plaintext highlighter-rouge">pilot</code>
+              上传和管理 TestFlight
+            </li>
+            <li>
+              <code class="language-plaintext highlighter-rouge">deliver</code>
+              将应用及其它信息上传到 App Store
+            </li>
+          </ul>
+
+          <p>
+            而通过 fastlane
+            我们可以将上面这些独立的小工具有机地结合起来，从管理证书到单元测试，从编译打包到上传发布，都能在命令行轻松完成，乃至一键部署，听起来是不是生产力大增呢。
+          </p>
+
+          <p>
+            因为 macOS 自带了 Ruby，所以 fastlane 的安装非常简单，<code
+              class="language-plaintext highlighter-rouge"
+              >gem install fastlane</code
+            >
+            就搞定了，初始化也只需要在工程目录下
+            <code class="language-plaintext highlighter-rouge"
+              >fastlane init</code
+            >
+            即可。初始化成功后你会得到
+            <code class="language-plaintext highlighter-rouge">Fastfile</code
+            >、<code class="language-plaintext highlighter-rouge">Appfile</code>
+            和
+            <code class="language-plaintext highlighter-rouge">Deliverfile</code
+            >，前者是最核心的流程配置文件，后两者则分别用于访问 Apple Developer
+            Portal 和 iTunes Connect，另外在
+            <code class="language-plaintext highlighter-rouge">metadata</code>
+            目录下会自动拉取 App Store 的相关信息，以供日后
+            <code class="language-plaintext highlighter-rouge">deliver</code>
+            使用。
+          </p>
+
+          <p>
+            顺带一提，Terminal
+            也不读取系统代理设置，而是通过环境变量来设置代理的。譬如对于
+            ShadowsocksX-NG 的默认设置，<code
+              class="language-plaintext highlighter-rouge"
+              >export ALL_PROXY="socks5://127.0.0.1:1086"</code
+            >
+            即可。
+          </p>
+
+          <h2 id="fastfile">Fastfile</h2>
+
+          <p>
+            接下来最核心的部分就是来配置
+            <code class="language-plaintext highlighter-rouge">Fastfile</code>
+            了，虽然自动生成的
+            <code class="language-plaintext highlighter-rouge">Fastfile</code>
+            已经囊括了
+            <code class="language-plaintext highlighter-rouge">test</code> /
+            <code class="language-plaintext highlighter-rouge">beta</code> /
+            <code class="language-plaintext highlighter-rouge">release</code>
+            这三支流程（在这里称为 lane），不过它们的默认操作只是简单的
+            <code class="language-plaintext highlighter-rouge">scan</code> /
+            <code class="language-plaintext highlighter-rouge">gym</code> +
+            <code class="language-plaintext highlighter-rouge">pilot</code> /
+            <code class="language-plaintext highlighter-rouge">gym</code> +
+            <code class="language-plaintext highlighter-rouge">deliver</code
+            >，尚未发挥出 fastlane 的全部威力。fastlane
+            除了上述的子工具之外，还内建了非常多实用的操作，在
+            <a href="https://docs.fastlane.tools/actions/"
+              >https://docs.fastlane.tools/actions/</a
+            >
+            可以查询 fastlane 所有支持的操作和已有的插件。因为
+            <code class="language-plaintext highlighter-rouge">Fastfile</code>
+            本质上就是 Ruby DSL，所以你也可以直接在其中写 Ruby
+            代码，甚至为其创建插件。
+          </p>
+
+          <p>
+            以我自己的项目（QSCMobileV3）为例，在常规的编译打包和上传之前，我需要用
+            <code class="language-plaintext highlighter-rouge">agvtool</code>
+            增加 Build Number 并修改版本号，<code
+              class="language-plaintext highlighter-rouge"
+              >git commit</code
+            >
+            之后再打上包含更新日志的标签并推送到远程仓库。这一整套流程实际上都可以由
+            fastlane 代劳，而我需要做的只是预先书写一下
+            <code class="language-plaintext highlighter-rouge"
+              >release_notes.txt</code
+            >，接着敲下
+            <code class="language-plaintext highlighter-rouge"
+              >fastlane release</code
+            >
+            便能一键部署，剩下就是静静等待苹果审核了。
+          </p>
+
+          <div class="language-ruby highlighter-rouge">
+            <div class="highlight">
+              <pre
+                class="highlight"
+              ><code><span class="n">platform</span> <span class="ss">:ios</span> <span class="k">do</span>
+  <span class="n">before_all</span> <span class="k">do</span>
+    <span class="n">increment_build_number</span>
+    <span class="n">increment_version_number</span><span class="p">(</span>
+      <span class="ss">bump_type: </span><span class="n">prompt</span><span class="p">(</span><span class="ss">text: </span><span class="s2">"Bump type: (patch/minor/major)"</span><span class="p">)</span>
+    <span class="p">)</span>
+    
+    <span class="n">git_commit</span><span class="p">(</span>
+      <span class="ss">path: </span><span class="s2">"."</span><span class="p">,</span>
+      <span class="ss">message: </span><span class="s2">"Version bump to </span><span class="si">#{</span><span class="n">lane_context</span><span class="p">[</span><span class="ss">:VERSION_NUMBER</span><span class="p">]</span><span class="si">}</span><span class="s2">"</span>
+    <span class="p">)</span>
+    <span class="n">lane_context</span><span class="p">[</span><span class="ss">:CHANGE_LOG</span><span class="p">]</span> <span class="o">=</span> <span class="no">File</span><span class="p">.</span><span class="nf">read</span> <span class="s2">"./metadata/zh-Hans/release_notes.txt"</span>
+    <span class="n">add_git_tag</span><span class="p">(</span>
+      <span class="ss">tag: </span><span class="n">lane_context</span><span class="p">[</span><span class="ss">:VERSION_NUMBER</span><span class="p">],</span>
+      <span class="ss">message: </span><span class="n">lane_context</span><span class="p">[</span><span class="ss">:CHANGE_LOG</span><span class="p">]</span>
+    <span class="p">)</span>
+    <span class="n">push_to_git_remote</span>
+    
+    <span class="n">gym</span><span class="p">(</span>
+      <span class="ss">scheme: </span><span class="s2">"QSCMobileV3"</span><span class="p">,</span>
+      <span class="ss">include_bitcode: </span><span class="kp">true</span>
+    <span class="p">)</span>
+  <span class="k">end</span>
+  
+  <span class="n">desc</span> <span class="s2">"Submit a new Beta Build to Apple TestFlight"</span>
+  <span class="n">lane</span> <span class="ss">:beta</span> <span class="k">do</span>
+    <span class="n">pilot</span><span class="p">(</span>
+      <span class="ss">changelog: </span><span class="n">lane_context</span><span class="p">[</span><span class="ss">:CHANGE_LOG</span><span class="p">],</span>
+      <span class="ss">distribute_external: </span><span class="kp">true</span>
+    <span class="p">)</span>
+  <span class="k">end</span>
+  
+  <span class="n">desc</span> <span class="s2">"Deploy a new version to the App Store"</span>
+  <span class="n">lane</span> <span class="ss">:release</span> <span class="k">do</span>
+    <span class="n">deliver</span><span class="p">(</span>
+      <span class="ss">force: </span><span class="kp">true</span><span class="p">,</span>
+      <span class="ss">submit_for_review: </span><span class="kp">true</span>
+    <span class="p">)</span>
+  <span class="k">end</span>
+<span class="k">end</span>
+</code></pre>
+            </div>
+          </div>
+
+          <h2 id="boarding">boarding</h2>
+
+          <p>
+            <a href="https://github.com/fastlane/boarding"
+              ><img
+                src="https://raw.githubusercontent.com/fastlane/boarding/master/assets/BoardingHuge.png"
+                alt=""
+            /></a>
+          </p>
+
+          <p>
+            除了命令行工具之外，fastlane 还提供了一个自动建站工具
+            boarding，通过这个网站用户可以一键注册成为 TestFlight
+            外部测试员。也许你已经猜到了，boarding 用的是 Ruby on Rails
+            框架，你所需要做的就是将网站部署到 Heroku
+            上，填写好模板信息，就可以通过 xxx.herokuapp.com 来访问它了。
+          </p>
+
+          <p>
+            之前在求是潮手机站 V3
+            公测时，是通过回复微信公众号来申请的，需要先在后台将用户数据处理为
+            CSV，然而再定期由我手动添加到 iTunes
+            Connect，这相当不优雅。因为接下来还会推出 Today Widget / Box /
+            Discover 等新功能，所以我现在用 boarding 搭建了「<a
+              href="https://ios.zjuqsc.com"
+              >求是潮手机站 iOS 测试体验计划</a
+            >」，完全不需要手动干预，是不是优雅多了呢？
+          </p>
+        </div>
+
+        <div class="comments">
+          <div id="disqus_thread"></div>
+          <script>
+            var disqus_config = function () {
+              this.page.url = "https://blog.yzsun.me/automate-using-fastlane/";
+              this.page.identifier = "/automate-using-fastlane/";
+            };
+            (function () {
+              var d = document,
+                s = d.createElement("script");
+              s.src = "//yzyzsun.disqus.com/embed.js";
+              s.setAttribute("data-timestamp", +new Date());
+              (d.head || d.body).appendChild(s);
+            })();
+          </script>
+          <noscript
+            >Please enable JavaScript to view the
+            <a href="https://disqus.com/?ref_noscript"
+              >comments powered by Disqus.</a
+            ></noscript
+          >
+        </div>
+      </article>
+    </div>
+
+    <div class="wrapper-footer">
+      <div class="container">
+        <footer class="footer">
+          <a href="https://github.com/yzyzsun"
+            ><i class="svg-icon github"></i
+          ></a>
+
+          <a href="/feed.xml"><i class="svg-icon rss"></i></a>
+        </footer>
+      </div>
+    </div>
+
+    <!-- Google Analytics -->
+    <script>
+      (function (i, s, o, g, r, a, m) {
+        i["GoogleAnalyticsObject"] = r;
+        (i[r] =
+          i[r] ||
+          function () {
+            (i[r].q = i[r].q || []).push(arguments);
+          }),
+          (i[r].l = 1 * new Date());
+        (a = s.createElement(o)), (m = s.getElementsByTagName(o)[0]);
+        a.async = 1;
+        a.src = g;
+        m.parentNode.insertBefore(a, m);
+      })(
+        window,
+        document,
+        "script",
+        "//www.google-analytics.com/analytics.js",
+        "ga"
+      );
+
+      ga("create", "UA-65994616-1", "auto");
+      ga("send", "pageview", {
+        page: "/automate-using-fastlane/",
+        title: "使用 fastlane 自动化 iOS 部署",
+      });
+    </script>
+    <!-- End Google Analytics -->
+  </body>
+</html>

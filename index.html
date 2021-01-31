@@ -1,0 +1,1209 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+  <head>
+    <title>孙耀珠的博客</title>
+
+    <meta charset="utf-8" />
+    <meta content="text/html; charset=utf-8" http-equiv="Content-Type" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1.0, maximum-scale=1.0"
+    />
+    <meta
+      name="google-site-verification"
+      content="zYt2wigM41vmyHtpvOvLHk4Yetcfbv5Bz9pdvsTRT3Y"
+    />
+
+    <!-- Begin Jekyll SEO tag v2.7.1 -->
+    <meta name="generator" content="Jekyll v4.2.0" />
+    <meta property="og:title" content="孙耀珠的博客" />
+    <meta property="og:locale" content="en_US" />
+    <link rel="canonical" href="https://blog.yzsun.me/" />
+    <meta property="og:url" content="https://blog.yzsun.me/" />
+    <meta property="og:site_name" content="孙耀珠的博客" />
+    <meta name="twitter:card" content="summary" />
+    <meta property="twitter:title" content="孙耀珠的博客" />
+    <script type="application/ld+json">
+      {
+        "url": "https://blog.yzsun.me/",
+        "@type": "WebSite",
+        "headline": "孙耀珠的博客",
+        "name": "孙耀珠的博客",
+        "@context": "https://schema.org"
+      }
+    </script>
+    <!-- End Jekyll SEO tag -->
+
+    <link
+      type="application/atom+xml"
+      rel="alternate"
+      href="https://blog.yzsun.me/feed.xml"
+      title="孙耀珠的博客"
+    />
+
+    <!--[if lt IE 9]>
+      <script src="//cdnjs.cloudflare.com/ajax/libs/html5shiv/r29/html5.min.js"></script>
+    <![endif]-->
+
+    <link rel="stylesheet" href="/style.css" />
+  </head>
+
+  <body>
+    <div class="wrapper-masthead">
+      <div class="container">
+        <header class="masthead clearfix">
+          <a href="/" class="site-avatar"
+            ><img src="/images/avatar.jpg" alt="avatar"
+          /></a>
+
+          <div class="site-info">
+            <h1 class="site-domain"><a href="/">yzsun.me</a></h1>
+            <p class="site-name">孙耀珠的博客</p>
+          </div>
+
+          <nav>
+            <a href="/">首页</a>
+            <a href="/archive/">归档</a>
+            <a href="/about/">关于</a>
+          </nav>
+        </header>
+      </div>
+    </div>
+
+    <div id="main" role="main" class="container">
+      <div class="posts">
+        <article class="post">
+          <h1><a href="/html-templating/">HTML 模板语言纵览</a></h1>
+
+          <div class="info">
+            <span>
+              <i class="fa fa-calendar"></i>
+              2020-08-09
+            </span>
+            <span>
+              <i class="fa fa-user"></i>
+              孙耀珠
+            </span>
+            <span>
+              <i class="fa fa-tags"></i>
+              领域专用语言
+            </span>
+          </div>
+
+          <div class="entry">
+            <p>
+              前端开发的本质，是把结构化的数据映射到 HTML。HTML
+              本身是静态的，因此模板引擎应运而生，接下了动态生成 HTML
+              的任务，直到近年来在前后端分离的浪潮下被面面俱到的前端框架所兼并。本文试图梳理出模板语言的主流范式，不过注意本文并非按照时间线编排，如果要还原历史的话，应该是
+              PHP (1995) → Zope 2 (1998) → JSTL (2002) → Django (2005) → Haml
+              (2006) → Mustache (2009) → AngularJS (2010)。
+            </p>
+          </div>
+
+          <a href="/html-templating/" class="read-more">Read More</a>
+        </article>
+
+        <article class="post">
+          <h1><a href="/linux-performance/">Linux 内核性能演变</a></h1>
+
+          <div class="info">
+            <span>
+              <i class="fa fa-calendar"></i>
+              2020-04-10
+            </span>
+            <span>
+              <i class="fa fa-user"></i>
+              孙耀珠
+            </span>
+            <span>
+              <i class="fa fa-tags"></i>
+              文献阅读
+            </span>
+          </div>
+
+          <div class="entry">
+            <blockquote>
+              <p>
+                本文是我在《系统设计与实现》课程的热点话题阅读报告，内容来源于
+                Xiang (Jenny) Ren, et al. 发表在 SOSP 2019 的论文《<a
+                  href="https://doi.org/10.1145/3341301.3359640"
+                  >An Analysis of Performance Evolution of Linux’s Core
+                  Operations</a
+                >》（下文简称 [<em>Ren19</em>]）。
+              </p>
+            </blockquote>
+
+            <p>
+              1991年9月17日，赫尔辛基大学的大四学生 Linus Torvalds 向
+              ftp.funet.fi 上传了自己课余时间编写的 Linux 0.01
+              源代码，由此揭开了开源操作系统的崭新篇章。如今，Linux
+              已成为最主流的服务器操作系统，TOP500
+              榜单中的超级计算机更是悉数采用。在高性能计算对 Linux
+              依赖越来越强的大背景下，[<em>Ren19</em>] 对近年来 Linux
+              内核的核心操作性能进行了系统性的评估，得到一个骇人听闻的结论：绝大多数内核操作的性能均有退化。不过值得庆幸的是，研究团队发现可以通过编译配置或是简单的补丁来禁用掉那些导致性能退化的内核改动。
+            </p>
+          </div>
+
+          <a href="/linux-performance/" class="read-more">Read More</a>
+        </article>
+
+        <article class="post">
+          <h1><a href="/cjkv/">跨越国境的汉字</a></h1>
+
+          <div class="info">
+            <span>
+              <i class="fa fa-calendar"></i>
+              2020-03-29
+            </span>
+            <span>
+              <i class="fa fa-user"></i>
+              孙耀珠
+            </span>
+            <span>
+              <i class="fa fa-tags"></i>
+              杂谈
+            </span>
+          </div>
+
+          <div class="entry">
+            <p>
+              我身边的同学们大都只懂汉语和英语，聊天时偶尔会发现他们对日本、韩国、朝鲜和越南的汉字使用知之甚少。比如有人见到汉字就觉得是汉语，但实际上日韩朝越都在以自己的方式使用着汉字，比如很难说「大変面白」「本当上手」也算是规范汉语，虽然这些字我们都认识。
+            </p>
+
+            <p>
+              另一个常见的误解是：为什么 Matsumoto Yukihiro
+              被翻译成了松本行弘？为什么 Jang Won-young
+              被翻译成了张员瑛？首先要意识到英语不是日韩的母语，因此上面的罗马字也只是音译。实际上
+              Matz
+              的姓名本来就是汉字「松本行弘」，只是这四个字都用了日语训读，导致中日读音大相径庭。而韩国的情况更麻烦一点，因为他们现在几乎不用汉字了，所以姓名里的谚文对应哪个汉字要么靠猜要么询问本人。张员瑛的原名是「장원영」，一开始大家猜测其对应的汉字是「張元英」，不过很遗憾猜错了，后来官方宣布她的姓名汉字是「張員瑛」。当然日本人名也有要猜的时候，比如说「松山ケンイチ」「石原さとみ」（也都猜错过，哈哈哈哈）。不过如今对汉字如此执着的也只有中国了，日韩互译对方人名的时候并不会追溯到汉字，而是简单粗暴地使用音译：松本行弘在韩语里就叫
+              마츠모토 유키히로，张员瑛在日语里就叫 チャン・ウォニョン。
+            </p>
+          </div>
+
+          <a href="/cjkv/" class="read-more">Read More</a>
+        </article>
+
+        <article class="post">
+          <h1>
+            <a href="/megaparsec/">Megaparsec: Haskell 的语法分析组合子</a>
+          </h1>
+
+          <div class="info">
+            <span>
+              <i class="fa fa-calendar"></i>
+              2019-11-24
+            </span>
+            <span>
+              <i class="fa fa-user"></i>
+              Mark Karpov
+            </span>
+            <span>
+              <i class="fa fa-tags"></i>
+              译文
+            </span>
+          </div>
+
+          <div class="entry">
+            <blockquote>
+              <p>
+                原文标题：Megaparsec tutorial from IH book<br />
+                原文链接：<a
+                  href="https://markkarpov.com/tutorial/megaparsec.html"
+                  >https://markkarpov.com/tutorial/megaparsec.html</a
+                >
+              </p>
+            </blockquote>
+          </div>
+
+          <a href="/megaparsec/" class="read-more">Read More</a>
+        </article>
+
+        <article class="post">
+          <h1><a href="/aidoru/">日系偶像综述</a></h1>
+
+          <div class="info">
+            <span>
+              <i class="fa fa-calendar"></i>
+              2019-02-24
+            </span>
+            <span>
+              <i class="fa fa-user"></i>
+              孙耀珠
+            </span>
+            <span>
+              <i class="fa fa-tags"></i>
+              杂谈
+            </span>
+          </div>
+
+          <div class="entry">
+            <p>
+              刚刚过去的 2018
+              年，被一些媒体称为「中国偶像元年」，这一年里爱奇艺的《偶像练习生》和腾讯的《创造101》将偶像和粉丝经济的概念一下子推向了主流文化。很遗憾没有去萧山现场看《创造101》的录制，不过我去钱江世纪公园看了首届天猫亚洲偶像嘉年华（AIF2018），明显感觉在两大偶像综艺繁荣的背后，中国国内所谓的养成系偶像还不成气候。一般来说持续数日或者多舞台同时演出才称得上是音乐节，单日单舞台的
+              AIF 也就是地下偶像拼盘的水平吧，演出阵容和规模远不如日本的
+              TIF。不过在 AIF 上见证了 AKB48 Team SH
+              的首次公开亮相，我还是非常兴奋的，毕竟也算是跻身上海队的古参饭了。
+            </p>
+
+            <p>
+              对「偶像」这个词的理解，一千个读者眼中就有一千个哈姆雷特。在日本虽然也有汉语词「偶像」，但只有崇拜对象之意；我们现在讨论的偶像则为「IDOL」的音译词「アイドル」。虽然「IDOL」仍然是偶像的意思，但经过音译的转换已经退化为了表音符号；因此在当代日语的语境中，「アイドル」并不会自然而然地跟崇拜对象之意关联起来，而是被赋予了新的含义：与粉丝分享成长过程、以其存在本身为魅力的人物（参见<a
+                href="https://ja.wikipedia.org/wiki/アイドル"
+                >维基百科</a
+              >）。请允许我将这个语义下的偶像称为日系偶像，本文便是个人对日系偶像领域的国内外研究现状综述，其中也结合了我在东京一年的见学体验以及赴北上广参加偶像活动的经历。
+            </p>
+          </div>
+
+          <a href="/aidoru/" class="read-more">Read More</a>
+        </article>
+
+        <article class="post">
+          <h1><a href="/spectre-meltdown-foreshadow/">幽灵・熔毁・预兆</a></h1>
+
+          <div class="info">
+            <span>
+              <i class="fa fa-calendar"></i>
+              2019-01-31
+            </span>
+            <span>
+              <i class="fa fa-user"></i>
+              孙耀珠
+            </span>
+            <span>
+              <i class="fa fa-tags"></i>
+              文献综述
+            </span>
+          </div>
+
+          <div class="entry">
+            <p>
+              <img src="/images/spectre-meltdown-foreshadow-00.png" alt="" />
+            </p>
+
+            <p>
+              去年肆虐了一年的幽灵系列漏洞似乎已经风平浪静了，但实际上它们对 CPU
+              微架构和系统软件领域依然有着长久而深远的影响。幽灵系列漏洞针对的并不是某个具体的硬件缺陷，而是将矛头对准了分支预测和乱序执行这两个现代
+              CPU
+              普遍采用的优化策略，并通过缓存旁路攻击完成对机密数据的任意读取，通用性极强，也极难做到全面的防御。本文将从幽灵系列漏洞的原理入手，介绍它们对现代计算机系统产生的影响和目前可行的对策。
+            </p>
+          </div>
+
+          <a href="/spectre-meltdown-foreshadow/" class="read-more"
+            >Read More</a
+          >
+        </article>
+
+        <article class="post">
+          <h1><a href="/restful/">关于 REST 的思考</a></h1>
+
+          <div class="info">
+            <span>
+              <i class="fa fa-calendar"></i>
+              2018-07-11
+            </span>
+            <span>
+              <i class="fa fa-user"></i>
+              孙耀珠
+            </span>
+            <span>
+              <i class="fa fa-tags"></i>
+              文献综述
+            </span>
+          </div>
+
+          <div class="entry">
+            <blockquote>
+              <p>
+                这篇文章是我在《B/S
+                体系软件设计》课程的中期报告（命题作文）。因为在开发求是潮手机站时有写过与后端
+                API 通信的部分，在其他项目中也不时要考虑 API
+                设计的问题，所以在这方面也有一些自己粗浅的体悟。
+              </p>
+            </blockquote>
+
+            <p>
+              <strong>表现层状态转化</strong
+              >（REST）是一种网络应用程序的架构风格，通常体现在客户端与服务端的通信方式上。不过
+              REST
+              与简单对象访问协议（SOAP）等不同，它并不是一种规范化的协议，而是直接基于
+              HTTP 实现的一种接口风格。它相比 SOAP
+              等协议而言更加简单自然，因此在网站接口设计上得到了广泛应用。REST
+              这个名字起得有点令人费解，这是 Roy Fielding 在其博士论文<sup
+                id="fnref:dissertation"
+                role="doc-noteref"
+                ><a href="#fn:dissertation" class="footnote">1</a></sup
+              >中创造的名词，不过其思想也可以被解释为「HTTP
+              对象模型」，并且这些思想早已被用在 HTTP 和 URI
+              标准的设计上。因此，我们可以先从 HTTP 和 URI 谈起。
+            </p>
+
+            <div class="footnotes" role="doc-endnotes">
+              <ol>
+                <li id="fn:dissertation" role="doc-endnote">
+                  <p>
+                    Roy Fielding. Architectural Styles and the Design of
+                    Network-based Software Architectures. PhD dissertation,
+                    University of California, Irvine, 2000.
+                    <a
+                      href="http://www.ics.uci.edu/~fielding/pubs/dissertation/rest_arch_style.htm"
+                      >Chapter 5: Representational State Transfer (REST)</a
+                    > <a
+                      href="#fnref:dissertation"
+                      class="reversefootnote"
+                      role="doc-backlink"
+                      >&#8617;</a
+                    >
+                  </p>
+                </li>
+              </ol>
+            </div>
+          </div>
+
+          <a href="/restful/" class="read-more">Read More</a>
+        </article>
+
+        <article class="post">
+          <h1><a href="/tokyo-ichinen/">东京一年</a></h1>
+
+          <div class="info">
+            <span>
+              <i class="fa fa-calendar"></i>
+              2018-03-04
+            </span>
+            <span>
+              <i class="fa fa-user"></i>
+              孙耀珠
+            </span>
+            <span>
+              <i class="fa fa-tags"></i>
+              游记
+            </span>
+          </div>
+
+          <div class="entry">
+            <p><img src="/images/tokyo-ichinen-00.jpg" alt="東京工業大学" /></p>
+
+            <p>
+              说起来，第一次来日本还是四年前的高中毕业旅行，当时沿着东海道线一路游览了近畿、箱根和东京。如今作为留学生重踏东京的土地，身份从风尘仆仆的游客转变为一千三百万都民中的一员，想到能与真实的东京近距离接触就十分心动。
+            </p>
+          </div>
+
+          <a href="/tokyo-ichinen/" class="read-more">Read More</a>
+        </article>
+
+        <article class="post">
+          <h1>
+            <a href="/automate-using-fastlane/"
+              >使用 fastlane 自动化 iOS 部署</a
+            >
+          </h1>
+
+          <div class="info">
+            <span>
+              <i class="fa fa-calendar"></i>
+              2016-11-30
+            </span>
+            <span>
+              <i class="fa fa-user"></i>
+              孙耀珠
+            </span>
+            <span>
+              <i class="fa fa-tags"></i>
+              运维
+            </span>
+          </div>
+
+          <div class="entry">
+            <p>
+              对于 iOS
+              开发者来说，应用发布和代码签名证书大概是最令人头疼的两个环节了，这倒不是因为技术上有多难，而是它们的操作流程相当麻烦，尤其是在中国的网络环境下。
+            </p>
+
+            <p>
+              一般来讲，手动发布应用更新大致有以下流程：修改所有 Target
+              的版本号、用 Xcode 给项目 Archive、在 Xcode Organizer 中上传到 App
+              Store、到 iTunes Connect
+              更新相关信息、提交给苹果审核。而其中上传那一步在不翻墙的情况下成功率极低，经常会卡在「Authenticating
+              with the iTunes Store…」，而且系统 SOCKS 代理（如
+              Shadowsocks）在此时似乎并不起作用，只有使用 Proxifier 或者 VPN
+              才有效果。也是基于这个原因，我一般不会直接在 Organizer
+              中直接上传，而是先导出为 .ipa 文件，再使用 Xcode 附带的
+              Application Loader 上传，这样就免去了上传失败的话每次直接上传时将
+              .xcarchive 转为 .ipa 的时间。
+            </p>
+
+            <p>
+              当然以上还没考虑第一次发布时配置证书的流程，一个初学者面对苹果开发者中心琳琅满目的
+              Certificates / Identifiers / Provisioning Profiles
+              多半是一脸懵逼，不过幸运的是从 Xcode 8
+              开始已经能够比较完美地自动管理代码签名了，不再像以前一样需要自己去
+              Fix issues。
+            </p>
+
+            <p>
+              对于 iOS 应用的部署，如果你也像我一样饱受折磨，fastlane
+              也许是你的救星。
+            </p>
+          </div>
+
+          <a href="/automate-using-fastlane/" class="read-more">Read More</a>
+        </article>
+
+        <article class="post">
+          <h1><a href="/qsc-mobile-ios-v3/">求是潮手机站 V3 for iOS</a></h1>
+
+          <div class="info">
+            <span>
+              <i class="fa fa-calendar"></i>
+              2016-11-03
+            </span>
+            <span>
+              <i class="fa fa-user"></i>
+              求是潮
+            </span>
+            <span>
+              <i class="fa fa-tags"></i>
+              广告
+            </span>
+          </div>
+
+          <div class="entry">
+            <p><img src="/images/qsc-mobile-ios-v3.jpg" alt="" /></p>
+
+            <blockquote>
+              <p>
+                App Store:
+                <a href="https://itunes.apple.com/cn/app/id583334920"
+                  >https://itunes.apple.com/cn/app/id583334920</a
+                ><br />
+                GitLab (Private):
+                <a href="https://git.zjuqsc.com/qsc-mobile/qsc-mobile-ios-v3"
+                  >https://git.zjuqsc.com/qsc-mobile/qsc-mobile-ios-v3</a
+                >
+              </p>
+            </blockquote>
+
+            <p>
+              在深冬，写下第一行代码<br />
+              在初春，设计第一版界面<br />
+              在盛夏，开放第一次测试<br />
+              只为在金秋，带给你第一流的体验
+            </p>
+          </div>
+
+          <a href="/qsc-mobile-ios-v3/" class="read-more">Read More</a>
+        </article>
+
+        <article class="post">
+          <h1>
+            <a href="/rails-deployment/"
+              >Deploy Rails with PostgreSQL Using Passenger and Nginx on
+              CentOS</a
+            >
+          </h1>
+
+          <div class="info">
+            <span>
+              <i class="fa fa-calendar"></i>
+              2016-02-10
+            </span>
+            <span>
+              <i class="fa fa-user"></i>
+              孙耀珠
+            </span>
+            <span>
+              <i class="fa fa-tags"></i>
+              运维
+            </span>
+          </div>
+
+          <div class="entry">
+            <p>
+              最近读完了 Michael Hartl 的《Ruby on Rails
+              Tutorial》，于是想试着在自己的 Digital Ocean (CentOS 7)
+              上部署一下最终完成的 sample app。最简单的方法当然是：
+            </p>
+
+            <div class="language-sh highlighter-rouge">
+              <div class="highlight">
+                <pre
+                  class="highlight"
+                ><code><span class="nv">$ </span>rails server <span class="nt">-e</span> production <span class="nt">-b</span> 0.0.0.0 <span class="nt">-p</span> 80
+</code></pre>
+              </div>
+            </div>
+
+            <p>
+              但 Rails 内建的 WEBrick + SQLite
+              性能较差，而且这样部署也不够灵活，还是上 Apache / Nginx
+              比较主流。与 Apache 相比 Nginx
+              的异步模型能更好地处理高并发的场景，Passenger
+              性能不错并且可以直接集成于 Apache / Nginx 而不必反向代理，而
+              PostgreSQL 比 MySQL / MariaDB 功能更强大，这三者是 Ruby
+              服务器的最佳实践之一，因此我决定折腾一下 Nginx + Passenger +
+              PostgreSQL。
+            </p>
+          </div>
+
+          <a href="/rails-deployment/" class="read-more">Read More</a>
+        </article>
+
+        <article class="post">
+          <h1>
+            <a href="/ruby-iterators/"
+              >Ruby: collect, detect, inject, reject, select</a
+            >
+          </h1>
+
+          <div class="info">
+            <span>
+              <i class="fa fa-calendar"></i>
+              2016-01-04
+            </span>
+            <span>
+              <i class="fa fa-user"></i>
+              孙耀珠
+            </span>
+            <span>
+              <i class="fa fa-tags"></i>
+              编程语言
+            </span>
+          </div>
+
+          <div class="entry">
+            <p>
+              在比较 Ruby 和 Python 的时候，很多人会说 Python
+              是一门简约的语言，而 Ruby 是一门魔幻的语言。之所以说 Ruby
+              魔幻，一方面是因为神奇的元编程和甜甜的语法糖，另一方面是在 Ruby
+              中总有不止一种方法去做一件事（<a
+                href="https://en.wikipedia.org/wiki/There%27s_more_than_one_way_to_do_it"
+                >There’s more than one way to do it</a
+              >），循环便是其中一例。
+            </p>
+
+            <p>
+              如果写过主流的结构化编程语言，那么一定对 for
+              循环非常熟悉吧。Pascal 继承了 ALGOL 风格的 for
+              循环，由初值、终值以及可选的步长组成；C
+              语言则创造了现在广为人知的三段式 for 循环，被 Java / JavaScript /
+              PHP 等主流语言所沿用；而 Python / Swift 等语言使用 for-in 语句结合
+              range 也能实现相同的功能：
+            </p>
+
+            <div class="language-plaintext highlighter-rouge">
+              <div class="highlight">
+                <pre
+                  class="highlight"
+                ><code>for i := 0 to n-1 do ……         ⍝ Pascal
+for (int i = 0; i &lt; n; ++i) ……  ⍝ C
+for i in range(0, n): ……        ⍝ Python
+for i in 0..&lt;n { …… }           ⍝ Swift
+</code></pre>
+              </div>
+            </div>
+
+            <p>而在 Ruby 的世界中，有一些有趣的方法可以取代 for 循环：</p>
+
+            <div class="language-ruby highlighter-rouge">
+              <div class="highlight">
+                <pre
+                  class="highlight"
+                ><code><span class="n">n</span><span class="p">.</span><span class="nf">times</span> <span class="p">{</span> <span class="o">|</span><span class="n">i</span><span class="o">|</span> <span class="err">……</span> <span class="p">}</span>
+<span class="mi">0</span><span class="p">.</span><span class="nf">upto</span><span class="p">(</span><span class="n">n</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span> <span class="p">{</span> <span class="o">|</span><span class="n">i</span><span class="o">|</span> <span class="err">……</span> <span class="p">}</span>
+<span class="p">(</span><span class="mi">0</span><span class="o">...</span><span class="n">n</span><span class="p">).</span><span class="nf">each</span> <span class="p">{</span> <span class="o">|</span><span class="n">i</span><span class="o">|</span> <span class="err">……</span> <span class="p">}</span>
+</code></pre>
+              </div>
+            </div>
+
+            <p>
+              不过 Ruby 并没有激进地删掉 for 关键字，实现了
+              <code class="language-plaintext highlighter-rouge">each</code>
+              方法的对象都能以 for-in 语句进行迭代。像上述
+              <code class="language-plaintext highlighter-rouge">times</code> /
+              <code class="language-plaintext highlighter-rouge">upto</code> /
+              <code class="language-plaintext highlighter-rouge">each</code>
+              这样的方法在 Ruby
+              中被称为<strong>迭代器</strong>（iterator），其实现方式与后来
+              Python / JavaScript
+              等语言中的<strong>生成器</strong>（generator）相似，但使用方式更接近于函数式编程中广泛采用的<strong>高阶函数</strong>（higher-order
+              function）。
+            </p>
+          </div>
+
+          <a href="/ruby-iterators/" class="read-more">Read More</a>
+        </article>
+
+        <article class="post">
+          <h1>
+            <a href="/qt-multithreading/">使用 Qt 多线程避免事件循环阻塞</a>
+          </h1>
+
+          <div class="info">
+            <span>
+              <i class="fa fa-calendar"></i>
+              2015-11-17
+            </span>
+            <span>
+              <i class="fa fa-user"></i>
+              孙耀珠
+            </span>
+            <span>
+              <i class="fa fa-tags"></i>
+              调库
+            </span>
+          </div>
+
+          <div class="entry">
+            <p>
+              这学期选了一门物理实验的小课题「宇宙射线μ子探测」，于是需要给实验用到的程序写个
+              GUI。因为目标平台是 Windows，何宇就直接去写 WPF 了；而我本身不是
+              Windows 用户，当然倾向于寻找一个跨平台的解决方案，目前主流的 GUI
+              框架中 Qt 大概是最优雅的选择（<a
+                href="http://www.zhihu.com/question/23480014"
+                >知乎上也有对此的讨论</a
+              >）。
+            </p>
+
+            <p>
+              除了原生的 C++，Qt 也支持其他许多语言的绑定，譬如 PyQt、QtRuby
+              等等；Qt 近年新推的 Qt Quick 也改用了可以内嵌 JS 的新语言
+              QML。不过因为我恰好在上 C++
+              的面向对象程序设计课，正想借此机会实践一下，所以我还是选择了原生的
+              C++。
+            </p>
+
+            <p>
+              因为实验模拟是个计算密集型的任务，整个计算函数要跑很长时间，如果直接调用它，必然会<strong>阻塞</strong>事件循环。这样一来，GUI
+              所有的绘制和交互都被阻塞在事件队列中，整个程序就失去响应了。
+            </p>
+          </div>
+
+          <a href="/qt-multithreading/" class="read-more">Read More</a>
+        </article>
+
+        <article class="post">
+          <h1><a href="/shanghai-travels/">魔都纪行</a></h1>
+
+          <div class="info">
+            <span>
+              <i class="fa fa-calendar"></i>
+              2015-08-05
+            </span>
+            <span>
+              <i class="fa fa-user"></i>
+              孙耀珠
+            </span>
+            <span>
+              <i class="fa fa-tags"></i>
+              游记
+            </span>
+          </div>
+
+          <div class="entry">
+            <p>
+              大一这年来，屈指一算我总共去了三次上海：第一次是去看
+              <strong>CCG</strong>；第二次游历了五角场，然而重点是去嘉兴路看了
+              <strong>SNH48 剧场公演</strong>；最近的一次是去看
+              <strong>ChinaJoy</strong
+              >。虽然说不上有多熟悉上海，但渐渐对上海有了一种莫名的亲切感，大概今后依然会经常造访魔都吧。
+            </p>
+
+            <h2 id="ccg">CCG</h2>
+
+            <p>
+              去年暑假是我和初中同学第二次一起去看
+              CCG，原计划五天的行程因为随后的日本之行压缩成了两天，交通路线、食宿都是轻车熟路，没有什么波折。我原以为浦东新区是个高度现代化、处处高楼鳞次栉比的地方，正如我原以为上海站会干净整洁、富丽堂皇，然而真正来了才发现，这里的大街小巷跟我的家乡并没有太大差别：从地铁站到宾馆的路上，依旧是熟悉的小餐馆、小超市、以及路边叫卖的摊贩，只有远远眺望那红色的中国馆才提醒着我这里几年前可是举世瞩目的世博园区。
+            </p>
+          </div>
+
+          <a href="/shanghai-travels/" class="read-more">Read More</a>
+        </article>
+
+        <article class="post">
+          <h1><a href="/c-traps-and-pitfalls/">《C 陷阱与缺陷》笔记</a></h1>
+
+          <div class="info">
+            <span>
+              <i class="fa fa-calendar"></i>
+              2015-06-07
+            </span>
+            <span>
+              <i class="fa fa-user"></i>
+              孙耀珠
+            </span>
+            <span>
+              <i class="fa fa-tags"></i>
+              编程语言
+            </span>
+          </div>
+
+          <div class="entry">
+            <ul id="markdown-toc">
+              <li>
+                <a
+                  href="#词法陷阱lexical-pitfalls"
+                  id="markdown-toc-词法陷阱lexical-pitfalls"
+                  >词法陷阱（Lexical pitfalls）</a
+                >
+              </li>
+            </ul>
+
+            <h2 id="词法陷阱lexical-pitfalls">词法陷阱（Lexical pitfalls）</h2>
+
+            <ul>
+              <li>
+                由 ALGOL 派生的编程语言如 Pascal 和 Ada，使用
+                <code class="language-plaintext highlighter-rouge">:=</code>
+                作为赋值运算符，而
+                <code class="language-plaintext highlighter-rouge">=</code>
+                作为比较运算符。C 语言则使用了另一种表示法，以
+                <code class="language-plaintext highlighter-rouge">=</code>
+                为赋值运算符，以
+                <code class="language-plaintext highlighter-rouge">==</code>
+                为比较运算符。
+              </li>
+              <li>
+                在 C 语言中，<code class="language-plaintext highlighter-rouge"
+                  >&amp;</code
+                >
+                和
+                <code class="language-plaintext highlighter-rouge">|</code>
+                是按位运算符，而
+                <code class="language-plaintext highlighter-rouge"
+                  >&amp;&amp;</code
+                >
+                和
+                <code class="language-plaintext highlighter-rouge">||</code>
+                是逻辑运算符。另外，<code
+                  class="language-plaintext highlighter-rouge"
+                  >^</code
+                >
+                表示按位异或，而不是乘方。
+              </li>
+              <li>
+                C 编译器在词法分析时遵从贪心法，比如
+                <code class="language-plaintext highlighter-rouge"
+                  >y = x/*p</code
+                >
+                的
+                <code class="language-plaintext highlighter-rouge">/*</code>
+                会被理解为注释的开始，而不是
+                <code class="language-plaintext highlighter-rouge"
+                  >y = x / *p</code
+                >。
+              </li>
+              <li>
+                <code class="language-plaintext highlighter-rouge">0</code>
+                开头的整型字面量将被视为八进制，因此切忌用
+                <code class="language-plaintext highlighter-rouge">0</code>
+                来占位对齐。
+              </li>
+              <li>
+                单引号引起的一个字符实际上代表一个整数，而用双引号引起的字符串代表一个无名的字符数组。如果误用单引号引起一个字符串，使用
+                Clang
+                等编译器会得到最后一个字符的整数值，而其他编译器也可能得到第一个字符的整数值。
+              </li>
+            </ul>
+          </div>
+
+          <a href="/c-traps-and-pitfalls/" class="read-more">Read More</a>
+        </article>
+
+        <article class="post">
+          <h1><a href="/swift-notes-3/">Swift 学习笔记（三）</a></h1>
+
+          <div class="info">
+            <span>
+              <i class="fa fa-calendar"></i>
+              2015-05-05
+            </span>
+            <span>
+              <i class="fa fa-user"></i>
+              孙耀珠
+            </span>
+            <span>
+              <i class="fa fa-tags"></i>
+              编程语言
+            </span>
+          </div>
+
+          <div class="entry">
+            <ul id="markdown-toc">
+              <li>
+                <a href="#objective-c-api" id="markdown-toc-objective-c-api"
+                  >Objective-C API</a
+                >
+                <ul>
+                  <li><a href="#初始化" id="markdown-toc-初始化">初始化</a></li>
+                </ul>
+              </li>
+            </ul>
+
+            <h2 id="objective-c-api">Objective-C API</h2>
+
+            <p>
+              为了让 Swift 继承 Objective-C 的成熟生态，苹果开发了 Clang
+              Importer 将 Objective-C API 引入
+              Swift，并自动进行了若干命名转换。而 Swift 3
+              更是对命名原则做了大规模的调整，使之更清晰、更适应于 Swift，详见
+              <a
+                href="https://github.com/apple/swift-evolution/blob/master/proposals/0005-objective-c-name-translation.md"
+                >SE-0005</a
+              >、<a
+                href="https://github.com/apple/swift-evolution/blob/master/proposals/0006-apply-api-guidelines-to-the-standard-library.md"
+                >SE-0006</a
+              >
+              两份提案，并且最终形成了一份
+              <a href="https://swift.org/documentation/api-design-guidelines/"
+                >API Design Guidelines</a
+              >。
+            </p>
+
+            <h3 id="初始化">初始化</h3>
+
+            <ul>
+              <li>
+                使用 Swift 调用 Objective-C 类的构造器时，方法名中的
+                <code class="language-plaintext highlighter-rouge">init</code>
+                和
+                <code class="language-plaintext highlighter-rouge"
+                  >initWith</code
+                >
+                前缀会被截去，其余各部分依次变为构造器的参数名。<code
+                  class="language-plaintext highlighter-rouge"
+                  >alloc</code
+                >
+                方法不必再手动调用，Swift 会自己处理内存分配。
+              </li>
+              <li>
+                简洁起见，Objective-C 类的工厂方法也被映射成了 Swift
+                的便利构造器。
+              </li>
+              <li>
+                在 Objective-C 中可能返回
+                <code class="language-plaintext highlighter-rouge">nil</code>
+                的构造器，在 Swift 中会被映射为可失败构造器。
+              </li>
+            </ul>
+
+            <div class="language-objc highlighter-rouge">
+              <div class="highlight">
+                <pre
+                  class="highlight"
+                ><code><span class="c1">// Objective-C</span>
+<span class="n">UITableView</span> <span class="o">*</span><span class="n">myTableView</span> <span class="o">=</span> <span class="p">[[</span><span class="n">UITableView</span> <span class="nf">alloc</span><span class="p">]</span> <span class="nf">initWithFrame</span><span class="p">:</span><span class="n">CGRectZero</span> <span class="nf">style</span><span class="p">:</span><span class="n">UITableViewStyleGrouped</span><span class="p">];</span>
+<span class="n">UIColor</span> <span class="o">*</span><span class="n">color</span> <span class="o">=</span> <span class="p">[</span><span class="n">UIColor</span> <span class="nf">colorWithRed</span><span class="p">:</span><span class="mi">0</span><span class="p">.</span><span class="mi">5</span> <span class="nf">green</span><span class="p">:</span><span class="mi">0</span><span class="p">.</span><span class="mi">0</span> <span class="n">blue</span><span class="o">:</span><span class="mi">0</span><span class="p">.</span><span class="mi">5</span> <span class="n">alpha</span><span class="o">:</span><span class="mi">1</span><span class="p">.</span><span class="mi">0</span><span class="p">];</span>
+</code></pre>
+              </div>
+            </div>
+
+            <div class="language-swift highlighter-rouge">
+              <div class="highlight">
+                <pre class="highlight"><code><span class="c1">// Swift</span>
+<span class="k">let</span> <span class="nv">myTableView</span> <span class="o">=</span> <span class="kt">UITableView</span><span class="p">(</span><span class="nv">frame</span><span class="p">:</span> <span class="o">.</span><span class="n">zero</span><span class="p">,</span> <span class="nv">style</span><span class="p">:</span> <span class="o">.</span><span class="n">grouped</span><span class="p">)</span>
+<span class="k">let</span> <span class="nv">color</span> <span class="o">=</span> <span class="kt">UIColor</span><span class="p">(</span><span class="nv">red</span><span class="p">:</span> <span class="mf">0.5</span><span class="p">,</span> <span class="nv">green</span><span class="p">:</span> <span class="mf">0.0</span><span class="p">,</span> <span class="nv">blue</span><span class="p">:</span> <span class="mf">0.5</span><span class="p">,</span> <span class="nv">alpha</span><span class="p">:</span> <span class="mf">1.0</span><span class="p">)</span>
+</code></pre>
+              </div>
+            </div>
+          </div>
+
+          <a href="/swift-notes-3/" class="read-more">Read More</a>
+        </article>
+
+        <article class="post">
+          <h1><a href="/swift-notes-2/">Swift 学习笔记（二）</a></h1>
+
+          <div class="info">
+            <span>
+              <i class="fa fa-calendar"></i>
+              2015-05-02
+            </span>
+            <span>
+              <i class="fa fa-user"></i>
+              孙耀珠
+            </span>
+            <span>
+              <i class="fa fa-tags"></i>
+              编程语言
+            </span>
+          </div>
+
+          <div class="entry">
+            <ul id="markdown-toc">
+              <li>
+                <a href="#结构体和类" id="markdown-toc-结构体和类"
+                  >结构体和类</a
+                >
+              </li>
+            </ul>
+
+            <h2 id="结构体和类">结构体和类</h2>
+
+            <ul>
+              <li>
+                结构体（Structure）和类（Class）有以下共同特性：属性（property）、方法（method）、下标（subscript）、构造器（initializer）、扩展（extension）、协议（protocol）；另外类还有以下独有特性：继承（inheritance）、类型转换（type
+                casting）、析构器（deinitializer）、自动引用计数（ARC）。
+              </li>
+              <li>
+                结构体是<strong>值类型</strong>，当其进行赋值操作或参数传递时会发生值拷贝，当然编译器也会在此基础上做
+                copy-on-write
+                优化；而类是<strong>引用类型</strong>，相当于通过指针间接访问，因此不会发生值拷贝，但同时
+                <code class="language-plaintext highlighter-rouge">let</code>
+                关键字和参数传递时不再能保证其指向的内容不被修改。<sup
+                  id="fnref:valuetype"
+                  role="doc-noteref"
+                  ><a href="#fn:valuetype" class="footnote">1</a></sup
+                >
+              </li>
+              <li>
+                对于类的实例来说，相等（equality）不意味着相同（identity），我们可以通过
+                <code class="language-plaintext highlighter-rouge">===</code> /
+                <code class="language-plaintext highlighter-rouge">!==</code>
+                来判断是不是同一个对象。
+              </li>
+            </ul>
+
+            <div class="footnotes" role="doc-endnotes">
+              <ol>
+                <li id="fn:valuetype" role="doc-endnote">
+                  <p>
+                    对结构体和值类型的进一步讨论可以参见
+                    <a href="http://objccn.io/issue-16-2/">ObjC 中国</a
+                    >，对于是选用结构体还是类可以参见
+                    <a
+                      href="https://developer.apple.com/documentation/swift/choosing_between_structures_and_classes"
+                      >官方文档</a
+                    >（优先选用结构体）。 <a
+                      href="#fnref:valuetype"
+                      class="reversefootnote"
+                      role="doc-backlink"
+                      >&#8617;</a
+                    >
+                  </p>
+                </li>
+              </ol>
+            </div>
+          </div>
+
+          <a href="/swift-notes-2/" class="read-more">Read More</a>
+        </article>
+
+        <article class="post">
+          <h1><a href="/swift-notes-1/">Swift 学习笔记（一）</a></h1>
+
+          <div class="info">
+            <span>
+              <i class="fa fa-calendar"></i>
+              2015-04-26
+            </span>
+            <span>
+              <i class="fa fa-user"></i>
+              孙耀珠
+            </span>
+            <span>
+              <i class="fa fa-tags"></i>
+              编程语言
+            </span>
+          </div>
+
+          <div class="entry">
+            <p>
+              苹果自收购 NeXT 公司开始便使用 Objective-C
+              作为主力开发语言，至今已有近二十年了；而在这期间，各大科技公司都如火如荼地设计着更为现代的语言，譬如微软推出了
+              C# 和 F#、谷歌推出了 Go 和 Dart、Mozilla 推出了 Rust……虽然
+              Objective-C 随着 OS X 和 iOS
+              的迅速发展而越来越火，但相比之下它的语言设计已经落后于时代了，于是在这个大背景下
+              Swift 诞生了，开发者正是 LLVM / Clang 之父 Chris Lattner。
+            </p>
+
+            <p>
+              Swift
+              仍然是一门静态类型、面向对象的语言，不过它拥有很多现代的语言特性，譬如类型推断、代数数据类型、模式匹配、泛型等等，同时也有
+              Playgrounds 这样便利的交互式编程环境。Swift
+              非常强调安全性，不论是随处可见的可空类型、继承时复杂的构造规则，还是赋值没有返回值、控制流不能省略花括号，都是为了代码安全而考虑。另外
+              Swift 终于丢掉了 C 语言的包袱，语言层面上移除了指针，<code
+                class="language-plaintext highlighter-rouge"
+                >switch</code
+              >
+              语句不再需要
+              <code class="language-plaintext highlighter-rouge">break</code
+              >，整型溢出会抛出运行时错误等等。
+            </p>
+
+            <p>
+              就目前来讲，用 Swift 进行 iOS 开发依然离不开 Objective-C
+              运行时，不过两者能够很方便地交互和共存，从前所有 Objective-C
+              撰写的 API 均可供 Swift 使用。Swift 的语法目前仍在不断改进，从
+              <a href="https://apple.github.io/swift-evolution/"
+                >Swift Evolution</a
+              >
+              可见一斑；目前这三篇学习笔记已从初版更新到了 Swift
+              5.0（2019-03-25），这是第一个 ABI 稳定的版本，也就是说从 Swift 5.0
+              开始二进制接口将向下兼容。<sup id="fnref:abi" role="doc-noteref"
+                ><a href="#fn:abi" class="footnote">1</a></sup
+              >
+            </p>
+
+            <div class="footnotes" role="doc-endnotes">
+              <ol>
+                <li id="fn:abi" role="doc-endnote">
+                  <p>
+                    <a href="https://swift.org/blog/abi-stability-and-more/"
+                      >ABI Stability and More — Swift Blog</a
+                    > <a
+                      href="#fnref:abi"
+                      class="reversefootnote"
+                      role="doc-backlink"
+                      >&#8617;</a
+                    >
+                  </p>
+                </li>
+              </ol>
+            </div>
+          </div>
+
+          <a href="/swift-notes-1/" class="read-more">Read More</a>
+        </article>
+
+        <article class="post">
+          <h1>
+            <a href="/sublime-text-for-mac/">Sublime Text for Mac 使用配置</a>
+          </h1>
+
+          <div class="info">
+            <span>
+              <i class="fa fa-calendar"></i>
+              2014-11-08
+            </span>
+            <span>
+              <i class="fa fa-user"></i>
+              孙耀珠
+            </span>
+            <span>
+              <i class="fa fa-tags"></i>
+              开发环境
+            </span>
+          </div>
+
+          <div class="entry">
+            <p>
+              Mac OS X 从不缺乏优秀的代码编辑器，从 Vim 和 Emacs 到
+              Xcode、IntelliJ
+              IDEA、Eclipse，都有着为数甚多的忠实用户。然而大多数的 IDE
+              是为软件工程而设计的，若只是写写算法题，那么只需要简单的命令行程序，用这些面向工程的
+              IDE 堪比杀鸡用牛刀了。
+            </p>
+
+            <p>
+              Sublime Text
+              作为一个轻量级的代码编辑器，对于单文件编程非常友好，原生支持不少主流语言的编译运行。它吸收了前辈
+              TextMate
+              的优点，并在可扩展性方面更胜一筹。通过各种插件包，我们可以定制包括主题、配色方案、编译选项在内的方方面面。
+            </p>
+
+            <p>
+              即便如此，Sublime Text
+              还是有一些不尽如人意的地方需要进一步配置，以下便是 C /
+              C++、Python、Ruby、HTML 的几处配置技巧。
+            </p>
+
+            <p>测试环境：Sublime Text 3 Build 3065 (OS X Yosemite 10.10)</p>
+          </div>
+
+          <a href="/sublime-text-for-mac/" class="read-more">Read More</a>
+        </article>
+
+        <article class="post">
+          <h1><a href="/hello-world/">Hello, World!</a></h1>
+
+          <div class="info">
+            <span>
+              <i class="fa fa-calendar"></i>
+              2014-11-02
+            </span>
+            <span>
+              <i class="fa fa-user"></i>
+              孙耀珠
+            </span>
+            <span>
+              <i class="fa fa-tags"></i>
+              杂谈
+            </span>
+          </div>
+
+          <div class="entry">
+            <p>这是博客的第一篇文章，首先当然是说声欢迎来访～</p>
+
+            <p>
+              我曾经用国外网络服务器商的免费空间搭建过 WordPress 博客，并绑定了
+              .tk
+              的免费域名。不过这些免费空间大多不太靠谱，一旦账号不活跃就很可能被停用；在国内不仅访问速度很慢，还有被墙的风险。于是不久我就放弃了原来的博客。
+            </p>
+
+            <p>
+              前几天，我偶然接触到了 Markdown
+              这个轻量级标记语言，发现其与维基百科所使用的
+              <a href="https://en.wikipedia.org/wiki/Help:Wiki_markup"
+                >Wiki Markup</a
+              >
+              异曲同工（不考虑后者复杂的模板功能）——比 HTML 简单、比 Microsoft
+              Word / Apple Pages
+              纯粹，但同时也能满足平时富文本编辑的需要。自然而然地，我萌生了用
+              Markdown
+              写博客的想法。对于一个程序员来说，网站搭建在自己的服务器上这种可控的感觉当然是最好的，不过像博客这样的静态网站托管在
+              GitHub Pages
+              也是不错的选择，还省去了自己去维护的工夫。而静态网站生成工具我选择了
+              Jekyll，首先是因为自己对于 Ruby 更加熟悉，其次 GitHub Pages
+              原生支持 Jekyll，因此可以直接托管源码，不用像 Hexo
+              一样先在本地生成所有静态文件再推送到 GitHub 上。
+            </p>
+          </div>
+
+          <a href="/hello-world/" class="read-more">Read More</a>
+        </article>
+      </div>
+    </div>
+
+    <div class="wrapper-footer">
+      <div class="container">
+        <footer class="footer">
+          <a href="https://github.com/yzyzsun"
+            ><i class="svg-icon github"></i
+          ></a>
+
+          <a href="/feed.xml"><i class="svg-icon rss"></i></a>
+        </footer>
+      </div>
+    </div>
+
+    <!-- Google Analytics -->
+    <script>
+      (function (i, s, o, g, r, a, m) {
+        i["GoogleAnalyticsObject"] = r;
+        (i[r] =
+          i[r] ||
+          function () {
+            (i[r].q = i[r].q || []).push(arguments);
+          }),
+          (i[r].l = 1 * new Date());
+        (a = s.createElement(o)), (m = s.getElementsByTagName(o)[0]);
+        a.async = 1;
+        a.src = g;
+        m.parentNode.insertBefore(a, m);
+      })(
+        window,
+        document,
+        "script",
+        "//www.google-analytics.com/analytics.js",
+        "ga"
+      );
+
+      ga("create", "UA-65994616-1", "auto");
+      ga("send", "pageview", {
+        page: "/",
+        title: "",
+      });
+    </script>
+    <!-- End Google Analytics -->
+  </body>
+</html>

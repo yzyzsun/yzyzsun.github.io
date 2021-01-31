@@ -1,0 +1,748 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+  <head>
+    <title>幽灵・熔毁・预兆 | 孙耀珠的博客</title>
+
+    <meta charset="utf-8" />
+    <meta content="text/html; charset=utf-8" http-equiv="Content-Type" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1.0, maximum-scale=1.0"
+    />
+    <meta
+      name="google-site-verification"
+      content="zYt2wigM41vmyHtpvOvLHk4Yetcfbv5Bz9pdvsTRT3Y"
+    />
+
+    <!-- Begin Jekyll SEO tag v2.7.1 -->
+    <meta name="generator" content="Jekyll v4.2.0" />
+    <meta property="og:title" content="幽灵・熔毁・预兆" />
+    <meta name="author" content="孙耀珠" />
+    <meta property="og:locale" content="en_US" />
+    <meta
+      name="description"
+      content="去年肆虐了一年的幽灵系列漏洞似乎已经风平浪静了，但实际上它们对 CPU 微架构和系统软件领域依然有着长久而深远的影响。幽灵系列漏洞针对的并不是某个具体的硬件缺陷，而是将矛头对准了分支预测和乱序执行这两个现代 CPU 普遍采用的优化策略，并通过缓存旁路攻击完成对机密数据的任意读取，通用性极强，也极难做到全面的防御。本文将从幽灵系列漏洞的原理入手，介绍它们对现代计算机系统产生的影响和目前可行的对策。"
+    />
+    <meta
+      property="og:description"
+      content="去年肆虐了一年的幽灵系列漏洞似乎已经风平浪静了，但实际上它们对 CPU 微架构和系统软件领域依然有着长久而深远的影响。幽灵系列漏洞针对的并不是某个具体的硬件缺陷，而是将矛头对准了分支预测和乱序执行这两个现代 CPU 普遍采用的优化策略，并通过缓存旁路攻击完成对机密数据的任意读取，通用性极强，也极难做到全面的防御。本文将从幽灵系列漏洞的原理入手，介绍它们对现代计算机系统产生的影响和目前可行的对策。"
+    />
+    <link
+      rel="canonical"
+      href="https://blog.yzsun.me/spectre-meltdown-foreshadow/"
+    />
+    <meta
+      property="og:url"
+      content="https://blog.yzsun.me/spectre-meltdown-foreshadow/"
+    />
+    <meta property="og:site_name" content="孙耀珠的博客" />
+    <meta property="og:type" content="article" />
+    <meta
+      property="article:published_time"
+      content="2019-01-31T00:00:00+00:00"
+    />
+    <meta name="twitter:card" content="summary" />
+    <meta property="twitter:title" content="幽灵・熔毁・预兆" />
+    <script type="application/ld+json">
+      {
+        "description": "去年肆虐了一年的幽灵系列漏洞似乎已经风平浪静了，但实际上它们对 CPU 微架构和系统软件领域依然有着长久而深远的影响。幽灵系列漏洞针对的并不是某个具体的硬件缺陷，而是将矛头对准了分支预测和乱序执行这两个现代 CPU 普遍采用的优化策略，并通过缓存旁路攻击完成对机密数据的任意读取，通用性极强，也极难做到全面的防御。本文将从幽灵系列漏洞的原理入手，介绍它们对现代计算机系统产生的影响和目前可行的对策。",
+        "url": "https://blog.yzsun.me/spectre-meltdown-foreshadow/",
+        "@type": "BlogPosting",
+        "headline": "幽灵・熔毁・预兆",
+        "dateModified": "2019-01-31T00:00:00+00:00",
+        "datePublished": "2019-01-31T00:00:00+00:00",
+        "mainEntityOfPage": {
+          "@type": "WebPage",
+          "@id": "https://blog.yzsun.me/spectre-meltdown-foreshadow/"
+        },
+        "author": { "@type": "Person", "name": "孙耀珠" },
+        "@context": "https://schema.org"
+      }
+    </script>
+    <!-- End Jekyll SEO tag -->
+
+    <link
+      type="application/atom+xml"
+      rel="alternate"
+      href="https://blog.yzsun.me/feed.xml"
+      title="孙耀珠的博客"
+    />
+
+    <!--[if lt IE 9]>
+      <script src="//cdnjs.cloudflare.com/ajax/libs/html5shiv/r29/html5.min.js"></script>
+    <![endif]-->
+
+    <link rel="stylesheet" href="/style.css" />
+  </head>
+
+  <body>
+    <div class="wrapper-masthead">
+      <div class="container">
+        <header class="masthead clearfix">
+          <a href="/" class="site-avatar"
+            ><img src="/images/avatar.jpg" alt="avatar"
+          /></a>
+
+          <div class="site-info">
+            <h1 class="site-domain"><a href="/">yzsun.me</a></h1>
+            <p class="site-name">孙耀珠的博客</p>
+          </div>
+
+          <nav>
+            <a href="/">首页</a>
+            <a href="/archive/">归档</a>
+            <a href="/about/">关于</a>
+          </nav>
+        </header>
+      </div>
+    </div>
+
+    <div id="main" role="main" class="container">
+      <article class="post">
+        <h1>幽灵・熔毁・预兆</h1>
+
+        <div class="info">
+          <span>
+            <i class="fa fa-calendar"></i>
+            2019-01-31
+          </span>
+          <span>
+            <i class="fa fa-user"></i>
+            孙耀珠
+          </span>
+          <span>
+            <i class="fa fa-tags"></i>
+            文献综述
+          </span>
+        </div>
+
+        <div class="entry">
+          <p><img src="/images/spectre-meltdown-foreshadow-00.png" alt="" /></p>
+
+          <p>
+            去年肆虐了一年的幽灵系列漏洞似乎已经风平浪静了，但实际上它们对 CPU
+            微架构和系统软件领域依然有着长久而深远的影响。幽灵系列漏洞针对的并不是某个具体的硬件缺陷，而是将矛头对准了分支预测和乱序执行这两个现代
+            CPU
+            普遍采用的优化策略，并通过缓存旁路攻击完成对机密数据的任意读取，通用性极强，也极难做到全面的防御。本文将从幽灵系列漏洞的原理入手，介绍它们对现代计算机系统产生的影响和目前可行的对策。
+          </p>
+
+          <!--more-->
+
+          <p>
+            幽灵系列漏洞截至目前至少已有十种变体被通用漏洞披露（CVE）数据库收录，亦有未被单独收录的
+            SpectreRSB（USENIX WOOT 2018）、ret2spec（ACM CCS
+            2018）等攻击被陆续发现。
+          </p>
+
+          <table>
+            <thead>
+              <tr>
+                <th> </th>
+                <th>漏洞编号</th>
+                <th>代号</th>
+                <th>正式名称</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>Variant 1</td>
+                <td>CVE-2017-5753</td>
+                <td>Spectre-V1</td>
+                <td>Bounds Check Bypass</td>
+              </tr>
+              <tr>
+                <td>Variant 2</td>
+                <td>CVE-2017-5715</td>
+                <td>Spectre-V2</td>
+                <td>Branch Target Injection</td>
+              </tr>
+              <tr>
+                <td>Variant 3</td>
+                <td>CVE-2017-5754</td>
+                <td>Meltdown</td>
+                <td>Rogue Data Cache Load</td>
+              </tr>
+              <tr>
+                <td>Variant 3a</td>
+                <td>CVE-2018-3640</td>
+                <td>Spectre-NG</td>
+                <td>Rogue System Register Read</td>
+              </tr>
+              <tr>
+                <td>Variant 4</td>
+                <td>CVE-2018-3639</td>
+                <td>Spectre-NG</td>
+                <td>Speculative Store Bypass</td>
+              </tr>
+              <tr>
+                <td>-</td>
+                <td>CVE-2018-3665</td>
+                <td>LazyFP</td>
+                <td>Lazy FP State Restore</td>
+              </tr>
+              <tr>
+                <td>-</td>
+                <td>CVE-2018-3693</td>
+                <td>Spectre 1.1</td>
+                <td>Bounds Check Bypass Store</td>
+              </tr>
+              <tr>
+                <td>-</td>
+                <td>CVE-2018-3615</td>
+                <td>Foreshadow</td>
+                <td>L1 Terminal Fault - SGX</td>
+              </tr>
+              <tr>
+                <td>-</td>
+                <td>CVE-2018-3620</td>
+                <td>Foreshadow-NG</td>
+                <td>L1 Terminal Fault - OS/SMM</td>
+              </tr>
+              <tr>
+                <td>-</td>
+                <td>CVE-2018-3646</td>
+                <td>Foreshadow-NG</td>
+                <td>L1 Terminal Fault - VMM</td>
+              </tr>
+            </tbody>
+          </table>
+
+          <h2 id="熔毁meltdown">熔毁（Meltdown）</h2>
+
+          <p>
+            熔毁漏洞又称幽灵变体三，是这一系列漏洞中最容易利用、也最为人所知的一个。它由来自
+            Google Project Zero、德国 Cyberus
+            技术有限公司和奥地利格拉茨科技大学的三个团队各自独立地发现，论文发表在
+            USENIX Security 2018
+            上。要解释清楚熔毁漏洞的原理，需要综合三方面的知识：虚拟内存、乱序执行、基于缓存的旁路攻击。
+          </p>
+
+          <p>
+            我们都知道，现代的操作系统都应用了<strong>虚拟内存</strong>（Virtual
+            Memory）技术，也就是说每个进程都拥有自己的虚拟地址空间，操作系统会根据页表将这些虚拟地址映射到物理地址。虚拟地址空间通常划分为用户和内核两部分，应用程序只能访问各自的用户地址空间，而只有在内核态下才能触及内核地址空间。为了进行访问权限控制，页表项中会有一个
+            User/Supervisor
+            位用来指定用户态能否访问，起到了隔离用户空间和内核空间的作用。在
+            Linux 和 macOS
+            等主流操作系统中，为了方便系统的访存操作，整个物理内存会直接映射到一部分内核空间上。而熔毁漏洞的目标便是攻破上述安全防线，在用户态也能任意访问所有物理内存。
+          </p>
+
+          <p>
+            为了达到目的，熔毁漏洞选择了从处理器的微架构着手攻击。现代处理器普遍采用了指令级并行技术来最大程度地发挥计算性能，其中一个特性便是<strong>乱序执行</strong>（Out-of-Order
+            Execution）。在支持乱序执行的处理器上，所有指令在译码后将发往保留站（Reservation
+            Station），一旦操作数就绪指令即可执行，不管先来后到。不过为了保证程序的正确性，指令执行的结果将以取指顺序写回程序员可见的寄存器，这被称为顺序提交（In-Order
+            Commit）。而处理器的错误检测和异常处理都在提交阶段进行，如果发生异常则清空流水线并恢复原来的状态。
+          </p>
+
+          <p>
+            <strong>旁路攻击</strong>又称侧信道攻击（Side-Channel
+            Attack），指绕开对加密算法的理论分析，而利用其硬件实现泄露的信息来进行攻击，譬如用时、功耗、电磁辐射等。在熔毁漏洞的例子中，缓存充当了攻击的旁路，基于缓存的
+            Flush+Reload
+            攻击击溃了乱序执行的最后一道防线。简单来讲，Flush+Reload
+            攻击首先利用
+            <code class="language-plaintext highlighter-rouge">clflush</code>
+            等指令预先清空缓存，再等待受害程序进行访存操作，然后通过数据访问的用时来判断某段数据在此期间是否被受害程序访问过。因为访问过的数据会载入缓存，所以下一次访问的速度会是第一次的两倍以上。如果没有权限调用
+            <code class="language-plaintext highlighter-rouge">clflush</code>
+            等指令，也可以手动访问大量无关数据来达到清空缓存的目的，这种变体被称为
+            Evict+Reload 攻击。
+          </p>
+
+          <p>
+            现在我们已经集齐了三片拼图，是时候把它们组合起来了。首先我们构造这样一段代码：
+          </p>
+
+          <div class="language-c highlighter-rouge">
+            <div class="highlight">
+              <pre
+                class="highlight"
+              ><code><span class="kt">char</span> <span class="n">data</span> <span class="o">=</span> <span class="o">*</span><span class="p">(</span><span class="kt">char</span><span class="o">*</span><span class="p">)</span><span class="mh">0xffffffff81a000e0</span><span class="p">;</span>
+<span class="kt">char</span> <span class="n">tmp</span> <span class="o">=</span> <span class="n">array</span><span class="p">[</span><span class="n">data</span> <span class="o">*</span> <span class="mi">4096</span><span class="p">];</span>
+</code></pre>
+            </div>
+          </div>
+
+          <p>
+            我们可以看到第一行访问了一个内核空间的地址，理论上会因无权访问而触发段错误，从而中止程序的运行。然而我们之前提到错误检查是在提交阶段才进行的，于是第二行的代码有很大概率会在读到
+            <code class="language-plaintext highlighter-rouge">data</code>
+            之后到触发异常之前的时间窗口内提前执行。虽然这种乱序执行最终不会对寄存器有任何可见的影响，但容易被忽略的一点是，<code
+              class="language-plaintext highlighter-rouge"
+              >array</code
+            >
+            的部分数据被载入了缓存。虽然我们无法读取缓存中的数据，但我们可以通过
+            Flush+Reload 攻击来判断是
+            <code class="language-plaintext highlighter-rouge">array</code>
+            的哪部分被载入了缓存，从而得知
+            <code class="language-plaintext highlighter-rouge">data</code>
+            的值是多少。比如我们可以根据下图的用时曲线推断出
+            <code class="language-plaintext highlighter-rouge">data = 84</code
+            >：
+          </p>
+
+          <p><img src="/images/spectre-meltdown-foreshadow-01.png" alt="" /></p>
+
+          <p>
+            像这样在极短的时间窗口内留下副作用的指令，在论文中被称为<strong>暂态执行</strong>（Transient
+            Execution），这也是幽灵系列漏洞的核心技术。因为不少主流操作系统都在内核空间中直接映射了物理内存，所以通过暂态执行和缓存旁路攻击能够提取物理内存中的所有数据，危害性极强。
+          </p>
+
+          <h3 id="影响范围">影响范围</h3>
+
+          <table>
+            <thead>
+              <tr>
+                <th>厂商</th>
+                <th>产品</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>Intel</td>
+                <td>几乎所有在售的 CPU</td>
+              </tr>
+              <tr>
+                <td>AMD</td>
+                <td>未受影响</td>
+              </tr>
+              <tr>
+                <td>ARM</td>
+                <td>仅 Cortex-A75 受到影响</td>
+              </tr>
+              <tr>
+                <td>IBM</td>
+                <td>z/Architecture 和 Power 架构均受影响</td>
+              </tr>
+              <tr>
+                <td>Apple</td>
+                <td>所有在售的 Mac 和 iOS 设备</td>
+              </tr>
+            </tbody>
+          </table>
+
+          <h3 id="对策">对策</h3>
+
+          <ul>
+            <li>
+              <p>
+                硬件：重新设计 CPU
+                以确保在发射读取指令之前进行权限检查，英特尔已于 Coffee Lake
+                Refresh 及后续微架构中修补熔毁漏洞，但之前的 CPU
+                就只能软件修补了；
+              </p>
+            </li>
+            <li>
+              <p>软件：各大操作系统都推出了内核页表隔离补丁来抵御熔毁漏洞：</p>
+
+              <ul>
+                <li>Linux 4.15 已部署 Kernel Page-Table Isolation；</li>
+                <li>Windows 10 build 17035 已部署 KVA Shadow；</li>
+                <li>macOS 10.13.2 / iOS 11.2 已部署 Double Map；</li>
+                <li>……</li>
+              </ul>
+            </li>
+          </ul>
+
+          <h2 id="内核页表隔离">内核页表隔离</h2>
+
+          <p>
+            说起 Linux
+            这次针对熔毁漏洞的内核页表隔离补丁，其背后还有一段不短的历史，最早要从
+            Linux 的内核地址空间布局开始说起。
+          </p>
+
+          <h3 id="kaslr">KASLR</h3>
+
+          <p>
+            最早 Linux
+            的内核映像在地址空间中的地址是固定的，这使黑客能够硬编码地址对 Linux
+            进行攻击。为了使这类攻击不容易奏效，Linux 3.14
+            引入了<strong>内核地址空间布局随机化</strong>（Kernel Address Space
+            Layout
+            Randomization），也就是说在每次系统启动时可以随机生成一个内核映像地址的偏移量，不过直到
+            Linux 4.12 开始 KASLR 才被默认开启。
+          </p>
+
+          <h3 id="kaiser">KAISER</h3>
+
+          <p>
+            虽然 KASLR 增加了攻击的难度，但不能杜绝黑客访问到内核映像。2017
+            年，格拉茨科技大学的研究人员提出了<strong>高效移除旁路的内核地址隔离</strong>（Kernel
+            Address Isolation to have Side-channels Efficiently
+            Removed）补丁来进一步加固，恰好这个补丁对后来的熔毁漏洞也十分有效。KAISER
+            提议内核态和用户态使用两张不同的页表，内核态的页表还跟原来一样，而用户态的页表中不再暴露内核地址空间，除了少量
+            x86
+            架构必需的部分。不过其缺点也很明显，切换页表和清空转译后备缓冲器（Translation
+            Lookaside Buffer）带来了不少额外的性能开销。
+          </p>
+
+          <h3 id="kpti">KPTI</h3>
+
+          <p>
+            在得知熔毁漏洞之后，Linux 社区开始着手从软件层面进行修补。开发团队在
+            KAISER
+            的基础上加入了一些优化，譬如支持进程上下文标识符（Process-Context
+            Identifier）以避免清空页表缓存从而降低性能影响，并将其改名为<strong>内核页表隔离</strong>（Kernel
+            Page-Table Isolation）最终并入了 Linux 4.15。
+          </p>
+
+          <h2 id="幽灵spectre">幽灵（Spectre）</h2>
+
+          <p>
+            幽灵漏洞的影响范围比熔毁漏洞更加广泛，影响当下几乎所有计算机系统；不过幽灵漏洞相较而言更难利用，因为它需要被攻击的软件中包含特定形式的可利用代码。
+          </p>
+
+          <p>
+            幽灵漏洞的核心也是暂态执行，暂态执行除了前面叙述的乱序执行之外还有其他的触发方式，而幽灵的论文中便提到了两种，这两种均与分支预测有关。因为分支指令可能涉及内存读取，需要上百个时钟周期才能完成，因此现代处理器都设计了分支预测器来预先推测执行。一个解耦的分支预测器通常包含两个部分：
+          </p>
+
+          <ul>
+            <li>
+              分支方向预测器：预测分支的条件是真是假，通常利用模式历史表（Pattern
+              History Table）等进行预测；
+            </li>
+            <li>
+              目标地址预测器：预测间接跳转的目标地址，通常利用分支目标缓冲器（Branch
+              Target Buffer）等进行预测。
+            </li>
+          </ul>
+
+          <p>
+            幽灵漏洞的步骤与熔毁漏洞类似，也是通过缓存旁路攻击来获取暂态执行泄漏的信息。在攻击之前，通常还会训练分支预测器，使其运行目标代码时会进行特定的预测执行；同时可以把条件判断所需的数据挤出缓存，以提高预测执行发生的概率。
+          </p>
+
+          <h3 id="变体一边界检查绕过">变体一：边界检查绕过</h3>
+
+          <p>我们设想系统调用或库中有这样一段代码：</p>
+
+          <div class="language-c highlighter-rouge">
+            <div class="highlight">
+              <pre
+                class="highlight"
+              ><code><span class="k">if</span> <span class="p">(</span><span class="n">x</span> <span class="o">&lt;</span> <span class="n">len</span><span class="p">(</span><span class="n">array1</span><span class="p">))</span>
+    <span class="n">y</span> <span class="o">=</span> <span class="n">array2</span><span class="p">[</span><span class="n">array1</span><span class="p">[</span><span class="n">x</span><span class="p">]</span> <span class="o">*</span> <span class="mi">4096</span><span class="p">];</span>
+</code></pre>
+            </div>
+          </div>
+
+          <p>
+            其中
+            <code class="language-plaintext highlighter-rouge">x</code>
+            是一个外部传入的变量，所以条件语句进行了数组越界的检查。我们可以训练分支预测器让它暂态执行第二行的代码，则
+            <code class="language-plaintext highlighter-rouge">array1[x]</code>
+            可以访问任意数据，再对
+            <code class="language-plaintext highlighter-rouge">array2</code>
+            进行缓存旁路攻击即可。
+          </p>
+
+          <p>
+            Spectre-V1 影响几乎所有
+            CPU，且不仅可以在系统级编程语言中构造，在带即时编译优化的 JavaScript
+            引擎中亦可复现。因此 Mozilla 宣布从 Firefox 57 开始
+            <code class="language-plaintext highlighter-rouge"
+              >performance.now()</code
+            >
+            的精度将降到 20µs，<code
+              class="language-plaintext highlighter-rouge"
+              >SharedArrayBuffer</code
+            >
+            将默认禁用。而英特尔等厂商未推出硬件解决方案，建议开发者从软件层面解决，譬如
+            ICC 新增
+            <code class="language-plaintext highlighter-rouge"
+              >-mconditional-branch=pattern-fix</code
+            >
+            选项来自动插入
+            <code class="language-plaintext highlighter-rouge">LFENCE</code>
+            指令避免预测执行。
+          </p>
+
+          <p><img src="/images/spectre-meltdown-foreshadow-02.png" alt="" /></p>
+
+          <h3 id="变体二分支目标注入">变体二：分支目标注入</h3>
+
+          <p>
+            第二个变体则是针对间接跳转目标地址的预测，我们可以训练分支预测器对方法调用等进行错误的目标地址预测，使其暂态执行我们挑选的可利用代码，辅以缓存旁路攻击获取机密数据。
+          </p>
+
+          <p>
+            Spectre-V2 同样也影响几乎所有 CPU。英特尔发布了微码更新，引入了三种
+            Indirect Branch Control
+            Mechanisms，可供对间接跳转预测进行限制。而谷歌工程师提出了
+            Retpoline，将间接跳转指令替换为返回指令，并将预测执行拖入死循环以缓解漏洞，ICC
+            / GCC / Clang 等各大编译器均已提供支持。譬如 x86 (Intel Syntax) 中的
+            <code class="language-plaintext highlighter-rouge">jmp rax</code>
+            指令会被 Retpoline 替换为：
+          </p>
+
+          <div class="language-nasm highlighter-rouge">
+            <div class="highlight">
+              <pre
+                class="highlight"
+              ><code><span class="err">1:</span>    <span class="nf">call</span> <span class="nv">set_up_target</span>
+  <span class="nl">capture_spec:</span>
+<span class="err">2:</span>    <span class="nf">pause</span>
+<span class="err">3:</span>    <span class="nf">jmp</span> <span class="nv">capture_spec</span>
+  <span class="nl">set_up_target:</span>
+<span class="err">4:</span>    <span class="nf">mov</span> <span class="p">[</span><span class="nb">rsp</span><span class="p">],</span> <span class="nb">rax</span>
+<span class="err">5:</span>    <span class="nf">ret</span>
+</code></pre>
+            </div>
+          </div>
+
+          <p>
+            虽然处理器对于间接跳转目标地址的预测相对复杂，容易被投毒；但对于返回指令目标地址的预测是确定的，主要依赖一个后进先出的返回栈缓冲器（Return
+            Stack Buffer）。在上面的例子中，指令 1 会将指令 2 的地址压入 RSB
+            中，并直接跳转到指令 4，指令 4
+            会将原来间接跳转的目标地址写入调用栈中返回地址的位置，于是下一行的返回指令
+            5 便完成了间接跳转的工作。另一方面，如果处理器进行了预测执行，在指令
+            5 处它会读取 RSB 并跳转到指令
+            2，接下来预测执行便陷入了死循环，直到处理器意识到预测并不正确。这样一来，Retpoline
+            便杜绝了目标地址预测被投毒的可能性。
+          </p>
+
+          <h2 id="预兆foreshadow">预兆（Foreshadow）</h2>
+
+          <p>
+            在全世界计算机安全风雨飘摇的一年里，大家都在寻找更加安全的可信计算环境，而其中经常被提到的便是
+            SGX。SGX 全称软件保护扩展（Software Guard
+            Extensions），是英特尔处理器的一组扩展指令集。SGX
+            能够在内存上创建飞地（Enclave），这块空间受到处理器的严格保护，OS /
+            Hypervisor / BIOS 等系统软件亦无法访问，相当于一个硬件级别的沙盒。
+          </p>
+
+          <p>
+            可惜的是，SGX
+            也被熔毁漏洞的变体攻破了，这个变体被称为预兆漏洞。其流程与熔毁漏洞相似，但
+            SGX 的安全机制使攻击流程多了两步：
+          </p>
+
+          <ul>
+            <li>
+              即使利用乱序执行漏洞，SGX 飞地数据也无法从内存读取，必须预先加载到
+              L1 缓存才能绕过限制，这也是该漏洞被英特尔官方命名为 L1 Terminal
+              Fault 的原因；
+            </li>
+            <li>
+              对指向 SGX 飞地的指针解引用会返回中止页（Abort Page）使得结果为
+              -1，而不像之前因访问内核空间而缺页（Page
+              Fault）。为了绕开这个限制，需要调用
+              <code class="language-plaintext highlighter-rouge">mprotect</code>
+              函数将页表项的 Present
+              位设为无效，从而提前在传统页表检查时便抛出缺页。
+            </li>
+          </ul>
+
+          <p>
+            预兆漏洞影响英特尔所有支持 SGX 的 CPU，即 Skylake
+            及其后续微架构，Atom 系列除外。英特尔已经发布了微码更新，后续 CPU
+            也将进行硬件修复。
+          </p>
+
+          <h2 id="系统性分类">系统性分类</h2>
+
+          <p>
+            随着幽灵系列漏洞如雨后春笋般不断涌现，格拉茨科技大学的研究人员又撰写了论文对暂态执行攻击进行了系统性分类和梳理分析。首先论文以暂态执行的成因将攻击分为幽灵和熔毁两大类：前者是预测执行的误判，后者是乱序执行对异常的延时处理。
+          </p>
+
+          <p>对于幽灵类的攻击，论文以预测执行所依赖的处理器元件进行分类：</p>
+
+          <ul>
+            <li>
+              Spectre-PHT：利用的是进行分支方向预测的模式历史表，包括
+              Spectre-V1、Spectre 1.1、NetSpectre；
+            </li>
+            <li>
+              Spectre-BTB：利用的是进行目标地址预测的分支目标缓冲器，包括
+              Spectre-V2；
+            </li>
+            <li>
+              Spectre-RSB：利用的是进行返回地址预测的返回栈缓冲器，包括
+              SpectreRSB、ret2spec；
+            </li>
+            <li>
+              Spectre-STL：利用的是进行内存依赖预测的 store-to-load 转发，包括
+              Spectre-V4。
+            </li>
+          </ul>
+
+          <p>
+            对于熔毁类的攻击，论文首先以异常类型分类，如果利用的异常是缺页则再基于页表项的属性位进行二级分类：
+          </p>
+
+          <ul>
+            <li>
+              Meltdown-GP：使用
+              <code class="language-plaintext highlighter-rouge">RDMSR</code>
+              等指令非法读取系统寄存器会触发一般保护错误（General Protection
+              Fault，#GP），利用这个异常进行暂态执行的攻击是 Spectre-V3a；
+            </li>
+            <li>
+              Meltdown-NM：FPU 的 SIMD
+              寄存器很大，然而不是所有进程都会用到它们，所以基于性能考虑，英特尔处理器没有在每次上下文切换的时候都保存和恢复这些寄存器。当新的进程第一次访问这些寄存器时，会触发设备不可用错误（Device
+              Not
+              Available，#NM），此时才会将它们保存进上一个进程的上下文中。利用这个异常进行暂态执行的攻击是
+              LazyFP；
+            </li>
+            <li>
+              Meltdown-BR：现代处理器通常支持
+              <code class="language-plaintext highlighter-rouge">BOUND</code>
+              指令来进行数组越界的检查，更新的还有英特尔的扩展指令集
+              MPX，它们都会在数组越界时触发越界错误（BOUND Range
+              Exceeded，#BR），论文在英特尔和 AMD
+              的处理器上成功实施了基于该异常的攻击；
+            </li>
+            <li>
+              Meltdown-PF：基于缺页（Page Fault，#PF）的暂态执行攻击；
+              <ul>
+                <li>
+                  Meltdown-P：如前文所述，Foreshadow 和 Foreshadow-NG 为了绕开
+                  SGX 的限制，通过将页表项的 Present 位设为无效引发缺页；
+                </li>
+                <li>
+                  Meltdown-RW：Spectre 1.2 指出可以在暂态执行期间无视 Read/Write
+                  位对只读数据进行写入；
+                </li>
+                <li>
+                  Meltdown-US：元祖 Meltdown，利用了 User/Supervisor
+                  位引发的缺页；
+                </li>
+                <li>
+                  Meltdown-PK：英特尔的 Skylake-SP 服务器处理器支持了 Memory
+                  Protection Keys for
+                  Userspace，可在用户空间更改页的权限，但论文提出该权限控制可通过暂态执行绕过。
+                </li>
+              </ul>
+            </li>
+          </ul>
+
+          <p>
+            论文中还分析了一些可能存在但实际上未能成功的攻击种类，在这里就不一一赘述了。
+          </p>
+
+          <p><img src="/images/spectre-meltdown-foreshadow-03.png" alt="" /></p>
+
+          <h2 id="参考论文">参考论文</h2>
+
+          <ol>
+            <li>
+              Paul Kocher, et al.
+              <a href="https://spectreattack.com/spectre.pdf"
+                >Spectre Attacks: Exploiting Speculative Execution</a
+              >. 40th IEEE Symposium on Security and Privacy. San Francisco,
+              USA. May 20-22, 2019.
+            </li>
+            <li>
+              Moritz Lipp, et al.
+              <a href="https://meltdownattack.com/meltdown.pdf"
+                >Meltdown: Reading Kernel Memory from User Space</a
+              >. 27th USENIX Security Symposium. Baltimore, USA. August 15-17,
+              2018.
+            </li>
+            <li>
+              Van Bulck, et al.
+              <a href="https://foreshadowattack.eu/foreshadow.pdf"
+                >Foreshadow: Extracting the Keys to the Intel SGX Kingdom with
+                Transient Out-of-Order Execution</a
+              >. 27th USENIX Security Symposium. Baltimore, USA. August 15-17,
+              2018.
+            </li>
+            <li>
+              Claudio Canella, et al.
+              <a href="https://arxiv.org/pdf/1811.05441"
+                >A Systematic Evaluation of Transient Execution Attacks and
+                Defenses</a
+              >. arXiv:1811.05441.
+            </li>
+            <li>
+              Daniel Gruss, et al.
+              <a href="https://gruss.cc/files/kaiser.pdf"
+                >KASLR is Dead: Long Live KASLR</a
+              >. 9th International Symposium on Engineering Secure Software and
+              Systems. Bonn, Germany. July 4-5, 2017.
+            </li>
+            <li>
+              Daniel Gruss, et al.
+              <a
+                href="https://www.usenix.org/system/files/login/articles/login_winter18_03_gruss.pdf"
+                >Kernel Isolation: From an Academic Idea to an Effective Patch
+                for Every Computer</a
+              >. USENIX ;login: Winter 2018.
+            </li>
+            <li>
+              Oliverio J. Santana, et al.
+              <a
+                href="http://citeseerx.ist.psu.edu/viewdoc/download?doi=10.1.1.2.4047&amp;rep=rep1&amp;type=pdf"
+                >A Comprehensive Analysis of Indirect Branch Prediction</a
+              >. 4th International Symposium on High Performance Computing.
+              Kansai Science City, Japan. May 15-17, 2002.
+            </li>
+          </ol>
+        </div>
+
+        <div class="comments">
+          <div id="disqus_thread"></div>
+          <script>
+            var disqus_config = function () {
+              this.page.url =
+                "https://blog.yzsun.me/spectre-meltdown-foreshadow/";
+              this.page.identifier = "/spectre-meltdown-foreshadow/";
+            };
+            (function () {
+              var d = document,
+                s = d.createElement("script");
+              s.src = "//yzyzsun.disqus.com/embed.js";
+              s.setAttribute("data-timestamp", +new Date());
+              (d.head || d.body).appendChild(s);
+            })();
+          </script>
+          <noscript
+            >Please enable JavaScript to view the
+            <a href="https://disqus.com/?ref_noscript"
+              >comments powered by Disqus.</a
+            ></noscript
+          >
+        </div>
+      </article>
+    </div>
+
+    <div class="wrapper-footer">
+      <div class="container">
+        <footer class="footer">
+          <a href="https://github.com/yzyzsun"
+            ><i class="svg-icon github"></i
+          ></a>
+
+          <a href="/feed.xml"><i class="svg-icon rss"></i></a>
+        </footer>
+      </div>
+    </div>
+
+    <!-- Google Analytics -->
+    <script>
+      (function (i, s, o, g, r, a, m) {
+        i["GoogleAnalyticsObject"] = r;
+        (i[r] =
+          i[r] ||
+          function () {
+            (i[r].q = i[r].q || []).push(arguments);
+          }),
+          (i[r].l = 1 * new Date());
+        (a = s.createElement(o)), (m = s.getElementsByTagName(o)[0]);
+        a.async = 1;
+        a.src = g;
+        m.parentNode.insertBefore(a, m);
+      })(
+        window,
+        document,
+        "script",
+        "//www.google-analytics.com/analytics.js",
+        "ga"
+      );
+
+      ga("create", "UA-65994616-1", "auto");
+      ga("send", "pageview", {
+        page: "/spectre-meltdown-foreshadow/",
+        title: "幽灵・熔毁・预兆",
+      });
+    </script>
+    <!-- End Google Analytics -->
+  </body>
+</html>

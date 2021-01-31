@@ -1,0 +1,560 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+  <head>
+    <title>Ruby: collect, detect, inject, reject, select | 孙耀珠的博客</title>
+
+    <meta charset="utf-8" />
+    <meta content="text/html; charset=utf-8" http-equiv="Content-Type" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1.0, maximum-scale=1.0"
+    />
+    <meta
+      name="google-site-verification"
+      content="zYt2wigM41vmyHtpvOvLHk4Yetcfbv5Bz9pdvsTRT3Y"
+    />
+
+    <!-- Begin Jekyll SEO tag v2.7.1 -->
+    <meta name="generator" content="Jekyll v4.2.0" />
+    <meta
+      property="og:title"
+      content="Ruby: collect, detect, inject, reject, select"
+    />
+    <meta name="author" content="孙耀珠" />
+    <meta property="og:locale" content="en_US" />
+    <meta
+      name="description"
+      content="在比较 Ruby 和 Python 的时候，很多人会说 Python 是一门简约的语言，而 Ruby 是一门魔幻的语言。之所以说 Ruby 魔幻，一方面是因为神奇的元编程和甜甜的语法糖，另一方面是在 Ruby 中总有不止一种方法去做一件事（There’s more than one way to do it），循环便是其中一例。 如果写过主流的结构化编程语言，那么一定对 for 循环非常熟悉吧。Pascal 继承了 ALGOL 风格的 for 循环，由初值、终值以及可选的步长组成；C 语言则创造了现在广为人知的三段式 for 循环，被 Java / JavaScript / PHP 等主流语言所沿用；而 Python / Swift 等语言使用 for-in 语句结合 range 也能实现相同的功能： for i := 0 to n-1 do …… ⍝ Pascal for (int i = 0; i &lt; n; ++i) …… ⍝ C for i in range(0, n): …… ⍝ Python for i in 0..&lt;n { …… } ⍝ Swift 而在 Ruby 的世界中，有一些有趣的方法可以取代 for 循环： n.times { |i| …… } 0.upto(n-1) { |i| …… } (0...n).each { |i| …… } 不过 Ruby 并没有激进地删掉 for 关键字，实现了 each 方法的对象都能以 for-in 语句进行迭代。像上述 times / upto / each 这样的方法在 Ruby 中被称为迭代器（iterator），其实现方式与后来 Python / JavaScript 等语言中的生成器（generator）相似，但使用方式更接近于函数式编程中广泛采用的高阶函数（higher-order function）。"
+    />
+    <meta
+      property="og:description"
+      content="在比较 Ruby 和 Python 的时候，很多人会说 Python 是一门简约的语言，而 Ruby 是一门魔幻的语言。之所以说 Ruby 魔幻，一方面是因为神奇的元编程和甜甜的语法糖，另一方面是在 Ruby 中总有不止一种方法去做一件事（There’s more than one way to do it），循环便是其中一例。 如果写过主流的结构化编程语言，那么一定对 for 循环非常熟悉吧。Pascal 继承了 ALGOL 风格的 for 循环，由初值、终值以及可选的步长组成；C 语言则创造了现在广为人知的三段式 for 循环，被 Java / JavaScript / PHP 等主流语言所沿用；而 Python / Swift 等语言使用 for-in 语句结合 range 也能实现相同的功能： for i := 0 to n-1 do …… ⍝ Pascal for (int i = 0; i &lt; n; ++i) …… ⍝ C for i in range(0, n): …… ⍝ Python for i in 0..&lt;n { …… } ⍝ Swift 而在 Ruby 的世界中，有一些有趣的方法可以取代 for 循环： n.times { |i| …… } 0.upto(n-1) { |i| …… } (0...n).each { |i| …… } 不过 Ruby 并没有激进地删掉 for 关键字，实现了 each 方法的对象都能以 for-in 语句进行迭代。像上述 times / upto / each 这样的方法在 Ruby 中被称为迭代器（iterator），其实现方式与后来 Python / JavaScript 等语言中的生成器（generator）相似，但使用方式更接近于函数式编程中广泛采用的高阶函数（higher-order function）。"
+    />
+    <link rel="canonical" href="https://blog.yzsun.me/ruby-iterators/" />
+    <meta property="og:url" content="https://blog.yzsun.me/ruby-iterators/" />
+    <meta property="og:site_name" content="孙耀珠的博客" />
+    <meta property="og:type" content="article" />
+    <meta
+      property="article:published_time"
+      content="2016-01-04T00:00:00+00:00"
+    />
+    <meta name="twitter:card" content="summary" />
+    <meta
+      property="twitter:title"
+      content="Ruby: collect, detect, inject, reject, select"
+    />
+    <script type="application/ld+json">
+      {
+        "description": "在比较 Ruby 和 Python 的时候，很多人会说 Python 是一门简约的语言，而 Ruby 是一门魔幻的语言。之所以说 Ruby 魔幻，一方面是因为神奇的元编程和甜甜的语法糖，另一方面是在 Ruby 中总有不止一种方法去做一件事（There’s more than one way to do it），循环便是其中一例。 如果写过主流的结构化编程语言，那么一定对 for 循环非常熟悉吧。Pascal 继承了 ALGOL 风格的 for 循环，由初值、终值以及可选的步长组成；C 语言则创造了现在广为人知的三段式 for 循环，被 Java / JavaScript / PHP 等主流语言所沿用；而 Python / Swift 等语言使用 for-in 语句结合 range 也能实现相同的功能： for i := 0 to n-1 do …… ⍝ Pascal for (int i = 0; i &lt; n; ++i) …… ⍝ C for i in range(0, n): …… ⍝ Python for i in 0..&lt;n { …… } ⍝ Swift 而在 Ruby 的世界中，有一些有趣的方法可以取代 for 循环： n.times { |i| …… } 0.upto(n-1) { |i| …… } (0...n).each { |i| …… } 不过 Ruby 并没有激进地删掉 for 关键字，实现了 each 方法的对象都能以 for-in 语句进行迭代。像上述 times / upto / each 这样的方法在 Ruby 中被称为迭代器（iterator），其实现方式与后来 Python / JavaScript 等语言中的生成器（generator）相似，但使用方式更接近于函数式编程中广泛采用的高阶函数（higher-order function）。",
+        "url": "https://blog.yzsun.me/ruby-iterators/",
+        "@type": "BlogPosting",
+        "headline": "Ruby: collect, detect, inject, reject, select",
+        "dateModified": "2016-01-04T00:00:00+00:00",
+        "datePublished": "2016-01-04T00:00:00+00:00",
+        "mainEntityOfPage": {
+          "@type": "WebPage",
+          "@id": "https://blog.yzsun.me/ruby-iterators/"
+        },
+        "author": { "@type": "Person", "name": "孙耀珠" },
+        "@context": "https://schema.org"
+      }
+    </script>
+    <!-- End Jekyll SEO tag -->
+
+    <link
+      type="application/atom+xml"
+      rel="alternate"
+      href="https://blog.yzsun.me/feed.xml"
+      title="孙耀珠的博客"
+    />
+
+    <!--[if lt IE 9]>
+      <script src="//cdnjs.cloudflare.com/ajax/libs/html5shiv/r29/html5.min.js"></script>
+    <![endif]-->
+
+    <link rel="stylesheet" href="/style.css" />
+  </head>
+
+  <body>
+    <div class="wrapper-masthead">
+      <div class="container">
+        <header class="masthead clearfix">
+          <a href="/" class="site-avatar"
+            ><img src="/images/avatar.jpg" alt="avatar"
+          /></a>
+
+          <div class="site-info">
+            <h1 class="site-domain"><a href="/">yzsun.me</a></h1>
+            <p class="site-name">孙耀珠的博客</p>
+          </div>
+
+          <nav>
+            <a href="/">首页</a>
+            <a href="/archive/">归档</a>
+            <a href="/about/">关于</a>
+          </nav>
+        </header>
+      </div>
+    </div>
+
+    <div id="main" role="main" class="container">
+      <article class="post">
+        <h1>Ruby: collect, detect, inject, reject, select</h1>
+
+        <div class="info">
+          <span>
+            <i class="fa fa-calendar"></i>
+            2016-01-04
+          </span>
+          <span>
+            <i class="fa fa-user"></i>
+            孙耀珠
+          </span>
+          <span>
+            <i class="fa fa-tags"></i>
+            编程语言
+          </span>
+        </div>
+
+        <div class="entry">
+          <p>
+            在比较 Ruby 和 Python 的时候，很多人会说 Python 是一门简约的语言，而
+            Ruby 是一门魔幻的语言。之所以说 Ruby
+            魔幻，一方面是因为神奇的元编程和甜甜的语法糖，另一方面是在 Ruby
+            中总有不止一种方法去做一件事（<a
+              href="https://en.wikipedia.org/wiki/There%27s_more_than_one_way_to_do_it"
+              >There’s more than one way to do it</a
+            >），循环便是其中一例。
+          </p>
+
+          <p>
+            如果写过主流的结构化编程语言，那么一定对 for 循环非常熟悉吧。Pascal
+            继承了 ALGOL 风格的 for 循环，由初值、终值以及可选的步长组成；C
+            语言则创造了现在广为人知的三段式 for 循环，被 Java / JavaScript /
+            PHP 等主流语言所沿用；而 Python / Swift 等语言使用 for-in 语句结合
+            range 也能实现相同的功能：
+          </p>
+
+          <div class="language-plaintext highlighter-rouge">
+            <div class="highlight">
+              <pre
+                class="highlight"
+              ><code>for i := 0 to n-1 do ……         ⍝ Pascal
+for (int i = 0; i &lt; n; ++i) ……  ⍝ C
+for i in range(0, n): ……        ⍝ Python
+for i in 0..&lt;n { …… }           ⍝ Swift
+</code></pre>
+            </div>
+          </div>
+
+          <p>而在 Ruby 的世界中，有一些有趣的方法可以取代 for 循环：</p>
+
+          <div class="language-ruby highlighter-rouge">
+            <div class="highlight">
+              <pre
+                class="highlight"
+              ><code><span class="n">n</span><span class="p">.</span><span class="nf">times</span> <span class="p">{</span> <span class="o">|</span><span class="n">i</span><span class="o">|</span> <span class="err">……</span> <span class="p">}</span>
+<span class="mi">0</span><span class="p">.</span><span class="nf">upto</span><span class="p">(</span><span class="n">n</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span> <span class="p">{</span> <span class="o">|</span><span class="n">i</span><span class="o">|</span> <span class="err">……</span> <span class="p">}</span>
+<span class="p">(</span><span class="mi">0</span><span class="o">...</span><span class="n">n</span><span class="p">).</span><span class="nf">each</span> <span class="p">{</span> <span class="o">|</span><span class="n">i</span><span class="o">|</span> <span class="err">……</span> <span class="p">}</span>
+</code></pre>
+            </div>
+          </div>
+
+          <p>
+            不过 Ruby 并没有激进地删掉 for 关键字，实现了
+            <code class="language-plaintext highlighter-rouge">each</code>
+            方法的对象都能以 for-in 语句进行迭代。像上述
+            <code class="language-plaintext highlighter-rouge">times</code> /
+            <code class="language-plaintext highlighter-rouge">upto</code> /
+            <code class="language-plaintext highlighter-rouge">each</code>
+            这样的方法在 Ruby
+            中被称为<strong>迭代器</strong>（iterator），其实现方式与后来 Python
+            / JavaScript
+            等语言中的<strong>生成器</strong>（generator）相似，但使用方式更接近于函数式编程中广泛采用的<strong>高阶函数</strong>（higher-order
+            function）。
+          </p>
+
+          <!--more-->
+
+          <div class="language-ruby highlighter-rouge">
+            <div class="highlight">
+              <pre
+                class="highlight"
+              ><code><span class="k">def</span> <span class="nf">fibonacci</span><span class="p">(</span><span class="n">n</span><span class="p">)</span>
+  <span class="n">x</span><span class="p">,</span> <span class="n">y</span> <span class="o">=</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span>
+  <span class="n">n</span><span class="p">.</span><span class="nf">times</span> <span class="k">do</span>
+    <span class="k">yield</span> <span class="n">x</span>
+    <span class="n">x</span><span class="p">,</span> <span class="n">y</span> <span class="o">=</span> <span class="n">y</span><span class="p">,</span> <span class="n">x</span> <span class="o">+</span> <span class="n">y</span>
+  <span class="k">end</span>
+<span class="k">end</span>
+<span class="n">fibonacci</span><span class="p">(</span><span class="mi">10</span><span class="p">)</span> <span class="p">{</span> <span class="o">|</span><span class="n">x</span><span class="o">|</span> <span class="nb">puts</span> <span class="n">x</span> <span class="p">}</span>
+</code></pre>
+            </div>
+          </div>
+
+          <p>
+            在这段代码中，我们首先定义了一个斐波那契数列的迭代器，接着用它打印了数列的前十项。一个方法被称为迭代器的充要条件是其使用了
+            <code class="language-plaintext highlighter-rouge">yield</code>
+            关键字，这也意味着在调用该方法时需要紧跟着一个形如
+            <code class="language-plaintext highlighter-rouge">{ …… }</code> 或
+            <code class="language-plaintext highlighter-rouge">do …… end</code>
+            的<strong>代码块</strong>（block）。迭代器在执行到
+            <code class="language-plaintext highlighter-rouge">yield</code>
+            语句时会将控制权暂时移交给代码块，<code
+              class="language-plaintext highlighter-rouge"
+              >yield</code
+            >
+            的值将成为代码块的参数，代码块执行完之后迭代器将重获控制权并继续执行下去，如此反复便达到了迭代的效果。而这个代码块实际上是
+            Ruby
+            中一种特殊的<strong>闭包</strong>（closure），它只能跟在方法后面而不能单独存在，如果希望存储或是传递闭包，则需将其转换
+            proc 或 lambda（前者的行为类似于代码块、后者类似于方法）。
+          </p>
+
+          <p>
+            我们可以注意到，迭代器的做法与绝大多数结构化编程语言的区别是：以普通的方法调用取代了特殊的控制语句。那么我们有没有可能进一步用
+            OOP 的特性消灭掉所有控制流的语法呢？其实这早在 1970 年代初就被
+            Smalltalk 实现了：Smalltalk 没有 if / while / for
+            语句，一切控制流都被动态派发的<strong>消息传递</strong>所取代。首先以
+            if 为例：
+          </p>
+
+          <div class="language-smalltalk highlighter-rouge">
+            <div class="highlight">
+              <pre
+                class="highlight"
+              ><code><span class="nv">result</span> <span class="o">:=</span> <span class="nv">a</span> <span class="nf">&gt;</span> <span class="nv">b</span>
+    <span class="nb">ifTrue:</span> <span class="p">[</span> <span class="s">'greater'</span> <span class="p">]</span>
+    <span class="nb">ifFalse:</span> <span class="p">[</span> <span class="s">'less or equal'</span> <span class="p">].</span>
+</code></pre>
+            </div>
+          </div>
+
+          <p>
+            Smalltalk 中的条件判断是向
+            <code class="language-plaintext highlighter-rouge">Boolean</code>
+            对象发送
+            <code class="language-plaintext highlighter-rouge"
+              >ifTrue:ifFalse:</code
+            >
+            消息，而其子类
+            <code class="language-plaintext highlighter-rouge">True</code> 和
+            <code class="language-plaintext highlighter-rouge">False</code>
+            分别以相反的方式实现对该消息的响应：<code
+              class="language-plaintext highlighter-rouge"
+              >True</code
+            >
+            对象只执行
+            <code class="language-plaintext highlighter-rouge">ifTrue:</code>
+            的代码块，而
+            <code class="language-plaintext highlighter-rouge">False</code>
+            对象只执行
+            <code class="language-plaintext highlighter-rouge">ifFalse:</code>
+            的代码块。因为 Smalltalk 的消息是动态派发的，所以
+            <code class="language-plaintext highlighter-rouge">Boolean</code>
+            对象如何响应消息直到运行时才会决定，这样一来条件语句就被 Smalltalk
+            的多态特性完美地取代了。
+          </p>
+
+          <p>
+            而 Smalltalk 的条件循环则是向一个返回布尔值的代码块发送
+            <code class="language-plaintext highlighter-rouge">whileTrue:</code>
+            消息，利用上述的
+            <code class="language-plaintext highlighter-rouge">ifTrue:</code>
+            即可递归实现。下面是一个 while 的例子：
+          </p>
+
+          <div class="language-smalltalk highlighter-rouge">
+            <div class="highlight">
+              <pre
+                class="highlight"
+              ><code><span class="p">[</span> <span class="nv">i</span> <span class="nf">&gt;</span> <span class="m">0</span> <span class="p">]</span> <span class="nb">whileTrue:</span> <span class="p">[</span>
+    <span class="nc">Transcript</span> <span class="nf">showCr:</span> <span class="nv">i</span> <span class="nf">asString</span><span class="p">.</span>
+    <span class="nv">i</span> <span class="o">:=</span> <span class="nv">i</span> <span class="nf">-</span> <span class="m">1</span>
+<span class="p">].</span>
+</code></pre>
+            </div>
+          </div>
+
+          <p>
+            而 for 系列任务则交给
+            <code class="language-plaintext highlighter-rouge"
+              >timesRepeat:</code
+            >
+            /
+            <code class="language-plaintext highlighter-rouge">to:by:do:</code>
+            /
+            <code class="language-plaintext highlighter-rouge">do:</code>
+            等来完成，这些消息跟开头提到的 Ruby 方法极其相似，可以看到 Ruby 从
+            Smalltalk 中借鉴了相当多的想法：
+          </p>
+
+          <div class="language-smalltalk highlighter-rouge">
+            <div class="highlight">
+              <pre
+                class="highlight"
+              ><code><span class="nv">n</span> <span class="nb">timesRepeat:</span> <span class="p">[</span> <span class="err">……</span> <span class="p">].</span>
+<span class="m">0</span> <span class="nf">to:</span> <span class="nv">n</span><span class="nf">-</span><span class="m">1</span> <span class="nf">do:</span> <span class="p">[</span> <span class="o">:</span><span class="nv">i</span> <span class="p">|</span> <span class="err">……</span> <span class="p">].</span>
+<span class="ss">#(</span><span class="m">1</span> <span class="m">2</span> <span class="m">3</span><span class="ss">)</span> <span class="nf">do:</span> <span class="p">[</span> <span class="o">:</span><span class="nv">i</span> <span class="p">|</span> <span class="err">……</span> <span class="p">].</span>
+</code></pre>
+            </div>
+          </div>
+
+          <p>
+            另外十分有趣的是，常用的 map / reduce / filter 系列函数，在
+            Smalltalk 的
+            <code class="language-plaintext highlighter-rouge">Iterable</code>
+            类中都起了 -ect 后缀的名字，简直是强迫症的福音。Ruby 也将其继承到了
+            <code class="language-plaintext highlighter-rouge">Enumerable</code>
+            模块中，但凡实现了
+            <code class="language-plaintext highlighter-rouge">each</code>
+            方法的类都可以将其混入（mixin）。下面则是 Ruby 中这些方法的
+            <a href="http://ruby-doc.org/core/Enumerable.html">Reference</a>：
+          </p>
+
+          <ul id="markdown-toc">
+            <li>
+              <a href="#collect-map" id="markdown-toc-collect-map"
+                >#collect (#map)</a
+              >
+            </li>
+            <li>
+              <a href="#detect-find" id="markdown-toc-detect-find"
+                >#detect (#find)</a
+              >
+            </li>
+            <li>
+              <a href="#inject-reduce" id="markdown-toc-inject-reduce"
+                >#inject (#reduce)</a
+              >
+            </li>
+            <li><a href="#reject" id="markdown-toc-reject">#reject</a></li>
+            <li>
+              <a
+                href="#select-find_all--filter"
+                id="markdown-toc-select-find_all--filter"
+                >#select (#find_all / #filter)</a
+              >
+            </li>
+          </ul>
+
+          <h2 id="collect-map">#collect (#map)</h2>
+
+          <div class="language-plaintext highlighter-rouge">
+            <div class="highlight">
+              <pre class="highlight"><code>collect { |obj| block } → array
+collect → an_enumerator
+</code></pre>
+            </div>
+          </div>
+
+          <p>
+            对每个元素执行一次 block，返回一个由所有 block 返回值构成的新数组。
+          </p>
+
+          <div class="language-ruby highlighter-rouge">
+            <div class="highlight">
+              <pre
+                class="highlight"
+              ><code><span class="p">(</span><span class="mi">1</span><span class="o">..</span><span class="mi">4</span><span class="p">).</span><span class="nf">collect</span> <span class="p">{</span> <span class="o">|</span><span class="n">x</span><span class="o">|</span> <span class="n">x</span><span class="o">**</span><span class="mi">2</span> <span class="p">}</span>
+<span class="c1">#=&gt; [1, 4, 9, 16]</span>
+</code></pre>
+            </div>
+          </div>
+
+          <h2 id="detect-find">#detect (#find)</h2>
+
+          <div class="language-plaintext highlighter-rouge">
+            <div class="highlight">
+              <pre
+                class="highlight"
+              ><code>detect(ifnone = nil) { |obj| block } → obj or nil
+detect(ifnone = nil) → an_enumerator
+</code></pre>
+            </div>
+          </div>
+
+          <p>
+            找出第一个使 block 返回 true 的元素，若未找到则返回
+            nil。如果指定了参数，那么未找到时调用
+            <code class="language-plaintext highlighter-rouge"
+              >ifnone.call</code
+            >
+            并返回其结果。
+          </p>
+
+          <div class="language-ruby highlighter-rouge">
+            <div class="highlight">
+              <pre
+                class="highlight"
+              ><code><span class="p">(</span><span class="mi">1</span><span class="o">..</span><span class="mi">10</span><span class="p">).</span><span class="nf">detect</span> <span class="p">{</span> <span class="o">|</span><span class="n">x</span><span class="o">|</span> <span class="n">x</span> <span class="o">%</span> <span class="mi">4</span> <span class="o">==</span> <span class="mi">0</span> <span class="p">}</span>
+<span class="c1">#=&gt; 4</span>
+</code></pre>
+            </div>
+          </div>
+
+          <h2 id="inject-reduce">#inject (#reduce)</h2>
+
+          <div class="language-plaintext highlighter-rouge">
+            <div class="highlight">
+              <pre class="highlight"><code>inject(initial, sym) → obj
+inject(sym) → obj
+inject(initial) { |memo, obj| block } → obj
+inject { |memo, obj| block } → obj
+</code></pre>
+            </div>
+          </div>
+
+          <p>
+            通过二元运算将所有元素规约为一个对象，二元运算可以通过 block
+            或是方法、运算符的 symbol 来指定。如果指定的是
+            block，则上一轮规约结果和当前元素会分别作为 block
+            参数传入，而返回值将是本轮的规约结果；如果指定的是
+            symbol，则每轮规约结果是
+            <code class="language-plaintext highlighter-rouge"
+              >memo.sym(obj)</code
+            >。如果没有指定初值，则第一个元素会被作为初值使用。
+          </p>
+
+          <div class="language-ruby highlighter-rouge">
+            <div class="highlight">
+              <pre
+                class="highlight"
+              ><code><span class="p">(</span><span class="mi">1</span><span class="o">..</span><span class="mi">4</span><span class="p">).</span><span class="nf">inject</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span> <span class="p">{</span> <span class="o">|</span><span class="n">sum</span><span class="p">,</span> <span class="n">x</span><span class="o">|</span> <span class="n">sum</span> <span class="o">+</span> <span class="n">x</span><span class="o">**</span><span class="mi">2</span> <span class="p">}</span>
+<span class="c1">#=&gt; 30</span>
+<span class="p">(</span><span class="mi">1</span><span class="o">..</span><span class="mi">100</span><span class="p">).</span><span class="nf">inject</span><span class="p">(:</span><span class="o">+</span><span class="p">)</span>
+<span class="c1">#=&gt; 5050</span>
+</code></pre>
+            </div>
+          </div>
+
+          <h2 id="reject">#reject</h2>
+
+          <div class="language-plaintext highlighter-rouge">
+            <div class="highlight">
+              <pre class="highlight"><code>reject { |obj| block } → array
+reject → an_enumerator
+</code></pre>
+            </div>
+          </div>
+
+          <p>筛选出所有使 block 返回 false 的元素。</p>
+
+          <div class="language-ruby highlighter-rouge">
+            <div class="highlight">
+              <pre
+                class="highlight"
+              ><code><span class="p">(</span><span class="mi">1</span><span class="o">..</span><span class="mi">10</span><span class="p">).</span><span class="nf">reject</span> <span class="p">{</span> <span class="o">|</span><span class="n">x</span><span class="o">|</span> <span class="n">x</span> <span class="o">%</span> <span class="mi">4</span> <span class="o">==</span> <span class="mi">0</span> <span class="p">}</span>
+<span class="c1">#=&gt; [1, 2, 3, 5, 6, 7, 9, 10]</span>
+</code></pre>
+            </div>
+          </div>
+
+          <h2 id="select-find_all--filter">#select (#find_all / #filter)</h2>
+
+          <div class="language-plaintext highlighter-rouge">
+            <div class="highlight">
+              <pre class="highlight"><code>select { |obj| block } → array
+select → an_enumerator
+</code></pre>
+            </div>
+          </div>
+
+          <p>筛选出所有使 block 返回 true 的元素。</p>
+
+          <div class="language-ruby highlighter-rouge">
+            <div class="highlight">
+              <pre
+                class="highlight"
+              ><code><span class="p">(</span><span class="mi">1</span><span class="o">..</span><span class="mi">10</span><span class="p">).</span><span class="nf">select</span> <span class="p">{</span> <span class="o">|</span><span class="n">x</span><span class="o">|</span> <span class="n">x</span> <span class="o">%</span> <span class="mi">4</span> <span class="o">==</span> <span class="mi">0</span> <span class="p">}</span>
+<span class="c1">#=&gt; [4, 8]</span>
+</code></pre>
+            </div>
+          </div>
+
+          <hr />
+
+          <p>最后的最后，让我们用一首《Ruby》来给本文画上一个完美的句号。</p>
+
+          <link
+            rel="stylesheet"
+            href="https://cdn.jsdelivr.net/npm/aplayer/dist/APlayer.min.css"
+          />
+
+          <script src="https://cdn.jsdelivr.net/npm/aplayer/dist/APlayer.min.js"></script>
+
+          <script src="https://cdn.jsdelivr.net/npm/meting@2/dist/Meting.min.js"></script>
+
+          <meting-js
+            auto="https://y.qq.com/n/yqq/song/004THqOS24AWae.html"
+          ></meting-js>
+        </div>
+
+        <div class="comments">
+          <div id="disqus_thread"></div>
+          <script>
+            var disqus_config = function () {
+              this.page.url = "https://blog.yzsun.me/ruby-iterators/";
+              this.page.identifier = "/ruby-iterators/";
+            };
+            (function () {
+              var d = document,
+                s = d.createElement("script");
+              s.src = "//yzyzsun.disqus.com/embed.js";
+              s.setAttribute("data-timestamp", +new Date());
+              (d.head || d.body).appendChild(s);
+            })();
+          </script>
+          <noscript
+            >Please enable JavaScript to view the
+            <a href="https://disqus.com/?ref_noscript"
+              >comments powered by Disqus.</a
+            ></noscript
+          >
+        </div>
+      </article>
+    </div>
+
+    <div class="wrapper-footer">
+      <div class="container">
+        <footer class="footer">
+          <a href="https://github.com/yzyzsun"
+            ><i class="svg-icon github"></i
+          ></a>
+
+          <a href="/feed.xml"><i class="svg-icon rss"></i></a>
+        </footer>
+      </div>
+    </div>
+
+    <!-- Google Analytics -->
+    <script>
+      (function (i, s, o, g, r, a, m) {
+        i["GoogleAnalyticsObject"] = r;
+        (i[r] =
+          i[r] ||
+          function () {
+            (i[r].q = i[r].q || []).push(arguments);
+          }),
+          (i[r].l = 1 * new Date());
+        (a = s.createElement(o)), (m = s.getElementsByTagName(o)[0]);
+        a.async = 1;
+        a.src = g;
+        m.parentNode.insertBefore(a, m);
+      })(
+        window,
+        document,
+        "script",
+        "//www.google-analytics.com/analytics.js",
+        "ga"
+      );
+
+      ga("create", "UA-65994616-1", "auto");
+      ga("send", "pageview", {
+        page: "/ruby-iterators/",
+        title: "Ruby: collect, detect, inject, reject, select",
+      });
+    </script>
+    <!-- End Google Analytics -->
+  </body>
+</html>

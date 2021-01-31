@@ -1,0 +1,907 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+  <head>
+    <title>关于 REST 的思考 | 孙耀珠的博客</title>
+
+    <meta charset="utf-8" />
+    <meta content="text/html; charset=utf-8" http-equiv="Content-Type" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1.0, maximum-scale=1.0"
+    />
+    <meta
+      name="google-site-verification"
+      content="zYt2wigM41vmyHtpvOvLHk4Yetcfbv5Bz9pdvsTRT3Y"
+    />
+
+    <!-- Begin Jekyll SEO tag v2.7.1 -->
+    <meta name="generator" content="Jekyll v4.2.0" />
+    <meta property="og:title" content="关于 REST 的思考" />
+    <meta name="author" content="孙耀珠" />
+    <meta property="og:locale" content="en_US" />
+    <meta
+      name="description"
+      content="这篇文章是我在《B/S 体系软件设计》课程的中期报告（命题作文）。因为在开发求是潮手机站时有写过与后端 API 通信的部分，在其他项目中也不时要考虑 API 设计的问题，所以在这方面也有一些自己粗浅的体悟。 表现层状态转化（REST）是一种网络应用程序的架构风格，通常体现在客户端与服务端的通信方式上。不过 REST 与简单对象访问协议（SOAP）等不同，它并不是一种规范化的协议，而是直接基于 HTTP 实现的一种接口风格。它相比 SOAP 等协议而言更加简单自然，因此在网站接口设计上得到了广泛应用。REST 这个名字起得有点令人费解，这是 Roy Fielding 在其博士论文1中创造的名词，不过其思想也可以被解释为「HTTP 对象模型」，并且这些思想早已被用在 HTTP 和 URI 标准的设计上。因此，我们可以先从 HTTP 和 URI 谈起。 Roy Fielding. Architectural Styles and the Design of Network-based Software Architectures. PhD dissertation, University of California, Irvine, 2000. Chapter 5: Representational State Transfer (REST) &#8617;"
+    />
+    <meta
+      property="og:description"
+      content="这篇文章是我在《B/S 体系软件设计》课程的中期报告（命题作文）。因为在开发求是潮手机站时有写过与后端 API 通信的部分，在其他项目中也不时要考虑 API 设计的问题，所以在这方面也有一些自己粗浅的体悟。 表现层状态转化（REST）是一种网络应用程序的架构风格，通常体现在客户端与服务端的通信方式上。不过 REST 与简单对象访问协议（SOAP）等不同，它并不是一种规范化的协议，而是直接基于 HTTP 实现的一种接口风格。它相比 SOAP 等协议而言更加简单自然，因此在网站接口设计上得到了广泛应用。REST 这个名字起得有点令人费解，这是 Roy Fielding 在其博士论文1中创造的名词，不过其思想也可以被解释为「HTTP 对象模型」，并且这些思想早已被用在 HTTP 和 URI 标准的设计上。因此，我们可以先从 HTTP 和 URI 谈起。 Roy Fielding. Architectural Styles and the Design of Network-based Software Architectures. PhD dissertation, University of California, Irvine, 2000. Chapter 5: Representational State Transfer (REST) &#8617;"
+    />
+    <link rel="canonical" href="https://blog.yzsun.me/restful/" />
+    <meta property="og:url" content="https://blog.yzsun.me/restful/" />
+    <meta property="og:site_name" content="孙耀珠的博客" />
+    <meta property="og:type" content="article" />
+    <meta
+      property="article:published_time"
+      content="2018-07-11T00:00:00+00:00"
+    />
+    <meta name="twitter:card" content="summary" />
+    <meta property="twitter:title" content="关于 REST 的思考" />
+    <script type="application/ld+json">
+      {
+        "description": "这篇文章是我在《B/S 体系软件设计》课程的中期报告（命题作文）。因为在开发求是潮手机站时有写过与后端 API 通信的部分，在其他项目中也不时要考虑 API 设计的问题，所以在这方面也有一些自己粗浅的体悟。 表现层状态转化（REST）是一种网络应用程序的架构风格，通常体现在客户端与服务端的通信方式上。不过 REST 与简单对象访问协议（SOAP）等不同，它并不是一种规范化的协议，而是直接基于 HTTP 实现的一种接口风格。它相比 SOAP 等协议而言更加简单自然，因此在网站接口设计上得到了广泛应用。REST 这个名字起得有点令人费解，这是 Roy Fielding 在其博士论文1中创造的名词，不过其思想也可以被解释为「HTTP 对象模型」，并且这些思想早已被用在 HTTP 和 URI 标准的设计上。因此，我们可以先从 HTTP 和 URI 谈起。 Roy Fielding. Architectural Styles and the Design of Network-based Software Architectures. PhD dissertation, University of California, Irvine, 2000. Chapter 5: Representational State Transfer (REST) &#8617;",
+        "url": "https://blog.yzsun.me/restful/",
+        "@type": "BlogPosting",
+        "headline": "关于 REST 的思考",
+        "dateModified": "2018-07-11T00:00:00+00:00",
+        "datePublished": "2018-07-11T00:00:00+00:00",
+        "mainEntityOfPage": {
+          "@type": "WebPage",
+          "@id": "https://blog.yzsun.me/restful/"
+        },
+        "author": { "@type": "Person", "name": "孙耀珠" },
+        "@context": "https://schema.org"
+      }
+    </script>
+    <!-- End Jekyll SEO tag -->
+
+    <link
+      type="application/atom+xml"
+      rel="alternate"
+      href="https://blog.yzsun.me/feed.xml"
+      title="孙耀珠的博客"
+    />
+
+    <!--[if lt IE 9]>
+      <script src="//cdnjs.cloudflare.com/ajax/libs/html5shiv/r29/html5.min.js"></script>
+    <![endif]-->
+
+    <link rel="stylesheet" href="/style.css" />
+  </head>
+
+  <body>
+    <div class="wrapper-masthead">
+      <div class="container">
+        <header class="masthead clearfix">
+          <a href="/" class="site-avatar"
+            ><img src="/images/avatar.jpg" alt="avatar"
+          /></a>
+
+          <div class="site-info">
+            <h1 class="site-domain"><a href="/">yzsun.me</a></h1>
+            <p class="site-name">孙耀珠的博客</p>
+          </div>
+
+          <nav>
+            <a href="/">首页</a>
+            <a href="/archive/">归档</a>
+            <a href="/about/">关于</a>
+          </nav>
+        </header>
+      </div>
+    </div>
+
+    <div id="main" role="main" class="container">
+      <article class="post">
+        <h1>关于 REST 的思考</h1>
+
+        <div class="info">
+          <span>
+            <i class="fa fa-calendar"></i>
+            2018-07-11
+          </span>
+          <span>
+            <i class="fa fa-user"></i>
+            孙耀珠
+          </span>
+          <span>
+            <i class="fa fa-tags"></i>
+            文献综述
+          </span>
+        </div>
+
+        <div class="entry">
+          <blockquote>
+            <p>
+              这篇文章是我在《B/S
+              体系软件设计》课程的中期报告（命题作文）。因为在开发求是潮手机站时有写过与后端
+              API 通信的部分，在其他项目中也不时要考虑 API
+              设计的问题，所以在这方面也有一些自己粗浅的体悟。
+            </p>
+          </blockquote>
+
+          <ul id="markdown-toc">
+            <li>
+              <a href="#http-和-uri" id="markdown-toc-http-和-uri"
+                >HTTP 和 URI</a
+              >
+            </li>
+            <li>
+              <a href="#restful-架构" id="markdown-toc-restful-架构"
+                >RESTful 架构</a
+              >
+            </li>
+            <li>
+              <a href="#实例一rails" id="markdown-toc-实例一rails"
+                >实例一：Rails</a
+              >
+            </li>
+            <li>
+              <a href="#实例二couchdb" id="markdown-toc-实例二couchdb"
+                >实例二：CouchDB</a
+              >
+            </li>
+            <li>
+              <a href="#相关技术" id="markdown-toc-相关技术">相关技术</a>
+              <ul>
+                <li>
+                  <a href="#graphql" id="markdown-toc-graphql">GraphQL</a>
+                </li>
+                <li><a href="#grpc" id="markdown-toc-grpc">gRPC</a></li>
+              </ul>
+            </li>
+            <li><a href="#小结" id="markdown-toc-小结">小结</a></li>
+          </ul>
+
+          <p>
+            <strong>表现层状态转化</strong
+            >（REST）是一种网络应用程序的架构风格，通常体现在客户端与服务端的通信方式上。不过
+            REST
+            与简单对象访问协议（SOAP）等不同，它并不是一种规范化的协议，而是直接基于
+            HTTP 实现的一种接口风格。它相比 SOAP
+            等协议而言更加简单自然，因此在网站接口设计上得到了广泛应用。REST
+            这个名字起得有点令人费解，这是 Roy Fielding 在其博士论文<sup
+              id="fnref:dissertation"
+              role="doc-noteref"
+              ><a href="#fn:dissertation" class="footnote">1</a></sup
+            >中创造的名词，不过其思想也可以被解释为「HTTP
+            对象模型」，并且这些思想早已被用在 HTTP 和 URI
+            标准的设计上。因此，我们可以先从 HTTP 和 URI 谈起。
+          </p>
+
+          <!--more-->
+
+          <h2 id="http-和-uri">HTTP 和 URI</h2>
+
+          <p>
+            众所周知，<strong>超文本传输协议</strong>（HTTP）是大家浏览网页使用最频繁的协议，承载了互联网上传输的大部分数据量。我们使用浏览器访问网页，其实就是向网站所在的服务器发出一个
+            HTTP 请求，而我们收到的 HTTP
+            响应便是用超文本标记语言（HTML）表示的网页，最后通过浏览器的渲染引擎呈现在我们眼前。像这样，HTTP
+            提供了发布和接收 HTML
+            页面的方法，不过其功能并不局限于此，任何数据或者说网络资源都可以通过
+            HTTP 传输。HTTP 标准定义了若干请求方法<sup
+              id="fnref:rfc2068"
+              role="doc-noteref"
+              ><a href="#fn:rfc2068" class="footnote">2</a></sup
+            ><sup id="fnref:rfc5789" role="doc-noteref"
+              ><a href="#fn:rfc5789" class="footnote">3</a></sup
+            >，用以表示对资源的不同操作方式：
+          </p>
+
+          <ul>
+            <li>
+              <strong>OPTIONS</strong>：请求服务器返回资源支持的所有方法。
+            </li>
+            <li><strong>GET</strong>：对资源进行查询。</li>
+            <li><strong>HEAD</strong>：与 GET 相同，但只返回响应的头字段。</li>
+            <li><strong>POST</strong>：向现有资源提交子项。</li>
+            <li>
+              <strong>PUT</strong>：提交资源数据，若不存在则新建，若存在则替换。
+            </li>
+            <li><strong>PATCH</strong>：对资源做部分修改。</li>
+            <li><strong>DELETE</strong>：请求删除资源。</li>
+            <li><strong>TRACE</strong>：回显服务器收到的请求。</li>
+          </ul>
+
+          <p>
+            以上请求方法多次提到了「资源」这个词，实际上<strong>统一资源标识符</strong>（URI）就是用于标识互联网资源的字符串，譬如网页便是资源的一种。URI
+            分为定位符（URL）和名称（URN）两类，前者 URL
+            就是我们俗称的网址，其格式如下<sup
+              id="fnref:rfc3986"
+              role="doc-noteref"
+              ><a href="#fn:rfc3986" class="footnote">4</a></sup
+            >：
+          </p>
+
+          <div class="language-plaintext highlighter-rouge">
+            <div class="highlight">
+              <pre
+                class="highlight"
+              ><code>                    authority               path
+        ┌───────────────┴───────────────┐┌───┴────┐
+  abc://username:password@example.com:123/path/data?key=value#fragid1
+  └┬┘   └───────┬───────┘ └────┬────┘ └┬┘           └───┬───┘ └──┬──┘
+scheme  user information     host     port            query   fragment
+</code></pre>
+            </div>
+          </div>
+
+          <p>
+            我们有了 URI 和 HTTP
+            这两个基本概念，也就意味着我们对互联网上的资源及其操作有了具体的表达方法，这样一来
+            REST 便呼之欲出了。
+          </p>
+
+          <h2 id="restful-架构">RESTful 架构</h2>
+
+          <p>
+            RESTful 架构的核心便是对资源的抽象，这些资源通过 URI 标识，通过 HTTP
+            请求来进行操作。我们会预先定义一系列动作，让资源能够便捷地以文本形式来被访问和修改。RESTful
+            架构的另一个特点是，它是无状态的，因为 HTTP
+            请求本身就是无状态的。也就是说，服务器不会保存任何操作的上下文，每一次请求都必须提供足够的信息，这既简化了接口的设计，又提高了
+            RESTful 架构的可靠性。同时，RESTful 也继承了 HTTP
+            的安全性、幂等性（idempotence）等性质，在这里，「安全」表示 HTTP
+            请求方法是只读不写的，「幂等」表示相同的方法调用一次或是多次产生的效果相同<sup
+              id="fnref:rfc2068:1"
+              role="doc-noteref"
+              ><a href="#fn:rfc2068" class="footnote">2</a></sup
+            ><sup id="fnref:rfc5789:1" role="doc-noteref"
+              ><a href="#fn:rfc5789" class="footnote">3</a></sup
+            >。
+          </p>
+
+          <p>
+            对资源的操作可以借用关系型数据库中 <strong>CRUD</strong
+            ><sup id="fnref:crud" role="doc-noteref"
+              ><a href="#fn:crud" class="footnote">5</a></sup
+            >
+            的概念分为四类：
+          </p>
+
+          <table>
+            <thead>
+              <tr>
+                <th>CRUD</th>
+                <th>SQL</th>
+                <th>HTTP</th>
+                <th>安全</th>
+                <th>幂等</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>Create</td>
+                <td>INSERT</td>
+                <td>POST</td>
+                <td>✕</td>
+                <td>✕</td>
+              </tr>
+              <tr>
+                <td>Read</td>
+                <td>SELECT</td>
+                <td>GET</td>
+                <td>◯</td>
+                <td>◯</td>
+              </tr>
+              <tr>
+                <td>Update</td>
+                <td>UPDATE</td>
+                <td>PUT</td>
+                <td>✕</td>
+                <td>◯</td>
+              </tr>
+              <tr>
+                <td>Delete</td>
+                <td>DELETE</td>
+                <td>DELETE</td>
+                <td>✕</td>
+                <td>◯</td>
+              </tr>
+            </tbody>
+          </table>
+
+          <p>
+            从这张表可以看到，模型化后的资源亦可视为关系型数据库中的数据，HTTP
+            请求可以直接对应于 SQL 语句。不过在实际的 RESTful
+            后端实现中，我们可能会使用 ORM、NoSQL 等技术，因此并不一定会直接与
+            SQL 打交道。另外，RESTful 架构通常约定只有 POST
+            不是幂等的，因为资源创建一次和创建多次结果显然不一样；但剩下的查询、更新和删除，重复相同的请求应该永远得到相同的效果。
+          </p>
+
+          <h2 id="实例一rails">实例一：Rails</h2>
+
+          <p>
+            <a href="http://rubyonrails.org"
+              ><img src="https://rubyonrails.org/images/rails-logo.svg" alt=""
+            /></a>
+          </p>
+
+          <p>
+            Ruby on Rails 是一个典型的 RESTful
+            框架，它提供了脚手架（scaffold）功能来快速创建一个资源，并生成对应的模板代码。我们以
+            <code class="language-plaintext highlighter-rouge">users</code>
+            这个资源为例，以下便是脚手架自动生成的路由<sup
+              id="fnref:rails"
+              role="doc-noteref"
+              ><a href="#fn:rails" class="footnote">6</a></sup
+            >：
+          </p>
+
+          <table>
+            <thead>
+              <tr>
+                <th>方法</th>
+                <th>URL</th>
+                <th>动作</th>
+                <th>作用</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>GET</td>
+                <td>/users</td>
+                <td>index</td>
+                <td>列出所有用户</td>
+              </tr>
+              <tr>
+                <td>GET</td>
+                <td>/users/new</td>
+                <td>new</td>
+                <td>显示创建用户的页面</td>
+              </tr>
+              <tr>
+                <td>POST</td>
+                <td>/users</td>
+                <td>create</td>
+                <td>创建新的用户</td>
+              </tr>
+              <tr>
+                <td>GET</td>
+                <td>/users/1</td>
+                <td>show</td>
+                <td>显示 ID 为 1 的用户</td>
+              </tr>
+              <tr>
+                <td>GET</td>
+                <td>/users/1/edit</td>
+                <td>edit</td>
+                <td>显示 ID 为 1 的用户的编辑页面</td>
+              </tr>
+              <tr>
+                <td>PATCH / PUT</td>
+                <td>/users/1</td>
+                <td>update</td>
+                <td>更新 ID 为 1 的用户</td>
+              </tr>
+              <tr>
+                <td>DELETE</td>
+                <td>/users/1</td>
+                <td>destroy</td>
+                <td>删除 ID 为 1 的用户</td>
+              </tr>
+            </tbody>
+          </table>
+
+          <p>
+            我们可以从中发现一些基本原则：<code
+              class="language-plaintext highlighter-rouge"
+              >/users</code
+            >
+            表示用户总体，对其发出 GET 和 POST
+            请求分别意味着查询所有用户和添加新的用户；而
+            <code class="language-plaintext highlighter-rouge">/users/:id</code>
+            表示用户个体，对其发出 GET、PUT 和 DELETE
+            请求分别意味着查询、更新、删除该用户信息。另外，因为 POST 和 PUT
+            请求需要用户提供消息主体（message body），所以另有两个页面
+            <code class="language-plaintext highlighter-rouge">/users/new</code>
+            和
+            <code class="language-plaintext highlighter-rouge"
+              >/users/:id/edit</code
+            >
+            来为添加新用户、更新用户信息两个操作提交表单。当然，如果是纯 API
+            项目就不需要这两个页面了。
+          </p>
+
+          <p>
+            对于每个请求，Rails 也提供了
+            <code class="language-plaintext highlighter-rouge">respond_to</code>
+            方法根据请求头的
+            <code class="language-plaintext highlighter-rouge">Accept</code>
+            字段来确定响应的格式。譬如正常的浏览器访问的请求头为
+            <code class="language-plaintext highlighter-rouge"
+              >Accept: text/html</code
+            >，控制器则正常渲染 HTML 页面；当客户端将请求头设为
+            <code class="language-plaintext highlighter-rouge"
+              >Accept: application/json</code
+            >
+            时，控制器则直接返回相应的 JSON 数据。我们看到，Rails 的 RESTful
+            架构既适用于服务端渲染页面的传统网站，也可用来搭建一个纯 API
+            的后端应用。
+          </p>
+
+          <h2 id="实例二couchdb">实例二：CouchDB</h2>
+
+          <p>
+            <a href="https://couchdb.apache.org"
+              ><img src="https://couchdb.apache.org/image/logo@2x.png" alt=""
+            /></a>
+          </p>
+
+          <p>
+            Apache CouchDB 是一个用 Erlang 语言编写的面向文档的 NoSQL
+            数据库。它使用 JSON 作为存储格式，使用 HTTP
+            作为数据库的接口，这也是非常典型的 RESTful
+            API。我们这里就不介绍其多版本并发控制等有趣的特性了，只看看它的
+            API<sup id="fnref:couchdb" role="doc-noteref"
+              ><a href="#fn:couchdb" class="footnote">7</a></sup
+            >：
+          </p>
+
+          <table>
+            <thead>
+              <tr>
+                <th>目的</th>
+                <th>方法</th>
+                <th>URL</th>
+                <th>请求主体</th>
+                <th>响应主体</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>创建名为 docs 的数据库</td>
+                <td>PUT</td>
+                <td>/docs</td>
+                <td> </td>
+                <td>{“ok”: true}</td>
+              </tr>
+              <tr>
+                <td>再次创建同名数据库</td>
+                <td>PUT</td>
+                <td>/docs</td>
+                <td> </td>
+                <td>{“error”: “file_exists”, “reason”: “…”}</td>
+              </tr>
+              <tr>
+                <td>创建一个文档</td>
+                <td>POST</td>
+                <td>/docs</td>
+                <td>{“title”: “couchdb”}</td>
+                <td>{“ok”: true, “id”: “5f3759df”, “rev”: “1-qaz”}</td>
+              </tr>
+              <tr>
+                <td>查询一个文档</td>
+                <td>GET</td>
+                <td>/docs/5f3759df</td>
+                <td> </td>
+                <td>
+                  {“_id”: “5f3759df”, “_rev”: “1-qaz”, “title”: “couchdb”}
+                </td>
+              </tr>
+              <tr>
+                <td>创建或更新一个文档</td>
+                <td>PUT</td>
+                <td>/docs/5f3759df</td>
+                <td>{“_rev”: “1-qaz”, “title”: “couch”}</td>
+                <td>{“ok”: true, “id”: “5f3759df”, “rev”: “2-wsx”}</td>
+              </tr>
+              <tr>
+                <td>删除一个文档</td>
+                <td>DELETE</td>
+                <td>/docs/5f3759df?rev=2-wsx</td>
+                <td> </td>
+                <td>{“ok”: true, “id”: “5f3759df”, “rev”: “2-wsx”}</td>
+              </tr>
+              <tr>
+                <td>删除 docs 数据库</td>
+                <td>DELETE</td>
+                <td>/docs</td>
+                <td> </td>
+                <td>{“ok”: true}</td>
+              </tr>
+            </tbody>
+          </table>
+
+          <p>
+            传统的关系型数据库譬如 MySQL、PostgreSQL，都是基于 TCP/IP
+            构建自己的二进制协议来传输数据的，而 CouchDB 却基于更高层的 HTTP
+            来构建 RESTful API，传输的也是人类可读的 JSON
+            文本。其好处显而易见：不需要任何额外封装和第三方库便可直接为前端提供简单易用的接口，易于调试；但这也有非常明显的缺点：相比于底层的自定义协议，HTTP
+            的文本请求会比二进制占用更大的空间，性能更差。
+          </p>
+
+          <p>
+            说起来，如今也渐渐出现了一些将传统数据库包装成通用 RESTful API
+            服务器的实践，不少开发者也很喜欢这种开箱即用的数据库后端，譬如
+            PostgREST 之于 PostgreSQL。
+          </p>
+
+          <h2 id="相关技术">相关技术</h2>
+
+          <p>
+            因为 REST 和 HTTP 两者的想法高度重合，同时也自然地支持 API
+            与浏览器访问复用同一套 URL，所以 RESTful
+            架构一直是服务端渲染页面网站的最佳选择。不过随着移动设备的普及和前端技术的蓬勃发展，越来越多的网站选择了前后端分离的策略——后端只提供数据，一切显示工作由前端来完成，即前端成为了与客户端并列的独立应用。在剥离页面渲染的浪潮之下，后端
+            API 的设计又出现了新的技术，其中最引人注目的则是 GraphQL 和 gRPC。
+          </p>
+
+          <h3 id="graphql"><a href="https://graphql.org">GraphQL</a></h3>
+
+          <p>
+            GraphQL 是 Facebook 公司发明的数据查询语言，其已在 Facebook
+            内部投入使用，并于 2015 年正式公开。虽然它的名字长得非常像
+            SQL，但实际上它不是一种数据库的查询语言，而是能够取代 REST 的一种
+            API 查询语言。与 RESTful API 不同，GraphQL 并不根据资源的不同将 API
+            细分为多个 URL，它通常部署在一个固定的 URL
+            上，并由客户端通过一种查询语言自由指定需要查询的资源和属性。例如下面便是一个
+            GraphQL 的请求以及服务器对其的响应<sup
+              id="fnref:graphql"
+              role="doc-noteref"
+              ><a href="#fn:graphql" class="footnote">8</a></sup
+            >：
+          </p>
+
+          <div class="language-graphql highlighter-rouge">
+            <div class="highlight">
+              <pre
+                class="highlight"
+              ><code><span class="p">{</span><span class="w">
+  </span><span class="n">hero</span><span class="w"> </span><span class="p">{</span><span class="w">
+    </span><span class="n">name</span><span class="w">
+    </span><span class="n">friends</span><span class="w"> </span><span class="p">{</span><span class="w">
+      </span><span class="n">name</span><span class="w">
+    </span><span class="p">}</span><span class="w">
+  </span><span class="p">}</span><span class="w">
+</span><span class="p">}</span><span class="w">
+</span></code></pre>
+            </div>
+          </div>
+
+          <div class="language-json highlighter-rouge">
+            <div class="highlight">
+              <pre
+                class="highlight"
+              ><code><span class="p">{</span><span class="w">
+  </span><span class="nl">"hero"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+    </span><span class="nl">"name"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Luke Skywalker"</span><span class="p">,</span><span class="w">
+    </span><span class="nl">"friends"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w">
+      </span><span class="p">{</span><span class="w"> </span><span class="nl">"name"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Obi-Wan Kenobi"</span><span class="w"> </span><span class="p">},</span><span class="w">
+      </span><span class="p">{</span><span class="w"> </span><span class="nl">"name"</span><span class="p">:</span><span class="w"> </span><span class="s2">"R2-D2"</span><span class="w"> </span><span class="p">},</span><span class="w">
+      </span><span class="p">{</span><span class="w"> </span><span class="nl">"name"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Han Solo"</span><span class="w"> </span><span class="p">},</span><span class="w">
+      </span><span class="p">{</span><span class="w"> </span><span class="nl">"name"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Leia Organa"</span><span class="w"> </span><span class="p">}</span><span class="w">
+    </span><span class="p">]</span><span class="w">
+  </span><span class="p">}</span><span class="w">
+</span><span class="p">}</span><span class="w">
+</span></code></pre>
+            </div>
+          </div>
+
+          <p>
+            我们可以看到查询语言的结构非常直观地对应了查询结果的
+            JSON，并且同一个请求中可以包含对多个对象的查询，所有属性亦是客户端自由指定的。另外，GraphQL
+            还定义了一种 schema
+            语言，这样在任何编程语言中都可以使用统一的形式来定义对象及其类型。
+          </p>
+
+          <p>
+            GraphQL 的出现解决了 RESTful API 的一些痛点，这些问题在 API
+            开放平台上尤为致命：
+          </p>
+
+          <ul>
+            <li>
+              不同的资源被分离在不同的接口，客户端通常需要多次请求才能取到足够的数据，这大大增加了服务器的负担。
+            </li>
+            <li>
+              对于
+              <code class="language-plaintext highlighter-rouge">/users/1</code>
+              这样的 API，客户端通常只能通过增加查询参数来自定义数据，譬如
+              <code class="language-plaintext highlighter-rouge"
+                >/users/1?detail=false</code
+              >
+              代表不显示详细信息等等。不过，这样的自定义增加了后端开发的复杂度，同时也不够灵活。
+            </li>
+            <li>
+              客户端通常无法预知 API 的数据格式，需要阅读文档才能确切知道。
+            </li>
+            <li>
+              服务端和客户端没有统一的数据定义和类型约束，增加了交流的成本和出错的可能性。
+            </li>
+          </ul>
+
+          <p>
+            介于以上原因，现在有越来越多的企业开始试用 GraphQL，譬如 GitHub
+            已经从 REST API v3 升级到了 GraphQL API v4。Relay 和 Apollo Client
+            等开源框架也为前端或客户端提供了可靠的 GraphQL 集成，Apollo Server
+            甚至还能帮助开发者将服务端的 RESTful API 包装成 GraphQL API。
+          </p>
+
+          <h3 id="grpc"><a href="https://grpc.io">gRPC</a></h3>
+
+          <p>
+            <strong>远程过程调用</strong>（RPC）并不是一个新鲜的事物，至少在
+            1980 年代 Sun
+            公司就为网络文件系统（NFS）开发出了开放网络运算远程过程调用（ONC
+            RPC）协议。之后 XML-RPC、JSON-RPC
+            等协议也陆续出现，其中前者已经演变成了如今的 SOAP。<strong
+              >gRPC</strong
+            >
+            则是 Google 公司于 2015 年开源的一种 RPC
+            协议实现，其最大特点就是使用了 Google 早先公布的 Protocol Buffers
+            格式来序列化数据，并通过 HTTP/2 来传输数据。
+          </p>
+
+          <p>
+            顾名思义，RPC
+            提供了远程调用服务器程序的接口，常常用于服务器集群节点之间的通信，在
+            Java 等面向对象编程语言中也叫远程方法调用（RMI）。与 REST 和 GraphQL
+            以数据为中心的概念不同，RPC
+            着眼于远程程序间的互相调用，不过各种类型的数据作为过程的参数和返回值，亦可在服务端和客户端之间自由传递。例如
+            gRPC 通过
+            <code class="language-plaintext highlighter-rouge">.proto</code>
+            文件来定义服务和消息<sup id="fnref:grpc" role="doc-noteref"
+              ><a href="#fn:grpc" class="footnote">9</a></sup
+            >：
+          </p>
+
+          <div class="language-protobuf highlighter-rouge">
+            <div class="highlight">
+              <pre
+                class="highlight"
+              ><code><span class="kd">service</span> <span class="n">Greeter</span> <span class="p">{</span>
+  <span class="k">rpc</span> <span class="n">SayHello</span> <span class="p">(</span><span class="n">HelloRequest</span><span class="p">)</span> <span class="k">returns</span> <span class="p">(</span><span class="n">HelloReply</span><span class="p">)</span> <span class="p">{}</span>
+<span class="p">}</span>
+<span class="kd">message</span> <span class="nc">HelloRequest</span> <span class="p">{</span>
+  <span class="kt">string</span> <span class="na">name</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span>
+<span class="p">}</span>
+<span class="kd">message</span> <span class="nc">HelloReply</span> <span class="p">{</span>
+  <span class="kt">string</span> <span class="kd">message</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span>
+<span class="p">}</span>
+</code></pre>
+            </div>
+          </div>
+
+          <p>
+            我们可以使用 gRPC 的
+            <code class="language-plaintext highlighter-rouge">protoc</code>
+            将上述文件编译到各种各样的服务端和客户端语言，之后只需要在服务端和客户端调用其生成的类和方法即可实现远程调用。我们可以发现
+            gRPC 有不少明显的好处：
+          </p>
+
+          <ul>
+            <li>
+              方法是否为远程调用对开发者是透明的，开发者只需要关心业务逻辑即可。
+            </li>
+            <li>
+              开发者不需要手动解析 XML、JSON
+              等数据格式，这些反序列化的工作都已经由 gRPC 自动生成的代码做好了。
+            </li>
+            <li>
+              gRPC
+              事先为服务端和客户端双方定义了参数和返回值的数据类型，也避免了
+              RESTful API 格式无法预知的问题。
+            </li>
+            <li>
+              gRPC 借助 protobuf 的二进制格式以及 HTTP/2
+              的全双工数据流等特性能够取得出色的性能。
+            </li>
+          </ul>
+
+          <p>
+            虽然 gRPC 的设计与 REST 或 GraphQL 相当不同，但将资源的 URL
+            对应于方法的调用、HTTP 请求对应于输入参数、HTTP
+            响应对应于返回值，两种设计仍然可以实现同样的功能，因此 gRPC
+            也是客户端与服务端交互不错的选择。
+          </p>
+
+          <h2 id="小结">小结</h2>
+
+          <p>
+            本文从 HTTP 和 URI 标准入手，介绍了 REST
+            的思想及其基本架构，接着通过 Rails 和 CouchDB 两个实例具体地展示
+            RESTful API 的设计。最后通过跟 GraphQL 和 gRPC
+            两个相关技术的比较，阐述了 RESTful API
+            的优缺点，以便对接口设计有一个全面的认识。
+          </p>
+          <div class="footnotes" role="doc-endnotes">
+            <ol>
+              <li id="fn:dissertation" role="doc-endnote">
+                <p>
+                  Roy Fielding. Architectural Styles and the Design of
+                  Network-based Software Architectures. PhD dissertation,
+                  University of California, Irvine, 2000.
+                  <a
+                    href="http://www.ics.uci.edu/~fielding/pubs/dissertation/rest_arch_style.htm"
+                    >Chapter 5: Representational State Transfer (REST)</a
+                  > <a
+                    href="#fnref:dissertation"
+                    class="reversefootnote"
+                    role="doc-backlink"
+                    >&#8617;</a
+                  >
+                </p>
+              </li>
+              <li id="fn:rfc2068" role="doc-endnote">
+                <p>
+                  Network Working Group. Hypertext Transfer Protocol – HTTP/1.1
+                  (RFC 2068). 1997.
+                  <a href="https://tools.ietf.org/html/rfc2068#section-9"
+                    >Chapter 9: Method Definitions</a
+                  > <a
+                    href="#fnref:rfc2068"
+                    class="reversefootnote"
+                    role="doc-backlink"
+                    >&#8617;</a
+                  > <a
+                    href="#fnref:rfc2068:1"
+                    class="reversefootnote"
+                    role="doc-backlink"
+                    >&#8617;<sup>2</sup></a
+                  >
+                </p>
+              </li>
+              <li id="fn:rfc5789" role="doc-endnote">
+                <p>
+                  Internet Engineering Task Force. PATCH Method for HTTP (RFC
+                  5789). 2010.
+                  <a href="https://tools.ietf.org/html/rfc5789"
+                    >https://tools.ietf.org/html/rfc5789</a
+                  > <a
+                    href="#fnref:rfc5789"
+                    class="reversefootnote"
+                    role="doc-backlink"
+                    >&#8617;</a
+                  > <a
+                    href="#fnref:rfc5789:1"
+                    class="reversefootnote"
+                    role="doc-backlink"
+                    >&#8617;<sup>2</sup></a
+                  >
+                </p>
+              </li>
+              <li id="fn:rfc3986" role="doc-endnote">
+                <p>
+                  Network Working Group. Uniform Resource Identifier (URI):
+                  Generic Syntax (RFC 3986). 2005.
+                  <a href="https://tools.ietf.org/html/rfc3986"
+                    >https://tools.ietf.org/html/rfc3986</a
+                  > <a
+                    href="#fnref:rfc3986"
+                    class="reversefootnote"
+                    role="doc-backlink"
+                    >&#8617;</a
+                  >
+                </p>
+              </li>
+              <li id="fn:crud" role="doc-endnote">
+                <p>
+                  <a
+                    href="https://en.wikipedia.org/wiki/Create,_read,_update_and_delete"
+                    >Create, Read, Update, Delete</a
+                  > <a
+                    href="#fnref:crud"
+                    class="reversefootnote"
+                    role="doc-backlink"
+                    >&#8617;</a
+                  >
+                </p>
+              </li>
+              <li id="fn:rails" role="doc-endnote">
+                <p>
+                  <a href="http://guides.rubyonrails.org/routing.html"
+                    >Rails Routing from the Outside In — Ruby on Rails Guides</a
+                  > <a
+                    href="#fnref:rails"
+                    class="reversefootnote"
+                    role="doc-backlink"
+                    >&#8617;</a
+                  >
+                </p>
+              </li>
+              <li id="fn:couchdb" role="doc-endnote">
+                <p>
+                  <a href="http://docs.couchdb.org/en/2.1.1/intro/api.html"
+                    >The Core API — Apache CouchDB 2.1.1 Documentation</a
+                  > <a
+                    href="#fnref:couchdb"
+                    class="reversefootnote"
+                    role="doc-backlink"
+                    >&#8617;</a
+                  >
+                </p>
+              </li>
+              <li id="fn:graphql" role="doc-endnote">
+                <p>
+                  <a href="https://graphql.github.io/learn/"
+                    >Introduction to GraphQL — GraphQL</a
+                  > <a
+                    href="#fnref:graphql"
+                    class="reversefootnote"
+                    role="doc-backlink"
+                    >&#8617;</a
+                  >
+                </p>
+              </li>
+              <li id="fn:grpc" role="doc-endnote">
+                <p>
+                  <a href="https://grpc.io/docs/guides/">Guides — gRPC</a> <a
+                    href="#fnref:grpc"
+                    class="reversefootnote"
+                    role="doc-backlink"
+                    >&#8617;</a
+                  >
+                </p>
+              </li>
+            </ol>
+          </div>
+        </div>
+
+        <div class="comments">
+          <div id="disqus_thread"></div>
+          <script>
+            var disqus_config = function () {
+              this.page.url = "https://blog.yzsun.me/restful/";
+              this.page.identifier = "/restful/";
+            };
+            (function () {
+              var d = document,
+                s = d.createElement("script");
+              s.src = "//yzyzsun.disqus.com/embed.js";
+              s.setAttribute("data-timestamp", +new Date());
+              (d.head || d.body).appendChild(s);
+            })();
+          </script>
+          <noscript
+            >Please enable JavaScript to view the
+            <a href="https://disqus.com/?ref_noscript"
+              >comments powered by Disqus.</a
+            ></noscript
+          >
+        </div>
+      </article>
+    </div>
+
+    <div class="wrapper-footer">
+      <div class="container">
+        <footer class="footer">
+          <a href="https://github.com/yzyzsun"
+            ><i class="svg-icon github"></i
+          ></a>
+
+          <a href="/feed.xml"><i class="svg-icon rss"></i></a>
+        </footer>
+      </div>
+    </div>
+
+    <!-- Google Analytics -->
+    <script>
+      (function (i, s, o, g, r, a, m) {
+        i["GoogleAnalyticsObject"] = r;
+        (i[r] =
+          i[r] ||
+          function () {
+            (i[r].q = i[r].q || []).push(arguments);
+          }),
+          (i[r].l = 1 * new Date());
+        (a = s.createElement(o)), (m = s.getElementsByTagName(o)[0]);
+        a.async = 1;
+        a.src = g;
+        m.parentNode.insertBefore(a, m);
+      })(
+        window,
+        document,
+        "script",
+        "//www.google-analytics.com/analytics.js",
+        "ga"
+      );
+
+      ga("create", "UA-65994616-1", "auto");
+      ga("send", "pageview", {
+        page: "/restful/",
+        title: "关于 REST 的思考",
+      });
+    </script>
+    <!-- End Google Analytics -->
+  </body>
+</html>

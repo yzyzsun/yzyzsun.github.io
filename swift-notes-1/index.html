@@ -1,0 +1,1754 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+  <head>
+    <title>Swift 学习笔记（一） | 孙耀珠的博客</title>
+
+    <meta charset="utf-8" />
+    <meta content="text/html; charset=utf-8" http-equiv="Content-Type" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1.0, maximum-scale=1.0"
+    />
+    <meta
+      name="google-site-verification"
+      content="zYt2wigM41vmyHtpvOvLHk4Yetcfbv5Bz9pdvsTRT3Y"
+    />
+
+    <!-- Begin Jekyll SEO tag v2.7.1 -->
+    <meta name="generator" content="Jekyll v4.2.0" />
+    <meta property="og:title" content="Swift 学习笔记（一）" />
+    <meta name="author" content="孙耀珠" />
+    <meta property="og:locale" content="en_US" />
+    <meta
+      name="description"
+      content="苹果自收购 NeXT 公司开始便使用 Objective-C 作为主力开发语言，至今已有近二十年了；而在这期间，各大科技公司都如火如荼地设计着更为现代的语言，譬如微软推出了 C# 和 F#、谷歌推出了 Go 和 Dart、Mozilla 推出了 Rust……虽然 Objective-C 随着 OS X 和 iOS 的迅速发展而越来越火，但相比之下它的语言设计已经落后于时代了，于是在这个大背景下 Swift 诞生了，开发者正是 LLVM / Clang 之父 Chris Lattner。 Swift 仍然是一门静态类型、面向对象的语言，不过它拥有很多现代的语言特性，譬如类型推断、代数数据类型、模式匹配、泛型等等，同时也有 Playgrounds 这样便利的交互式编程环境。Swift 非常强调安全性，不论是随处可见的可空类型、继承时复杂的构造规则，还是赋值没有返回值、控制流不能省略花括号，都是为了代码安全而考虑。另外 Swift 终于丢掉了 C 语言的包袱，语言层面上移除了指针，switch 语句不再需要 break，整型溢出会抛出运行时错误等等。 就目前来讲，用 Swift 进行 iOS 开发依然离不开 Objective-C 运行时，不过两者能够很方便地交互和共存，从前所有 Objective-C 撰写的 API 均可供 Swift 使用。Swift 的语法目前仍在不断改进，从 Swift Evolution 可见一斑；目前这三篇学习笔记已从初版更新到了 Swift 5.0（2019-03-25），这是第一个 ABI 稳定的版本，也就是说从 Swift 5.0 开始二进制接口将向下兼容。1 ABI Stability and More — Swift Blog &#8617;"
+    />
+    <meta
+      property="og:description"
+      content="苹果自收购 NeXT 公司开始便使用 Objective-C 作为主力开发语言，至今已有近二十年了；而在这期间，各大科技公司都如火如荼地设计着更为现代的语言，譬如微软推出了 C# 和 F#、谷歌推出了 Go 和 Dart、Mozilla 推出了 Rust……虽然 Objective-C 随着 OS X 和 iOS 的迅速发展而越来越火，但相比之下它的语言设计已经落后于时代了，于是在这个大背景下 Swift 诞生了，开发者正是 LLVM / Clang 之父 Chris Lattner。 Swift 仍然是一门静态类型、面向对象的语言，不过它拥有很多现代的语言特性，譬如类型推断、代数数据类型、模式匹配、泛型等等，同时也有 Playgrounds 这样便利的交互式编程环境。Swift 非常强调安全性，不论是随处可见的可空类型、继承时复杂的构造规则，还是赋值没有返回值、控制流不能省略花括号，都是为了代码安全而考虑。另外 Swift 终于丢掉了 C 语言的包袱，语言层面上移除了指针，switch 语句不再需要 break，整型溢出会抛出运行时错误等等。 就目前来讲，用 Swift 进行 iOS 开发依然离不开 Objective-C 运行时，不过两者能够很方便地交互和共存，从前所有 Objective-C 撰写的 API 均可供 Swift 使用。Swift 的语法目前仍在不断改进，从 Swift Evolution 可见一斑；目前这三篇学习笔记已从初版更新到了 Swift 5.0（2019-03-25），这是第一个 ABI 稳定的版本，也就是说从 Swift 5.0 开始二进制接口将向下兼容。1 ABI Stability and More — Swift Blog &#8617;"
+    />
+    <link rel="canonical" href="https://blog.yzsun.me/swift-notes-1/" />
+    <meta property="og:url" content="https://blog.yzsun.me/swift-notes-1/" />
+    <meta property="og:site_name" content="孙耀珠的博客" />
+    <meta property="og:type" content="article" />
+    <meta
+      property="article:published_time"
+      content="2015-04-26T00:00:00+00:00"
+    />
+    <meta name="twitter:card" content="summary" />
+    <meta property="twitter:title" content="Swift 学习笔记（一）" />
+    <script type="application/ld+json">
+      {
+        "description": "苹果自收购 NeXT 公司开始便使用 Objective-C 作为主力开发语言，至今已有近二十年了；而在这期间，各大科技公司都如火如荼地设计着更为现代的语言，譬如微软推出了 C# 和 F#、谷歌推出了 Go 和 Dart、Mozilla 推出了 Rust……虽然 Objective-C 随着 OS X 和 iOS 的迅速发展而越来越火，但相比之下它的语言设计已经落后于时代了，于是在这个大背景下 Swift 诞生了，开发者正是 LLVM / Clang 之父 Chris Lattner。 Swift 仍然是一门静态类型、面向对象的语言，不过它拥有很多现代的语言特性，譬如类型推断、代数数据类型、模式匹配、泛型等等，同时也有 Playgrounds 这样便利的交互式编程环境。Swift 非常强调安全性，不论是随处可见的可空类型、继承时复杂的构造规则，还是赋值没有返回值、控制流不能省略花括号，都是为了代码安全而考虑。另外 Swift 终于丢掉了 C 语言的包袱，语言层面上移除了指针，switch 语句不再需要 break，整型溢出会抛出运行时错误等等。 就目前来讲，用 Swift 进行 iOS 开发依然离不开 Objective-C 运行时，不过两者能够很方便地交互和共存，从前所有 Objective-C 撰写的 API 均可供 Swift 使用。Swift 的语法目前仍在不断改进，从 Swift Evolution 可见一斑；目前这三篇学习笔记已从初版更新到了 Swift 5.0（2019-03-25），这是第一个 ABI 稳定的版本，也就是说从 Swift 5.0 开始二进制接口将向下兼容。1 ABI Stability and More — Swift Blog &#8617;",
+        "url": "https://blog.yzsun.me/swift-notes-1/",
+        "@type": "BlogPosting",
+        "headline": "Swift 学习笔记（一）",
+        "dateModified": "2015-04-26T00:00:00+00:00",
+        "datePublished": "2015-04-26T00:00:00+00:00",
+        "mainEntityOfPage": {
+          "@type": "WebPage",
+          "@id": "https://blog.yzsun.me/swift-notes-1/"
+        },
+        "author": { "@type": "Person", "name": "孙耀珠" },
+        "@context": "https://schema.org"
+      }
+    </script>
+    <!-- End Jekyll SEO tag -->
+
+    <link
+      type="application/atom+xml"
+      rel="alternate"
+      href="https://blog.yzsun.me/feed.xml"
+      title="孙耀珠的博客"
+    />
+
+    <!--[if lt IE 9]>
+      <script src="//cdnjs.cloudflare.com/ajax/libs/html5shiv/r29/html5.min.js"></script>
+    <![endif]-->
+
+    <link rel="stylesheet" href="/style.css" />
+  </head>
+
+  <body>
+    <div class="wrapper-masthead">
+      <div class="container">
+        <header class="masthead clearfix">
+          <a href="/" class="site-avatar"
+            ><img src="/images/avatar.jpg" alt="avatar"
+          /></a>
+
+          <div class="site-info">
+            <h1 class="site-domain"><a href="/">yzsun.me</a></h1>
+            <p class="site-name">孙耀珠的博客</p>
+          </div>
+
+          <nav>
+            <a href="/">首页</a>
+            <a href="/archive/">归档</a>
+            <a href="/about/">关于</a>
+          </nav>
+        </header>
+      </div>
+    </div>
+
+    <div id="main" role="main" class="container">
+      <article class="post">
+        <h1>Swift 学习笔记（一）</h1>
+
+        <div class="info">
+          <span>
+            <i class="fa fa-calendar"></i>
+            2015-04-26
+          </span>
+          <span>
+            <i class="fa fa-user"></i>
+            孙耀珠
+          </span>
+          <span>
+            <i class="fa fa-tags"></i>
+            编程语言
+          </span>
+        </div>
+
+        <div class="entry">
+          <p>
+            苹果自收购 NeXT 公司开始便使用 Objective-C
+            作为主力开发语言，至今已有近二十年了；而在这期间，各大科技公司都如火如荼地设计着更为现代的语言，譬如微软推出了
+            C# 和 F#、谷歌推出了 Go 和 Dart、Mozilla 推出了 Rust……虽然
+            Objective-C 随着 OS X 和 iOS
+            的迅速发展而越来越火，但相比之下它的语言设计已经落后于时代了，于是在这个大背景下
+            Swift 诞生了，开发者正是 LLVM / Clang 之父 Chris Lattner。
+          </p>
+
+          <p>
+            Swift
+            仍然是一门静态类型、面向对象的语言，不过它拥有很多现代的语言特性，譬如类型推断、代数数据类型、模式匹配、泛型等等，同时也有
+            Playgrounds 这样便利的交互式编程环境。Swift
+            非常强调安全性，不论是随处可见的可空类型、继承时复杂的构造规则，还是赋值没有返回值、控制流不能省略花括号，都是为了代码安全而考虑。另外
+            Swift 终于丢掉了 C 语言的包袱，语言层面上移除了指针，<code
+              class="language-plaintext highlighter-rouge"
+              >switch</code
+            >
+            语句不再需要
+            <code class="language-plaintext highlighter-rouge">break</code
+            >，整型溢出会抛出运行时错误等等。
+          </p>
+
+          <p>
+            就目前来讲，用 Swift 进行 iOS 开发依然离不开 Objective-C
+            运行时，不过两者能够很方便地交互和共存，从前所有 Objective-C 撰写的
+            API 均可供 Swift 使用。Swift 的语法目前仍在不断改进，从
+            <a href="https://apple.github.io/swift-evolution/"
+              >Swift Evolution</a
+            >
+            可见一斑；目前这三篇学习笔记已从初版更新到了 Swift
+            5.0（2019-03-25），这是第一个 ABI 稳定的版本，也就是说从 Swift 5.0
+            开始二进制接口将向下兼容。<sup id="fnref:abi" role="doc-noteref"
+              ><a href="#fn:abi" class="footnote">1</a></sup
+            >
+          </p>
+
+          <!--more-->
+
+          <ul id="markdown-toc">
+            <li>
+              <a href="#数据类型" id="markdown-toc-数据类型">数据类型</a>
+              <ul>
+                <li><a href="#整数" id="markdown-toc-整数">整数</a></li>
+                <li><a href="#浮点数" id="markdown-toc-浮点数">浮点数</a></li>
+                <li><a href="#元组" id="markdown-toc-元组">元组</a></li>
+                <li>
+                  <a href="#可空类型" id="markdown-toc-可空类型">可空类型</a>
+                </li>
+              </ul>
+            </li>
+            <li>
+              <a href="#基本运算" id="markdown-toc-基本运算">基本运算</a>
+              <ul>
+                <li><a href="#赋值" id="markdown-toc-赋值">赋值</a></li>
+                <li><a href="#溢出" id="markdown-toc-溢出">溢出</a></li>
+                <li><a href="#求余" id="markdown-toc-求余">求余</a></li>
+                <li>
+                  <a href="#空合运算符" id="markdown-toc-空合运算符"
+                    >空合运算符</a
+                  >
+                </li>
+                <li>
+                  <a href="#区间运算符" id="markdown-toc-区间运算符"
+                    >区间运算符</a
+                  >
+                </li>
+              </ul>
+            </li>
+            <li>
+              <a href="#字符串和字符" id="markdown-toc-字符串和字符"
+                >字符串和字符</a
+              >
+              <ul>
+                <li>
+                  <a href="#unicode" id="markdown-toc-unicode">Unicode</a>
+                </li>
+              </ul>
+            </li>
+            <li>
+              <a href="#合集类型" id="markdown-toc-合集类型">合集类型</a>
+              <ul>
+                <li><a href="#数组" id="markdown-toc-数组">数组</a></li>
+                <li><a href="#集合" id="markdown-toc-集合">集合</a></li>
+                <li><a href="#字典" id="markdown-toc-字典">字典</a></li>
+              </ul>
+            </li>
+            <li>
+              <a href="#控制流" id="markdown-toc-控制流">控制流</a>
+              <ul>
+                <li>
+                  <a href="#循环语句" id="markdown-toc-循环语句">循环语句</a>
+                </li>
+                <li><a href="#switch" id="markdown-toc-switch">Switch</a></li>
+                <li>
+                  <a href="#模式匹配" id="markdown-toc-模式匹配">模式匹配</a>
+                </li>
+                <li><a href="#guard" id="markdown-toc-guard">Guard</a></li>
+                <li>
+                  <a href="#api-可用性" id="markdown-toc-api-可用性"
+                    >API 可用性</a
+                  >
+                </li>
+              </ul>
+            </li>
+            <li>
+              <a href="#函数" id="markdown-toc-函数">函数</a>
+              <ul>
+                <li>
+                  <a href="#参数与返回值" id="markdown-toc-参数与返回值"
+                    >参数与返回值</a
+                  >
+                </li>
+                <li>
+                  <a href="#参数名称" id="markdown-toc-参数名称">参数名称</a>
+                </li>
+                <li>
+                  <a href="#函数类型" id="markdown-toc-函数类型">函数类型</a>
+                </li>
+              </ul>
+            </li>
+            <li><a href="#闭包" id="markdown-toc-闭包">闭包</a></li>
+            <li>
+              <a href="#枚举" id="markdown-toc-枚举">枚举</a>
+              <ul>
+                <li><a href="#关联值" id="markdown-toc-关联值">关联值</a></li>
+                <li><a href="#原始值" id="markdown-toc-原始值">原始值</a></li>
+              </ul>
+            </li>
+          </ul>
+
+          <h2 id="数据类型">数据类型</h2>
+
+          <h3 id="整数">整数</h3>
+
+          <ul>
+            <li>
+              在 32 位平台上，<code class="language-plaintext highlighter-rouge"
+                >Int</code
+              >
+              /
+              <code class="language-plaintext highlighter-rouge">UInt</code> 和
+              <code class="language-plaintext highlighter-rouge">Int32</code> /
+              <code class="language-plaintext highlighter-rouge">UInt32</code>
+              长度相同。
+            </li>
+            <li>
+              在 64 位平台上，<code class="language-plaintext highlighter-rouge"
+                >Int</code
+              >
+              /
+              <code class="language-plaintext highlighter-rouge">UInt</code> 和
+              <code class="language-plaintext highlighter-rouge">Int64</code> /
+              <code class="language-plaintext highlighter-rouge">UInt64</code>
+              长度相同。
+            </li>
+            <li>
+              字面量前缀：二进制为
+              <code class="language-plaintext highlighter-rouge">0b</code
+              >，八进制为
+              <code class="language-plaintext highlighter-rouge">0o</code
+              >，十六进制为
+              <code class="language-plaintext highlighter-rouge">0x</code>。
+            </li>
+          </ul>
+
+          <h3 id="浮点数">浮点数</h3>
+
+          <ul>
+            <li>
+              <code class="language-plaintext highlighter-rouge">Float</code> 为
+              32 位浮点数；<code class="language-plaintext highlighter-rouge"
+                >Double</code
+              >
+              为 64 位浮点数，浮点数字面量会被自动推断为
+              <code class="language-plaintext highlighter-rouge">Double</code>。
+            </li>
+            <li>
+              十进制
+              <code class="language-plaintext highlighter-rouge">1.25e2</code>
+              表示 1.25×10²；十六进制（类似 IEEE 754）<code
+                class="language-plaintext highlighter-rouge"
+                >0xFp2</code
+              >
+              表示 15×2²。
+            </li>
+            <li>
+              加减乘除运算严格检查左右操作数类型是否相同，不会进行隐式类型转换，因此
+              <code class="language-plaintext highlighter-rouge">Int</code> /
+              <code class="language-plaintext highlighter-rouge">UInt</code> /
+              <code class="language-plaintext highlighter-rouge">Double</code> /
+              <code class="language-plaintext highlighter-rouge">Float</code> /
+              <code class="language-plaintext highlighter-rouge">CGFloat</code>
+              等类型之间进行运算时需要显式类型转换。
+            </li>
+          </ul>
+
+          <h3 id="元组">元组</h3>
+
+          <ul>
+            <li>
+              元组类型是任意各种类型的有序组合。可以通过点语法来访问元组中的单个元素，下标从零开始，如
+              <code class="language-plaintext highlighter-rouge">tuple.0</code
+              >。也可以在定义时给元素命名，命名后便可通过名字来获取元素的值。
+            </li>
+          </ul>
+
+          <div class="language-swift highlighter-rouge">
+            <div class="highlight">
+              <pre
+                class="highlight"
+              ><code><span class="k">let</span> <span class="nv">status</span> <span class="o">=</span> <span class="p">(</span><span class="nv">code</span><span class="p">:</span> <span class="mi">200</span><span class="p">,</span> <span class="nv">message</span><span class="p">:</span> <span class="s">"OK"</span><span class="p">)</span>
+<span class="nf">print</span><span class="p">(</span><span class="n">status</span><span class="o">.</span><span class="n">code</span><span class="p">,</span> <span class="n">status</span><span class="o">.</span><span class="n">message</span><span class="p">)</span>
+</code></pre>
+            </div>
+          </div>
+
+          <h3 id="可空类型">可空类型</h3>
+
+          <ul>
+            <li>
+              可空类型（Optional type）是一种特殊的泛型枚举：成员
+              <code class="language-plaintext highlighter-rouge">.none</code>
+              表示没有值，即
+              <code class="language-plaintext highlighter-rouge">nil</code
+              >；成员
+              <code class="language-plaintext highlighter-rouge"
+                >.some(Wrapped)</code
+              >
+              表示包含值，可以通过
+              <code class="language-plaintext highlighter-rouge">!</code>
+              来<strong>强制解包</strong>（forced unwrapping）获取值，或是通过
+              <code class="language-plaintext highlighter-rouge">?</code>
+              构成<strong>可空链式调用</strong>（optional chaining）。对
+              <code class="language-plaintext highlighter-rouge">nil</code>
+              进行强制解包会触发运行时错误，而可空链式调用则不会；当可空链式调用中有可空值为
+              <code class="language-plaintext highlighter-rouge">nil</code>
+              时整条链失败并返回
+              <code class="language-plaintext highlighter-rouge">nil</code
+              >，若成功则返回一个相应的可空类型。
+            </li>
+          </ul>
+
+          <div class="language-swift highlighter-rouge">
+            <div class="highlight">
+              <pre
+                class="highlight"
+              ><code><span class="k">var</span> <span class="nv">s</span><span class="p">:</span> <span class="kt">String</span><span class="p">?</span> <span class="c1">// = nil</span>
+<span class="n">s</span><span class="o">!.</span><span class="n">count</span> <span class="c1">// Fatal error!</span>
+<span class="n">s</span><span class="p">?</span><span class="o">.</span><span class="n">count</span> <span class="c1">// : Int? = nil</span>
+<span class="n">s</span> <span class="o">=</span> <span class="s">""</span>
+<span class="n">s</span><span class="o">!.</span><span class="n">count</span> <span class="c1">// : Int = 0</span>
+<span class="n">s</span><span class="p">?</span><span class="o">.</span><span class="n">count</span> <span class="c1">// : Int? = 0</span>
+</code></pre>
+            </div>
+          </div>
+
+          <ul>
+            <li>
+              在 <code class="language-plaintext highlighter-rouge">if</code> 和
+              <code class="language-plaintext highlighter-rouge">while</code>
+              语句中可以使用<strong>可空绑定</strong>（optional
+              binding）判断可空类型是否包含值，若包含则为真并将值赋给局部常量或变量，可空绑定与其他条件判断可用逗号隔开。<sup
+                id="fnref:binding"
+                role="doc-noteref"
+                ><a href="#fn:binding" class="footnote">2</a></sup
+              >
+            </li>
+          </ul>
+
+          <div class="language-swift highlighter-rouge">
+            <div class="highlight">
+              <pre
+                class="highlight"
+              ><code><span class="k">if</span> <span class="k">let</span> <span class="nv">a</span> <span class="o">=</span> <span class="n">x</span><span class="p">,</span> <span class="k">let</span> <span class="nv">b</span> <span class="o">=</span> <span class="n">y</span><span class="p">,</span> <span class="n">a</span> <span class="o">&lt;</span> <span class="n">b</span> <span class="p">{</span>
+    <span class="c1">// optional binding</span>
+<span class="p">}</span>
+<span class="k">if</span> <span class="n">x</span> <span class="o">!=</span> <span class="kc">nil</span> <span class="o">&amp;&amp;</span> <span class="n">y</span> <span class="o">!=</span> <span class="kc">nil</span> <span class="o">&amp;&amp;</span> <span class="n">a</span> <span class="o">&lt;</span> <span class="n">b</span> <span class="p">{</span>
+    <span class="k">let</span> <span class="nv">a</span> <span class="o">=</span> <span class="n">x</span><span class="o">!</span><span class="p">,</span> <span class="n">b</span> <span class="o">=</span> <span class="n">y</span><span class="o">!</span>
+    <span class="c1">// equivalent form</span>
+<span class="p">}</span>
+</code></pre>
+            </div>
+          </div>
+
+          <ul>
+            <li>
+              如果确信一个可空类型的变量在后续使用中一定不为空，可以采用<strong>隐式解包可空类型</strong>（implicitly
+              unwrapped optional type）<sup id="fnref:iuo" role="doc-noteref"
+                ><a href="#fn:iuo" class="footnote">3</a></sup
+              >
+              简化其操作：只要在声明时将类型后面的
+              <code class="language-plaintext highlighter-rouge">?</code> 改为
+              <code class="language-plaintext highlighter-rouge">!</code
+              >，则之后的使用默认强制解包。
+            </li>
+          </ul>
+
+          <div class="language-swift highlighter-rouge">
+            <div class="highlight">
+              <pre
+                class="highlight"
+              ><code><span class="k">var</span> <span class="nv">s</span><span class="p">:</span> <span class="kt">String</span><span class="o">!</span> <span class="o">=</span> <span class="s">"Must not be nil!"</span>
+<span class="n">s</span><span class="o">.</span><span class="n">count</span> <span class="c1">// = s!.count</span>
+</code></pre>
+            </div>
+          </div>
+
+          <h2 id="基本运算">基本运算</h2>
+
+          <h3 id="赋值">赋值</h3>
+
+          <ul>
+            <li>
+              赋值运算不返回任何值，以防止赋值号被错用为等号，但同时也导致
+              <code class="language-plaintext highlighter-rouge"
+                >x = y = z</code
+              >
+              是不合法的。
+            </li>
+            <li>
+              如果赋值的右边是一个元组，其元素可以被分解开来，如
+              <code class="language-plaintext highlighter-rouge"
+                >(x, y, _) = (1, 2, 3)</code
+              >。
+            </li>
+            <li>
+              C 语言中的
+              <code class="language-plaintext highlighter-rouge">++</code> 和
+              <code class="language-plaintext highlighter-rouge">--</code>
+              运算符已于 Swift 3.0（<a
+                href="https://github.com/apple/swift-evolution/blob/master/proposals/0004-remove-pre-post-inc-decrement.md"
+                >SE-0004</a
+              >）被废除，应当改用
+              <code class="language-plaintext highlighter-rouge">+=1</code> 和
+              <code class="language-plaintext highlighter-rouge">-=1</code>。
+            </li>
+          </ul>
+
+          <h3 id="溢出">溢出</h3>
+
+          <ul>
+            <li>
+              整数溢出会触发运行时错误，但如果要像 C
+              语言一样允许溢出，可以使用溢出运算符
+              <code class="language-plaintext highlighter-rouge">&amp;+</code>
+              <code class="language-plaintext highlighter-rouge">&amp;-</code>
+              <code class="language-plaintext highlighter-rouge">&amp;*</code
+              >。<sup id="fnref:overflow" role="doc-noteref"
+                ><a href="#fn:overflow" class="footnote">4</a></sup
+              >
+            </li>
+          </ul>
+
+          <h3 id="求余">求余</h3>
+
+          <ul>
+            <li>
+              求余运算
+              <code class="language-plaintext highlighter-rouge">a % b</code>
+              的结果跟
+              <code class="language-plaintext highlighter-rouge">a</code>
+              的符号相同，而跟
+              <code class="language-plaintext highlighter-rouge">b</code>
+              的符号无关。这与 C / Java / JavaScript
+              等语言是一致的，一般称这样的运算为取余（remainder）；
+            </li>
+            <li>
+              而 Python / Ruby 等语言
+              <code class="language-plaintext highlighter-rouge">%</code>
+              运算结果的符号只与
+              <code class="language-plaintext highlighter-rouge">b</code>
+              相同，一般称其为取模（modulo）。
+            </li>
+          </ul>
+
+          <h3 id="空合运算符">空合运算符</h3>
+
+          <div class="language-swift highlighter-rouge">
+            <div class="highlight">
+              <pre
+                class="highlight"
+              ><code><span class="n">a</span> <span class="p">??</span> <span class="n">b</span> <span class="c1">// nil coalescing operator</span>
+<span class="n">a</span> <span class="o">!=</span> <span class="kc">nil</span> <span class="p">?</span> <span class="n">a</span><span class="o">!</span> <span class="p">:</span> <span class="n">b</span> <span class="c1">// equivalent form</span>
+</code></pre>
+            </div>
+          </div>
+
+          <ul>
+            <li>
+              <code class="language-plaintext highlighter-rouge">a</code>
+              必须是可空类型，且
+              <code class="language-plaintext highlighter-rouge">b</code> 要与
+              <code class="language-plaintext highlighter-rouge">a</code>
+              所存储值的类型一致。
+            </li>
+          </ul>
+
+          <h3 id="区间运算符">区间运算符</h3>
+
+          <ul>
+            <li>
+              闭区间运算符
+              <code class="language-plaintext highlighter-rouge">a...b</code>
+              表示 [a, b]；
+            </li>
+            <li>
+              半开区间运算符
+              <code class="language-plaintext highlighter-rouge">a..&lt;b</code>
+              表示 [a, b)；
+            </li>
+            <li>
+              单侧无界区间运算符
+              <code class="language-plaintext highlighter-rouge">a...</code> /
+              <code class="language-plaintext highlighter-rouge">...a</code> /
+              <code class="language-plaintext highlighter-rouge">..&lt;a</code>
+              分别表示 [a, +∞) / (−∞, a] / (−∞, a)。<sup
+                id="fnref:range"
+                role="doc-noteref"
+                ><a href="#fn:range" class="footnote">5</a></sup
+              >
+            </li>
+          </ul>
+
+          <h2 id="字符串和字符">字符串和字符</h2>
+
+          <ul>
+            <li>
+              Swift
+              无论字符串还是字符都使用双引号而不用单引号，多行字符串字面量则可以放在三个双引号内。字符串之间可以通过
+              <code class="language-plaintext highlighter-rouge">+</code>
+              连接，将字符连接到字符串尾部可以使用
+              <code class="language-plaintext highlighter-rouge">append()</code>
+              方法，在字符串中插值（interpolation）可以使用
+              <code class="language-plaintext highlighter-rouge">"\()"</code>。
+            </li>
+            <li>
+              因为一个字符占用的空间可能不同，所以需要使用特殊的
+              <code class="language-plaintext highlighter-rouge"
+                >String.Index</code
+              >
+              类型作为下标获取字符串指定位置的字符，如
+              <code class="language-plaintext highlighter-rouge"
+                >string[string.index(string.endIndex, offsetBy: -7)]</code
+              >。<sup id="fnref:index" role="doc-noteref"
+                ><a href="#fn:index" class="footnote">6</a></sup
+              >
+            </li>
+          </ul>
+
+          <h3 id="unicode">Unicode</h3>
+
+          <ul>
+            <li>
+              Unicode 是目前世界通行的字符编码标准，其字符集共定义了 U+0000 至
+              U+10FFFF 共 17×2¹⁶ 个码位。Swift 支持 Unicode 的三种编码方案 UTF-8
+              / UTF-16 / UTF-32，分别对应字符串的
+              <code class="language-plaintext highlighter-rouge">utf8</code> /
+              <code class="language-plaintext highlighter-rouge">utf16</code> /
+              <code class="language-plaintext highlighter-rouge"
+                >unicodeScalars</code
+              >
+              三个属性。
+            </li>
+            <li>
+              在字符串字面量中，Unicode 码位 U+xxxx 可以使用
+              <code class="language-plaintext highlighter-rouge">\u{xxxx}</code>
+              表示，其中
+              <code class="language-plaintext highlighter-rouge">xxxx</code>
+              可以为 1-8 位的十六进制数（但实际上 Unicode 目前最多 6 位）。
+            </li>
+            <li>
+              Swift 的字符表示一个<strong>扩展字素群</strong>（extended grapheme
+              cluster），可以包含多个 Unicode
+              码位，例如单个字符「é」可由两个码位
+              <code class="language-plaintext highlighter-rouge"
+                >"\u{65}\u{301}"</code
+              >
+              表示。
+            </li>
+            <li>
+              而以前遗留下来的
+              <code class="language-plaintext highlighter-rouge">NSString</code>
+              本质上是 UTF-16 编码的码元数组，相应的
+              <code class="language-plaintext highlighter-rouge">length</code>
+              属性是其包含的码元个数，因此很可能会与
+              <code class="language-plaintext highlighter-rouge">String</code>
+              的
+              <code class="language-plaintext highlighter-rouge">count</code>
+              属性大小不同。<sup id="fnref:unicode" role="doc-noteref"
+                ><a href="#fn:unicode" class="footnote">7</a></sup
+              >
+            </li>
+          </ul>
+
+          <p>
+            <img
+              src="https://developer.apple.com/swift/blog/images/swift-string-views_2x.png"
+              alt="Swift String Views"
+            />
+          </p>
+
+          <h2 id="合集类型">合集类型</h2>
+
+          <ul>
+            <li>
+              合集类型（Collection types）包括数组（Array）、集合（Set）<sup
+                id="fnref:set"
+                role="doc-noteref"
+                ><a href="#fn:set" class="footnote">8</a></sup
+              >
+              和字典（Dictionary），其存储的元素类型必须相同；实际上，上一章节介绍的字符串
+              <sup id="fnref:string" role="doc-noteref"
+                ><a href="#fn:string" class="footnote">9</a></sup
+              >
+              也遵循
+              <code class="language-plaintext highlighter-rouge"
+                >Collection</code
+              >
+              协议。合集类型均由结构体通过泛型实现，为<strong>值类型</strong>。
+            </li>
+            <li>
+              根据合集类型协议的要求，<code
+                class="language-plaintext highlighter-rouge"
+                >count</code
+              >
+              属性能获取其元素个数，<code
+                class="language-plaintext highlighter-rouge"
+                >isEmpty</code
+              >
+              属性能判断是否为空，下标访问既可以使用索引也可以使用索引区间（即
+              <code class="language-plaintext highlighter-rouge"
+                >Range&lt;Self.Index&gt;</code
+              >）等等。
+            </li>
+          </ul>
+
+          <h3 id="数组">数组</h3>
+
+          <ul>
+            <li>
+              数组类型可以表示为
+              <code class="language-plaintext highlighter-rouge"
+                >Array&lt;Element&gt;</code
+              >，简写为
+              <code class="language-plaintext highlighter-rouge">[Element]</code
+              >。
+            </li>
+            <li>
+              创建空数组可用
+              <code class="language-plaintext highlighter-rouge"
+                >[Element]()</code
+              >，以重复的值创建数组可用
+              <code class="language-plaintext highlighter-rouge"
+                >Array(repeating:count:)</code
+              >。
+            </li>
+            <li>
+              可以用
+              <code class="language-plaintext highlighter-rouge"
+                >insert(_:at:)</code
+              >
+              /
+              <code class="language-plaintext highlighter-rouge"
+                >append(_:)</code
+              >
+              /
+              <code class="language-plaintext highlighter-rouge"
+                >remove(at:)</code
+              >
+              /
+              <code class="language-plaintext highlighter-rouge"
+                >removeLast()</code
+              >
+              /
+              <code class="language-plaintext highlighter-rouge"
+                >firstIndex(of:)</code
+              >
+              来插入、删除、查找元素。
+            </li>
+            <li>如果数组下标越界或为负数，会直接触发运行时错误。</li>
+          </ul>
+
+          <h3 id="集合">集合</h3>
+
+          <ul>
+            <li>
+              集合类型可以表示为
+              <code class="language-plaintext highlighter-rouge"
+                >Set&lt;Element&gt;</code
+              >，其中
+              <code class="language-plaintext highlighter-rouge">Element</code>
+              必须是可哈希的，即遵循
+              <code class="language-plaintext highlighter-rouge">Hashable</code>
+              协议。
+            </li>
+            <li>
+              创建空数组可用
+              <code class="language-plaintext highlighter-rouge"
+                >Set&lt;Element&gt;()</code
+              >，亦可用数组字面量来初始化集合
+              <code class="language-plaintext highlighter-rouge"
+                >var groups: Set = ["AKB48", "SKE48", "NMB48", "HKT48", "NGT48",
+                "STU48"]</code
+              >。
+            </li>
+            <li>
+              <code class="language-plaintext highlighter-rouge"
+                >insert(_:)</code
+              >
+              /
+              <code class="language-plaintext highlighter-rouge"
+                >remove(_:)</code
+              >
+              /
+              <code class="language-plaintext highlighter-rouge"
+                >contains(_:)</code
+              >
+              方法分别用来插入、删除、查找元素。
+            </li>
+            <li>
+              <code class="language-plaintext highlighter-rouge"
+                >isSubset(of:)</code
+              >
+              /
+              <code class="language-plaintext highlighter-rouge"
+                >isSuperset(of:)</code
+              >
+              /
+              <code class="language-plaintext highlighter-rouge"
+                >isDisjoint(with:)</code
+              >
+              方法分别用来判断子集、超集、互斥。
+            </li>
+            <li>
+              <code class="language-plaintext highlighter-rouge"
+                >union(_:)</code
+              >
+              /
+              <code class="language-plaintext highlighter-rouge"
+                >intersection(_:)</code
+              >
+              /
+              <code class="language-plaintext highlighter-rouge"
+                >subtracting(_:)</code
+              >
+              /
+              <code class="language-plaintext highlighter-rouge"
+                >symmetricDifference(_:)</code
+              >
+              方法分别会创建两个集合的并集、交集、差集、对称差；另有
+              <code class="language-plaintext highlighter-rouge"
+                >formUnion(_:)</code
+              >
+              /
+              <code class="language-plaintext highlighter-rouge"
+                >formIntersection(:_)</code
+              >
+              /
+              <code class="language-plaintext highlighter-rouge"
+                >subtract(_:)</code
+              >
+              /
+              <code class="language-plaintext highlighter-rouge"
+                >formSymmetricDifference(_:)</code
+              >
+              会直接在原集合上进行修改。<sup
+                id="fnref:setalgebra"
+                role="doc-noteref"
+                ><a href="#fn:setalgebra" class="footnote">10</a></sup
+              >
+            </li>
+          </ul>
+
+          <h3 id="字典">字典</h3>
+
+          <ul>
+            <li>
+              字典类型可以表示为
+              <code class="language-plaintext highlighter-rouge"
+                >Dictionary&lt;Key, Value&gt;</code
+              >，简写为
+              <code class="language-plaintext highlighter-rouge"
+                >[Key: Value]</code
+              >，其中
+              <code class="language-plaintext highlighter-rouge">Key</code>
+              必须是可哈希的。
+            </li>
+            <li>
+              访问字典可以使用
+              <code class="language-plaintext highlighter-rouge">dict[key]</code
+              >，返回值为可空类型，键不存在即返回
+              <code class="language-plaintext highlighter-rouge">nil</code
+              >。新增、修改键值亦可使用下标，而删除键值只需
+              <code class="language-plaintext highlighter-rouge"
+                >dict[key] = nil</code
+              >。
+            </li>
+            <li>
+              遍历字典可用
+              <code class="language-plaintext highlighter-rouge"
+                >for (key, value) in dict { … }</code
+              >
+              或单独遍历
+              <code class="language-plaintext highlighter-rouge"
+                >dict.keys</code
+              >
+              和
+              <code class="language-plaintext highlighter-rouge"
+                >dict.values</code
+              >。
+            </li>
+          </ul>
+
+          <h2 id="控制流">控制流</h2>
+
+          <ul>
+            <li>
+              所有控制流都不需要条件外侧的圆括号，但不可以省略语句体的花括号。
+            </li>
+          </ul>
+
+          <h3 id="循环语句">循环语句</h3>
+
+          <ul>
+            <li>
+              <code class="language-plaintext highlighter-rouge"
+                >for i in 0..&lt;10</code
+              >
+              中的
+              <code class="language-plaintext highlighter-rouge">i</code>
+              是一个每轮循环开始时自动生成的局部常量，因此不需要提前声明。
+            </li>
+            <li>
+              C 样式的
+              <code class="language-plaintext highlighter-rouge">for</code>
+              循环已于 Swift 3.0（<a
+                href="https://github.com/apple/swift-evolution/blob/master/proposals/0007-remove-c-style-for-loops.md"
+                >SE-0007</a
+              >）被废除，当然传统的
+              <code class="language-plaintext highlighter-rouge">while</code> 和
+              <code class="language-plaintext highlighter-rouge"
+                >repeat-while</code
+              >
+              <sup id="fnref:repeat" role="doc-noteref"
+                ><a href="#fn:repeat" class="footnote">11</a></sup
+              >
+              循环仍然存在。
+            </li>
+            <li>
+              可以在循环语句（或
+              <code class="language-plaintext highlighter-rouge">if</code> /
+              <code class="language-plaintext highlighter-rouge">switch</code
+              >）前放置一个标签
+              <code class="language-plaintext highlighter-rouge">label:</code
+              >，则可以用
+              <code class="language-plaintext highlighter-rouge"
+                >break label</code
+              >
+              来中断特定循环（或条件分支），或用
+              <code class="language-plaintext highlighter-rouge"
+                >continue label</code
+              >
+              跳过特定循环的当前轮。
+            </li>
+          </ul>
+
+          <h3 id="switch">Switch</h3>
+
+          <ul>
+            <li>
+              <code class="language-plaintext highlighter-rouge">switch</code>
+              语句必须是完备的，如果各
+              <code class="language-plaintext highlighter-rouge">case</code>
+              分支不能涵盖所有情况时，最后要有
+              <code class="language-plaintext highlighter-rouge">default</code>
+              分支。如果能匹配多个
+              <code class="language-plaintext highlighter-rouge">case</code
+              >，那么只会执行第一个匹配的分支。
+            </li>
+            <li>
+              <code class="language-plaintext highlighter-rouge">switch</code>
+              不存在隐式的贯穿，即不需要在
+              <code class="language-plaintext highlighter-rouge">case</code>
+              分支结束时写
+              <code class="language-plaintext highlighter-rouge">break</code
+              >；不过如果一定要像 C 语言那样贯穿到下一个
+              <code class="language-plaintext highlighter-rouge">case</code
+              >，可以用
+              <code class="language-plaintext highlighter-rouge"
+                >fallthrough</code
+              >
+              关键字。
+            </li>
+            <li>
+              每个
+              <code class="language-plaintext highlighter-rouge">case</code>
+              必须包含至少一条语句，所以两个
+              <code class="language-plaintext highlighter-rouge">case</code>
+              连着写会编译错误。如果是需要一次处理多种情况，可以在单个
+              <code class="language-plaintext highlighter-rouge">case</code>
+              中把多个表达式用逗号分开；如果是什么都不做，要写个
+              <code class="language-plaintext highlighter-rouge">break</code>。
+            </li>
+            <li>
+              <code class="language-plaintext highlighter-rouge">case let</code>
+              允许将匹配的值绑定到局部常量，并可以使用
+              <code class="language-plaintext highlighter-rouge">where</code>
+              来判断额外条件。
+            </li>
+          </ul>
+
+          <div class="language-swift highlighter-rouge">
+            <div class="highlight">
+              <pre
+                class="highlight"
+              ><code><span class="k">switch</span> <span class="n">point</span> <span class="p">{</span>
+<span class="k">case</span> <span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">):</span>
+    <span class="nf">print</span><span class="p">(</span><span class="s">"At the origin."</span><span class="p">)</span>
+<span class="k">case</span> <span class="p">(</span><span class="n">_</span><span class="p">,</span> <span class="mi">0</span><span class="p">),</span> <span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">_</span><span class="p">):</span>
+    <span class="nf">print</span><span class="p">(</span><span class="s">"On an axis."</span><span class="p">)</span>
+<span class="k">case</span> <span class="p">(</span><span class="o">-</span><span class="mi">2</span><span class="o">...</span><span class="mi">2</span><span class="p">,</span> <span class="o">-</span><span class="mi">2</span><span class="o">...</span><span class="mi">2</span><span class="p">):</span>
+    <span class="nf">print</span><span class="p">(</span><span class="s">"Inside a 4x4 box."</span><span class="p">)</span>
+<span class="k">case</span> <span class="k">let</span> <span class="p">(</span><span class="nv">x</span><span class="p">,</span> <span class="nv">y</span><span class="p">)</span> <span class="k">where</span> <span class="n">x</span> <span class="o">&lt;</span> <span class="nv">y</span><span class="p">:</span>
+    <span class="nf">print</span><span class="p">(</span><span class="s">"(</span><span class="se">\(</span><span class="n">x</span><span class="se">)</span><span class="s">, </span><span class="se">\(</span><span class="n">y</span><span class="se">)</span><span class="s">) is above the line y = x."</span><span class="p">)</span>
+<span class="k">default</span><span class="p">:</span>
+    <span class="nf">print</span><span class="p">(</span><span class="s">"Just some arbitrary point."</span><span class="p">)</span>
+<span class="p">}</span>
+</code></pre>
+            </div>
+          </div>
+
+          <h3 id="模式匹配">模式匹配</h3>
+
+          <ul>
+            <li>
+              Swift 在进行
+              <code class="language-plaintext highlighter-rouge">case</code>
+              的匹配时，实际上使用了
+              <code class="language-plaintext highlighter-rouge">~=</code>
+              运算符，譬如为区间的匹配定义了
+              <code class="language-plaintext highlighter-rouge"
+                >static func ~=(pattern: Range&lt;Bound&gt;, value: Bound) -&gt;
+                Bool</code
+              >。因此，我们也可以为自定义类型定义
+              <code class="language-plaintext highlighter-rouge">~=</code>
+              运算符。
+            </li>
+            <li>
+              当只需要匹配一条
+              <code class="language-plaintext highlighter-rouge">case</code>
+              时，可以使用
+              <code class="language-plaintext highlighter-rouge"
+                >if case let x = y { … }</code
+              >
+              来代替
+              <code class="language-plaintext highlighter-rouge"
+                >switch y { case let x: … }</code
+              >，类似的还有
+              <code class="language-plaintext highlighter-rouge"
+                >guard case let</code
+              >，后面都可以接
+              <code class="language-plaintext highlighter-rouge">where</code>
+              判断。<sup id="fnref:pattern" role="doc-noteref"
+                ><a href="#fn:pattern" class="footnote">12</a></sup
+              >
+            </li>
+            <li>
+              使用
+              <code class="language-plaintext highlighter-rouge">for case</code>
+              可以只遍历相应
+              <code class="language-plaintext highlighter-rouge">if case</code>
+              匹配成功的元素，也可以后接
+              <code class="language-plaintext highlighter-rouge">where</code>
+              判断，实际上使用
+              <code class="language-plaintext highlighter-rouge"
+                >for … where</code
+              >
+              而不带
+              <code class="language-plaintext highlighter-rouge">case</code>
+              依然是合法的。<sup id="fnref:pattern:1" role="doc-noteref"
+                ><a href="#fn:pattern" class="footnote">12</a></sup
+              >
+            </li>
+          </ul>
+
+          <div class="language-swift highlighter-rouge">
+            <div class="highlight">
+              <pre
+                class="highlight"
+              ><code><span class="k">for</span> <span class="k">case</span> <span class="k">let</span> <span class="p">(</span><span class="nv">title</span><span class="p">,</span> <span class="nv">kind</span><span class="p">)</span> <span class="k">in</span> <span class="n">mediaList</span><span class="o">.</span><span class="nf">map</span><span class="p">({</span> <span class="p">(</span><span class="nv">$0</span><span class="o">.</span><span class="n">title</span><span class="p">,</span> <span class="nv">$0</span><span class="o">.</span><span class="n">kind</span><span class="p">)</span> <span class="p">})</span> <span class="k">where</span> <span class="n">title</span><span class="o">.</span><span class="nf">hasPrefix</span><span class="p">(</span><span class="s">"Harry Potter"</span><span class="p">)</span> <span class="p">{</span>
+    <span class="nf">print</span><span class="p">(</span><span class="s">"- [</span><span class="se">\(</span><span class="n">kind</span><span class="se">)</span><span class="s">] </span><span class="se">\(</span><span class="n">title</span><span class="se">)</span><span class="s">"</span><span class="p">)</span>
+<span class="p">}</span>
+</code></pre>
+            </div>
+          </div>
+
+          <h3 id="guard">Guard</h3>
+
+          <ul>
+            <li>
+              <code class="language-plaintext highlighter-rouge"
+                >guard … else { … }</code
+              >
+              类似于只有
+              <code class="language-plaintext highlighter-rouge">else</code>
+              分支的
+              <code class="language-plaintext highlighter-rouge">if</code>
+              语句。
+            </li>
+            <li>
+              如果条件满足则跳过花括号里的内容，并且
+              <code class="language-plaintext highlighter-rouge"
+                >guard let</code
+              >
+              可空绑定对当前代码块的剩下部分依然有效。
+            </li>
+            <li>
+              如果条件不满足，<code class="language-plaintext highlighter-rouge"
+                >else</code
+              >
+              分支必须退出当前代码块，譬如使用
+              <code class="language-plaintext highlighter-rouge">return</code> /
+              <code class="language-plaintext highlighter-rouge">break</code> /
+              <code class="language-plaintext highlighter-rouge">continue</code>
+              /
+              <code class="language-plaintext highlighter-rouge">throw</code> /
+              <code class="language-plaintext highlighter-rouge"
+                >fatalError()</code
+              >。
+            </li>
+          </ul>
+
+          <h3 id="api-可用性">API 可用性</h3>
+
+          <ul>
+            <li>
+              在 <code class="language-plaintext highlighter-rouge">if</code> 或
+              <code class="language-plaintext highlighter-rouge">guard</code>
+              语句中可以使用
+              <code class="language-plaintext highlighter-rouge"
+                >#available</code
+              >
+              检查当前操作系统版本（包括 macOS / iOS / watchOS / tvOS）和 Swift
+              版本
+              <sup id="fnref:available" role="doc-noteref"
+                ><a href="#fn:available" class="footnote">13</a></sup
+              >，以验证 API 目前是否可用。类似地，也可以在各种声明前加
+              <code class="language-plaintext highlighter-rouge"
+                >@available</code
+              >。
+            </li>
+            <li>
+              最后一个参数
+              <code class="language-plaintext highlighter-rouge">*</code>
+              是不可省略的，表示在未指定的平台上，其版本与最低部署目标相同。
+            </li>
+          </ul>
+
+          <div class="language-swift highlighter-rouge">
+            <div class="highlight">
+              <pre
+                class="highlight"
+              ><code><span class="k">if</span> <span class="kd">#available(macOS 10.12, iOS 10, *)</span> <span class="p">{</span>
+    <span class="c1">// Use macOS Sierra and iOS 10 APIs</span>
+<span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+    <span class="c1">// Fall back to earlier macOS and iOS APIs</span>
+<span class="p">}</span>
+</code></pre>
+            </div>
+          </div>
+
+          <h2 id="函数">函数</h2>
+
+          <h3 id="参数与返回值">参数与返回值</h3>
+
+          <ul>
+            <li>
+              无参函数在定义和调用时不能省略括号。无返回值函数在定义时不需要写
+              <code class="language-plaintext highlighter-rouge"
+                >-&gt; Type</code
+              >，实际上它返回了一个特殊的值
+              <code class="language-plaintext highlighter-rouge">Void</code
+              >，这是一个空的元组即
+              <code class="language-plaintext highlighter-rouge">()</code>。
+            </li>
+            <li>可以使用元组类型让函数返回多个值。</li>
+          </ul>
+
+          <h3 id="参数名称">参数名称</h3>
+
+          <div class="language-swift highlighter-rouge">
+            <div class="highlight">
+              <pre
+                class="highlight"
+              ><code><span class="kd">func</span> <span class="nf">join</span><span class="p">(</span><span class="n">_</span> <span class="nv">s1</span><span class="p">:</span><span class="kt">String</span><span class="p">,</span> <span class="n">to</span> <span class="nv">s2</span><span class="p">:</span> <span class="kt">String</span><span class="p">,</span> <span class="nv">joiner</span><span class="p">:</span> <span class="kt">String</span> <span class="o">=</span> <span class="s">" "</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kt">String</span> <span class="p">{</span>
+    <span class="k">return</span> <span class="n">s1</span> <span class="o">+</span> <span class="n">joiner</span> <span class="o">+</span> <span class="n">s2</span>
+<span class="p">}</span>
+<span class="nf">join</span><span class="p">(</span><span class="s">"hello"</span><span class="p">,</span> <span class="nv">to</span><span class="p">:</span> <span class="s">"world"</span><span class="p">,</span> <span class="nv">joiner</span><span class="p">:</span> <span class="s">", "</span><span class="p">)</span>
+<span class="nf">join</span><span class="p">(</span><span class="s">"hello"</span><span class="p">,</span> <span class="nv">to</span><span class="p">:</span> <span class="s">"world"</span><span class="p">)</span>
+</code></pre>
+            </div>
+          </div>
+
+          <ul>
+            <li>
+              上述代码中的
+              <code class="language-plaintext highlighter-rouge">s1</code> /
+              <code class="language-plaintext highlighter-rouge">s2</code>
+              部分为<strong>参数名称</strong>（parameter
+              names），在函数内部使用；<code
+                class="language-plaintext highlighter-rouge"
+                >_</code
+              >
+              /
+              <code class="language-plaintext highlighter-rouge">to</code>
+              部分为<strong>参数标签</strong>（argument
+              labels），在调用函数时使用，以加强可读性。若不指定参数标签，则参数标签与参数名称相同，也可以使用
+              <code class="language-plaintext highlighter-rouge">_</code>
+              忽略参数标签。此项规则也适用于方法和构造器。<sup
+                id="fnref:parameter"
+                role="doc-noteref"
+                ><a href="#fn:parameter" class="footnote">14</a></sup
+              >
+            </li>
+            <li>
+              在参数类型后加
+              <code class="language-plaintext highlighter-rouge">...</code>
+              可定义<strong>可变参数</strong>（variadic
+              parameters），调用时可以传入不确定数量的参数，在函数内该参数将作为数组使用。一个函数至多只能有一个可变参数。
+            </li>
+            <li>
+              函数参数默认是常量，如果需要修改参数在函数外的实际值，可以定义<strong>输入输出参数</strong>（in-out
+              parameters）。首先需要在参数的类型前加关键字
+              <code class="language-plaintext highlighter-rouge">inout</code
+              >，其次调用时传入的变量前要加
+              <code class="language-plaintext highlighter-rouge">&amp;</code>。
+            </li>
+          </ul>
+
+          <h3 id="函数类型">函数类型</h3>
+
+          <ul>
+            <li>
+              函数类型可以表示为诸如
+              <code class="language-plaintext highlighter-rouge"
+                >(Int, Int) -&gt; Int</code
+              >
+              的形式，既无参数也无返回值的函数类型为
+              <code class="language-plaintext highlighter-rouge"
+                >() -&gt; Void</code
+              >。函数类型只与参数类型和返回值有关，参数标签不是类型的一部分。<sup
+                id="fnref:label"
+                role="doc-noteref"
+                ><a href="#fn:label" class="footnote">15</a></sup
+              >
+            </li>
+            <li>
+              函数是 Swift
+              语言的<strong>一等公民</strong>，可以作为参数类型和返回类型。
+            </li>
+            <li>
+              Swift
+              允许定义<strong>嵌套函数</strong>，嵌套函数只在其作用域中可见，但也可以由其外层函数返回从而被外界使用。
+            </li>
+          </ul>
+
+          <h2 id="闭包">闭包</h2>
+
+          <ul>
+            <li>
+              广义来讲 Swift 中有三种闭包，而狭义的闭包是指最后一种：
+              <ul>
+                <li>全局函数是一个有名字但不会捕获任何值的闭包；</li>
+                <li>
+                  嵌套函数是一个有名字并可以捕获其外层函数作用域中值的闭包；
+                </li>
+                <li>
+                  闭包表达式是一个可以捕获外界值的匿名闭包，与 Objective-C
+                  的代码块以及其他语言的 lambda 表达式类似。
+                </li>
+              </ul>
+            </li>
+            <li>
+              在 Swift
+              中，当一个闭包作为参数传入，但它在函数返回后才被执行，则认为它是一个特殊的<strong>逃逸闭包</strong>（escaping
+              closure）。闭包参数默认是不逃逸的
+              <sup id="fnref:escaping" role="doc-noteref"
+                ><a href="#fn:escaping" class="footnote">16</a></sup
+              >，因此需要在逃逸闭包的参数类型前加上
+              <code class="language-plaintext highlighter-rouge">@escaping</code
+              >，同时这也意味着闭包内的
+              <code class="language-plaintext highlighter-rouge">self.</code>
+              将不可省略。
+            </li>
+          </ul>
+
+          <div class="language-swift highlighter-rouge">
+            <div class="highlight">
+              <pre
+                class="highlight"
+              ><code><span class="c1">// Closure expression syntax</span>
+<span class="n">reversed</span> <span class="o">=</span> <span class="n">names</span><span class="o">.</span><span class="nf">sorted</span><span class="p">(</span><span class="nv">by</span><span class="p">:</span> <span class="p">{</span> <span class="p">(</span><span class="nv">s1</span><span class="p">:</span> <span class="kt">String</span><span class="p">,</span> <span class="nv">s2</span><span class="p">:</span> <span class="kt">String</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kt">Bool</span> <span class="k">in</span>
+    <span class="k">return</span> <span class="n">s1</span> <span class="o">&gt;</span> <span class="n">s2</span>
+<span class="p">})</span>
+<span class="c1">// Inferring type from context</span>
+<span class="n">reversed</span> <span class="o">=</span> <span class="n">names</span><span class="o">.</span><span class="nf">sorted</span><span class="p">(</span><span class="nv">by</span><span class="p">:</span> <span class="p">{</span> <span class="n">s1</span><span class="p">,</span> <span class="n">s2</span> <span class="k">in</span> <span class="k">return</span> <span class="n">s1</span> <span class="o">&gt;</span> <span class="n">s2</span> <span class="p">})</span>
+<span class="c1">// Implicit returns from single-expression closures</span>
+<span class="n">reversed</span> <span class="o">=</span> <span class="n">names</span><span class="o">.</span><span class="nf">sorted</span><span class="p">(</span><span class="nv">by</span><span class="p">:</span> <span class="p">{</span> <span class="n">s1</span><span class="p">,</span> <span class="n">s2</span> <span class="k">in</span> <span class="n">s1</span> <span class="o">&gt;</span> <span class="n">s2</span> <span class="p">})</span>
+<span class="c1">// Shorthand argument names</span>
+<span class="n">reversed</span> <span class="o">=</span> <span class="n">names</span><span class="o">.</span><span class="nf">sorted</span><span class="p">(</span><span class="nv">by</span><span class="p">:</span> <span class="p">{</span> <span class="nv">$0</span> <span class="o">&gt;</span> <span class="nv">$1</span> <span class="p">})</span>
+<span class="c1">// Trailing closures</span>
+<span class="n">reversed</span> <span class="o">=</span> <span class="n">names</span><span class="o">.</span><span class="n">sorted</span> <span class="p">{</span> <span class="nv">$0</span> <span class="o">&gt;</span> <span class="nv">$1</span> <span class="p">}</span>
+<span class="c1">// Operator methods</span>
+<span class="n">reversed</span> <span class="o">=</span> <span class="n">names</span><span class="o">.</span><span class="nf">sorted</span><span class="p">(</span><span class="nv">by</span><span class="p">:</span> <span class="o">&gt;</span><span class="p">)</span>
+</code></pre>
+            </div>
+          </div>
+
+          <h2 id="枚举">枚举</h2>
+
+          <ul>
+            <li>
+              枚举类型也是 Swift
+              语言的<strong>一等公民</strong>，它支持了很多传统上类独有的特性，例如实例方法、计算属性、遵循协议等。
+            </li>
+            <li>
+              枚举与其他类型名一样，应当首字母大写；而枚举的
+              <code class="language-plaintext highlighter-rouge">case</code>
+              成员应当首字母小写
+              <sup id="fnref:enumcase" role="doc-noteref"
+                ><a href="#fn:enumcase" class="footnote">17</a></sup
+              >。
+            </li>
+          </ul>
+
+          <h3 id="关联值">关联值</h3>
+
+          <ul>
+            <li>
+              枚举成员可以关联任意各种类型的值，且每个成员关联的类型和数量可以各不相同。这扩展了
+              C 语言中的联合（union），相当于在 Swift
+              中实现了代数数据类型，当然模式匹配亦适用于此。
+            </li>
+          </ul>
+
+          <div class="language-swift highlighter-rouge">
+            <div class="highlight">
+              <pre
+                class="highlight"
+              ><code><span class="kd">enum</span> <span class="kt">Barcode</span> <span class="p">{</span> <span class="c1">// Associated Values</span>
+    <span class="k">case</span> <span class="nf">upc</span><span class="p">(</span><span class="kt">Int</span><span class="p">,</span> <span class="kt">Int</span><span class="p">,</span> <span class="kt">Int</span><span class="p">,</span> <span class="kt">Int</span><span class="p">)</span>
+    <span class="k">case</span> <span class="nf">qrCode</span><span class="p">(</span><span class="kt">String</span><span class="p">)</span>
+<span class="p">}</span>
+
+<span class="k">var</span> <span class="nv">productBarcode</span> <span class="o">=</span> <span class="kt">Barcode</span><span class="o">.</span><span class="nf">upc</span><span class="p">(</span><span class="mi">8</span><span class="p">,</span> <span class="mi">85909</span><span class="p">,</span> <span class="mi">51226</span><span class="p">,</span> <span class="mi">3</span><span class="p">)</span>
+<span class="n">productBarcode</span> <span class="o">=</span> <span class="o">.</span><span class="nf">qrCode</span><span class="p">(</span><span class="s">"ABCDEFGHIJKLMNOP"</span><span class="p">)</span>
+
+<span class="k">switch</span> <span class="n">productBarcode</span> <span class="p">{</span>
+<span class="k">case</span> <span class="kd">let</span> <span class="o">.</span><span class="nf">upc</span><span class="p">(</span><span class="n">numberSystem</span><span class="p">,</span> <span class="n">manufacturer</span><span class="p">,</span> <span class="n">product</span><span class="p">,</span> <span class="n">check</span><span class="p">):</span>
+    <span class="nf">print</span><span class="p">(</span><span class="s">"UPC: </span><span class="se">\(</span><span class="n">numberSystem</span><span class="se">)</span><span class="s">, </span><span class="se">\(</span><span class="n">manufacturer</span><span class="se">)</span><span class="s">, </span><span class="se">\(</span><span class="n">product</span><span class="se">)</span><span class="s">, </span><span class="se">\(</span><span class="n">check</span><span class="se">)</span><span class="s">."</span><span class="p">)</span>
+<span class="k">case</span> <span class="kd">let</span> <span class="o">.</span><span class="nf">qrCode</span><span class="p">(</span><span class="n">productCode</span><span class="p">):</span>
+    <span class="nf">print</span><span class="p">(</span><span class="s">"QR code: </span><span class="se">\(</span><span class="n">productCode</span><span class="se">)</span><span class="s">."</span><span class="p">)</span>
+<span class="p">}</span>
+</code></pre>
+            </div>
+          </div>
+
+          <ul>
+            <li>
+              Swift 还支持<strong>递归枚举</strong>，在
+              <code class="language-plaintext highlighter-rouge">enum</code> 或
+              <code class="language-plaintext highlighter-rouge">case</code>
+              前加上
+              <code class="language-plaintext highlighter-rouge">indirect</code>
+              关键字即可提醒编译器为递归结构生成必要的中间层。
+            </li>
+          </ul>
+
+          <div class="language-swift highlighter-rouge">
+            <div class="highlight">
+              <pre
+                class="highlight"
+              ><code><span class="kd">enum</span> <span class="kt">ArithmeticExpression</span> <span class="p">{</span> <span class="c1">// Recursive Enumeration</span>
+    <span class="k">case</span> <span class="nf">number</span><span class="p">(</span><span class="kt">Int</span><span class="p">)</span>
+    <span class="kd">indirect</span> <span class="k">case</span> <span class="nf">addition</span><span class="p">(</span><span class="kt">ArithmeticExpression</span><span class="p">,</span> <span class="kt">ArithmeticExpression</span><span class="p">)</span>
+    <span class="kd">indirect</span> <span class="k">case</span> <span class="nf">multiplication</span><span class="p">(</span><span class="kt">ArithmeticExpression</span><span class="p">,</span> <span class="kt">ArithmeticExpression</span><span class="p">)</span>
+<span class="p">}</span>
+</code></pre>
+            </div>
+          </div>
+
+          <h3 id="原始值">原始值</h3>
+
+          <ul>
+            <li>
+              枚举成员也可以被预先填充为同一类型的原始值，这与 C
+              语言中的枚举（enum）类似。
+            </li>
+            <li>
+              当整型被用于原始值时，没有初始化的成员默认为上个成员的值加一，第一个成员则默认为
+              0；当字符串被用于原始值时，没有初始化的成员默认值为自身的名字。
+            </li>
+            <li>
+              枚举成员的
+              <code class="language-plaintext highlighter-rouge">rawValue</code>
+              属性可以获取其原始值，而枚举的构造器接受
+              <code class="language-plaintext highlighter-rouge">rawValue</code>
+              参数并返回一个可空类型。
+            </li>
+          </ul>
+
+          <div class="language-swift highlighter-rouge">
+            <div class="highlight">
+              <pre
+                class="highlight"
+              ><code><span class="kd">enum</span> <span class="kt">Plant</span><span class="p">:</span> <span class="kt">Int</span> <span class="p">{</span> <span class="c1">// Raw Values</span>
+    <span class="k">case</span> <span class="n">mercury</span> <span class="o">=</span> <span class="mi">1</span><span class="p">,</span> <span class="n">venus</span><span class="p">,</span> <span class="n">earth</span><span class="p">,</span> <span class="n">mars</span><span class="p">,</span> <span class="n">jupiter</span><span class="p">,</span> <span class="n">saturn</span><span class="p">,</span> <span class="n">uranus</span><span class="p">,</span> <span class="n">neptune</span>
+<span class="p">}</span>
+
+<span class="k">let</span> <span class="nv">earthOrder</span> <span class="o">=</span> <span class="kt">Planet</span><span class="o">.</span><span class="n">earth</span><span class="o">.</span><span class="n">rawValue</span> <span class="c1">// = 3</span>
+<span class="k">let</span> <span class="nv">somePlanet</span> <span class="o">=</span> <span class="kt">Planet</span><span class="p">(</span><span class="nv">rawValue</span><span class="p">:</span> <span class="mi">7</span><span class="p">)</span><span class="o">!</span> <span class="c1">// = .uranus</span>
+</code></pre>
+            </div>
+          </div>
+
+          <blockquote>
+            <p>
+              <strong>&lt;Next&gt;</strong>
+              <a href="/swift-notes-2/">Swift 学习笔记（二）</a>
+            </p>
+          </blockquote>
+          <div class="footnotes" role="doc-endnotes">
+            <ol>
+              <li id="fn:abi" role="doc-endnote">
+                <p>
+                  <a href="https://swift.org/blog/abi-stability-and-more/"
+                    >ABI Stability and More — Swift Blog</a
+                  > <a
+                    href="#fnref:abi"
+                    class="reversefootnote"
+                    role="doc-backlink"
+                    >&#8617;</a
+                  >
+                </p>
+              </li>
+              <li id="fn:binding" role="doc-endnote">
+                <p>
+                  最开始
+                  <code class="language-plaintext highlighter-rouge"
+                    >if-let</code
+                  >
+                  /
+                  <code class="language-plaintext highlighter-rouge"
+                    >while-let</code
+                  >
+                  的可空绑定和布尔表达式是用
+                  <code class="language-plaintext highlighter-rouge"
+                    >where</code
+                  >
+                  关键字隔开的，Swift 3.0（<a
+                    href="https://github.com/apple/swift-evolution/blob/master/proposals/0099-conditionclauses.md"
+                    >SE-0099</a
+                  >）开始统一改用逗号分割，且不再限定它们的前后位置。 <a
+                    href="#fnref:binding"
+                    class="reversefootnote"
+                    role="doc-backlink"
+                    >&#8617;</a
+                  >
+                </p>
+              </li>
+              <li id="fn:iuo" role="doc-endnote">
+                <p>
+                  隐式解包可空值原本所属的
+                  <code class="language-plaintext highlighter-rouge"
+                    >ImplicitlyUnwrappedOptional&lt;T&gt;</code
+                  >
+                  类型已于 Swift 4.2（<a
+                    href="https://github.com/apple/swift-evolution/blob/master/proposals/0054-abolish-iuo.md"
+                    >SE-0054</a
+                  >）被废除，取而代之的实现是为普通的可空类型加上
+                  <code class="language-plaintext highlighter-rouge"
+                    >@_autounwrapped</code
+                  >。 <a
+                    href="#fnref:iuo"
+                    class="reversefootnote"
+                    role="doc-backlink"
+                    >&#8617;</a
+                  >
+                </p>
+              </li>
+              <li id="fn:overflow" role="doc-endnote">
+                <p>
+                  因为除法溢出运算符
+                  <code class="language-plaintext highlighter-rouge"
+                    >&amp;/</code
+                  >
+                  <code class="language-plaintext highlighter-rouge"
+                    >&amp;%</code
+                  >
+                  的行为比较迷惑，因此已在
+                  <a
+                    href="https://developer.apple.com/library/archive/documentation/Xcode/Conceptual/RN-Xcode-Archive/Chapters/xc6_release_notes.html#//apple_ref/doc/uid/TP40016994-CH4-SW3"
+                    >Swift 1.2</a
+                  >
+                  中被移除。 <a
+                    href="#fnref:overflow"
+                    class="reversefootnote"
+                    role="doc-backlink"
+                    >&#8617;</a
+                  >
+                </p>
+              </li>
+              <li id="fn:range" role="doc-endnote">
+                <p>
+                  单侧无界区间运算符于 Swift 4.0（<a
+                    href="https://github.com/apple/swift-evolution/blob/master/proposals/0172-one-sided-ranges.md"
+                    >SE-0172</a
+                  >）引入，用于简化合集类型的下标访问。 <a
+                    href="#fnref:range"
+                    class="reversefootnote"
+                    role="doc-backlink"
+                    >&#8617;</a
+                  >
+                </p>
+              </li>
+              <li id="fn:index" role="doc-endnote">
+                <p>
+                  Swift 3.0（<a
+                    href="https://github.com/apple/swift-evolution/blob/master/proposals/0065-collections-move-indices.md"
+                    >SE-0065</a
+                  >）对合集类型及其下标访问进行了一次大改，本来由索引类型负责的遍历工作转交给合集类型本身，这样索引对象就不必再持有对合集对象的引用了。比如要取合集对象
+                  <code class="language-plaintext highlighter-rouge">c</code>
+                  的第二个元素的索引，原来是
+                  <code class="language-plaintext highlighter-rouge"
+                    >c.startIndex.successor()</code
+                  >，现在是
+                  <code class="language-plaintext highlighter-rouge"
+                    >c.index(after: c.startIndex)</code
+                  >。 <a
+                    href="#fnref:index"
+                    class="reversefootnote"
+                    role="doc-backlink"
+                    >&#8617;</a
+                  >
+                </p>
+              </li>
+              <li id="fn:unicode" role="doc-endnote">
+                <p>
+                  <a href="https://objccn.io/issue-9-1/"
+                    >NSString 与 Unicode — ObjC 中国</a
+                  > <a
+                    href="#fnref:unicode"
+                    class="reversefootnote"
+                    role="doc-backlink"
+                    >&#8617;</a
+                  >
+                </p>
+              </li>
+              <li id="fn:set" role="doc-endnote">
+                <p>
+                  <a
+                    href="https://developer.apple.com/library/archive/documentation/Xcode/Conceptual/RN-Xcode-Archive/Chapters/xc6_release_notes.html#//apple_ref/doc/uid/TP40016994-CH4-SW6"
+                    >Swift 1.2</a
+                  >
+                  引入了原生的
+                  <code class="language-plaintext highlighter-rouge">Set</code>
+                  类型，与原先的
+                  <code class="language-plaintext highlighter-rouge"
+                    >NSSet</code
+                  >
+                  桥接。 <a
+                    href="#fnref:set"
+                    class="reversefootnote"
+                    role="doc-backlink"
+                    >&#8617;</a
+                  >
+                </p>
+              </li>
+              <li id="fn:string" role="doc-endnote">
+                <p>
+                  在 Swift 1.x 中字符串遵循
+                  <code class="language-plaintext highlighter-rouge"
+                    >CollectionType</code
+                  >
+                  协议，相当于字符数组；但
+                  <a href="https://developer.apple.com/swift/blog/?id=30"
+                    >Swift 2.0</a
+                  >
+                  取消了这一设定，认为 Unicode
+                  字符串与字符数组有明显差异，原因包括字符串拼接后可能有字符合并、字符串相等的判断不是逐元素比较而是标准等价；然而
+                  Swift 4.0（<a
+                    href="https://github.com/apple/swift-evolution/blob/master/proposals/0163-string-revision-1.md"
+                    >SE-0163</a
+                  >）又重新评估认为之前的改动弊大于利，字符串再次遵循
+                  <code class="language-plaintext highlighter-rouge"
+                    >Collection</code
+                  >
+                  协议。 <a
+                    href="#fnref:string"
+                    class="reversefootnote"
+                    role="doc-backlink"
+                    >&#8617;</a
+                  >
+                </p>
+              </li>
+              <li id="fn:setalgebra" role="doc-endnote">
+                <p>
+                  Swift 3.0（<a
+                    href="https://github.com/apple/swift-evolution/blob/master/proposals/0059-updated-set-apis.md"
+                    >SE-0059</a
+                  >）按照
+                  <a
+                    href="https://swift.org/documentation/api-design-guidelines/#name-according-to-side-effects"
+                    >API Design Guidelines</a
+                  >
+                  中无副作用用名词、有副作用用动词的方针，对
+                  <code class="language-plaintext highlighter-rouge"
+                    >SetAlgebra</code
+                  >
+                  协议中的方法名进行过调整，比如将原来的
+                  <code class="language-plaintext highlighter-rouge"
+                    >subtract</code
+                  >
+                  /
+                  <code class="language-plaintext highlighter-rouge"
+                    >subtractInPlace</code
+                  >
+                  改成了现在的
+                  <code class="language-plaintext highlighter-rouge"
+                    >subtracting</code
+                  >
+                  /
+                  <code class="language-plaintext highlighter-rouge"
+                    >subtract</code
+                  >。 <a
+                    href="#fnref:setalgebra"
+                    class="reversefootnote"
+                    role="doc-backlink"
+                    >&#8617;</a
+                  >
+                </p>
+              </li>
+              <li id="fn:repeat" role="doc-endnote">
+                <p>
+                  <code class="language-plaintext highlighter-rouge"
+                    >repeat-while</code
+                  >
+                  原为
+                  <code class="language-plaintext highlighter-rouge"
+                    >do-while</code
+                  >，Swift 2.0 之后
+                  <code class="language-plaintext highlighter-rouge">do</code>
+                  关键字被改用于错误处理。 <a
+                    href="#fnref:repeat"
+                    class="reversefootnote"
+                    role="doc-backlink"
+                    >&#8617;</a
+                  >
+                </p>
+              </li>
+              <li id="fn:pattern" role="doc-endnote">
+                <p>
+                  <a href="http://swift.gg/2016/06/06/pattern-matching-4/"
+                    >模式匹配第四弹：if case, guard case, for case — Crunchy
+                    Development</a
+                  > <a
+                    href="#fnref:pattern"
+                    class="reversefootnote"
+                    role="doc-backlink"
+                    >&#8617;</a
+                  > <a
+                    href="#fnref:pattern:1"
+                    class="reversefootnote"
+                    role="doc-backlink"
+                    >&#8617;<sup>2</sup></a
+                  >
+                </p>
+              </li>
+              <li id="fn:available" role="doc-endnote">
+                <p>
+                  操作系统版本检查于
+                  <a href="https://developer.apple.com/swift/blog/?id=29"
+                    >Swift 2.0</a
+                  >
+                  引入，Swift 版本检查则 Swift 3.1（<a
+                    href="https://github.com/apple/swift-evolution/blob/master/proposals/0141-available-by-swift-version.md"
+                    >SE-0141</a
+                  >）才引入，之前得用预处理指令
+                  <code class="language-plaintext highlighter-rouge"
+                    >#if swift(&gt;= N)</code
+                  >。 <a
+                    href="#fnref:available"
+                    class="reversefootnote"
+                    role="doc-backlink"
+                    >&#8617;</a
+                  >
+                </p>
+              </li>
+              <li id="fn:parameter" role="doc-endnote">
+                <p>
+                  在 Swift 1.x
+                  时代，函数默认没有外部参数名，方法除了第一个参数其他都有外部参数名，而构造器所有参数都有外部参数名；在
+                  Swift 2.0 中，函数改用了方法的外部参数名规则；Swift 3.0（<a
+                    href="https://github.com/apple/swift-evolution/blob/master/proposals/0046-first-label.md"
+                    >SE-0046</a
+                  >）开始，函数和方法都统一成了构造器的外部参数名规则，并改称参数标签。 <a
+                    href="#fnref:parameter"
+                    class="reversefootnote"
+                    role="doc-backlink"
+                    >&#8617;</a
+                  >
+                </p>
+              </li>
+              <li id="fn:label" role="doc-endnote">
+                <p>
+                  Swift 3.0（<a
+                    href="https://github.com/apple/swift-evolution/blob/master/proposals/0111-remove-arg-label-type-significance.md"
+                    >SE-0111</a
+                  >）之前，参数标签是类型的一部分，有无参数标签的函数类型会建立子类型关系，导致参数和返回类型相同但参数标签不同的函数变量在互相赋值时有奇怪的表现。 <a
+                    href="#fnref:label"
+                    class="reversefootnote"
+                    role="doc-backlink"
+                    >&#8617;</a
+                  >
+                </p>
+              </li>
+              <li id="fn:escaping" role="doc-endnote">
+                <p>
+                  以前闭包参数默认是可以逃逸的，只有
+                  <code class="language-plaintext highlighter-rouge"
+                    >@noescape</code
+                  >
+                  没有
+                  <code class="language-plaintext highlighter-rouge"
+                    >@escaping</code
+                  >；Swift 3.0（<a
+                    href="https://github.com/apple/swift-evolution/blob/master/proposals/0103-make-noescape-default.md"
+                    >SE-0103</a
+                  >）将其改为默认不逃逸以简化编译器相关算法，并且
+                  <code class="language-plaintext highlighter-rouge"
+                    >@escaping</code
+                  >
+                  可以通过 Xcode 的静态检查自动添加。 <a
+                    href="#fnref:escaping"
+                    class="reversefootnote"
+                    role="doc-backlink"
+                    >&#8617;</a
+                  >
+                </p>
+              </li>
+              <li id="fn:enumcase" role="doc-endnote">
+                <p>
+                  以前枚举的
+                  <code class="language-plaintext highlighter-rouge">case</code>
+                  成员是首字母大写的，但 Swift 3.0 推出的
+                  <a
+                    href="https://swift.org/documentation/api-design-guidelines/#follow-case-conventions"
+                    >API Design Guidelines</a
+                  >
+                  规定除类型和协议外其余一律首字母小写。 <a
+                    href="#fnref:enumcase"
+                    class="reversefootnote"
+                    role="doc-backlink"
+                    >&#8617;</a
+                  >
+                </p>
+              </li>
+            </ol>
+          </div>
+        </div>
+
+        <div class="comments">
+          <div id="disqus_thread"></div>
+          <script>
+            var disqus_config = function () {
+              this.page.url = "https://blog.yzsun.me/swift-notes-1/";
+              this.page.identifier = "/swift-notes-1/";
+            };
+            (function () {
+              var d = document,
+                s = d.createElement("script");
+              s.src = "//yzyzsun.disqus.com/embed.js";
+              s.setAttribute("data-timestamp", +new Date());
+              (d.head || d.body).appendChild(s);
+            })();
+          </script>
+          <noscript
+            >Please enable JavaScript to view the
+            <a href="https://disqus.com/?ref_noscript"
+              >comments powered by Disqus.</a
+            ></noscript
+          >
+        </div>
+      </article>
+    </div>
+
+    <div class="wrapper-footer">
+      <div class="container">
+        <footer class="footer">
+          <a href="https://github.com/yzyzsun"
+            ><i class="svg-icon github"></i
+          ></a>
+
+          <a href="/feed.xml"><i class="svg-icon rss"></i></a>
+        </footer>
+      </div>
+    </div>
+
+    <!-- Google Analytics -->
+    <script>
+      (function (i, s, o, g, r, a, m) {
+        i["GoogleAnalyticsObject"] = r;
+        (i[r] =
+          i[r] ||
+          function () {
+            (i[r].q = i[r].q || []).push(arguments);
+          }),
+          (i[r].l = 1 * new Date());
+        (a = s.createElement(o)), (m = s.getElementsByTagName(o)[0]);
+        a.async = 1;
+        a.src = g;
+        m.parentNode.insertBefore(a, m);
+      })(
+        window,
+        document,
+        "script",
+        "//www.google-analytics.com/analytics.js",
+        "ga"
+      );
+
+      ga("create", "UA-65994616-1", "auto");
+      ga("send", "pageview", {
+        page: "/swift-notes-1/",
+        title: "Swift 学习笔记（一）",
+      });
+    </script>
+    <!-- End Google Analytics -->
+  </body>
+</html>

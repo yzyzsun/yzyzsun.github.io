@@ -1,0 +1,470 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+  <head>
+    <title>使用 Qt 多线程避免事件循环阻塞 | 孙耀珠的博客</title>
+
+    <meta charset="utf-8" />
+    <meta content="text/html; charset=utf-8" http-equiv="Content-Type" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1.0, maximum-scale=1.0"
+    />
+    <meta
+      name="google-site-verification"
+      content="zYt2wigM41vmyHtpvOvLHk4Yetcfbv5Bz9pdvsTRT3Y"
+    />
+
+    <!-- Begin Jekyll SEO tag v2.7.1 -->
+    <meta name="generator" content="Jekyll v4.2.0" />
+    <meta property="og:title" content="使用 Qt 多线程避免事件循环阻塞" />
+    <meta name="author" content="孙耀珠" />
+    <meta property="og:locale" content="en_US" />
+    <meta
+      name="description"
+      content="这学期选了一门物理实验的小课题「宇宙射线μ子探测」，于是需要给实验用到的程序写个 GUI。因为目标平台是 Windows，何宇就直接去写 WPF 了；而我本身不是 Windows 用户，当然倾向于寻找一个跨平台的解决方案，目前主流的 GUI 框架中 Qt 大概是最优雅的选择（知乎上也有对此的讨论）。 除了原生的 C++，Qt 也支持其他许多语言的绑定，譬如 PyQt、QtRuby 等等；Qt 近年新推的 Qt Quick 也改用了可以内嵌 JS 的新语言 QML。不过因为我恰好在上 C++ 的面向对象程序设计课，正想借此机会实践一下，所以我还是选择了原生的 C++。 因为实验模拟是个计算密集型的任务，整个计算函数要跑很长时间，如果直接调用它，必然会阻塞事件循环。这样一来，GUI 所有的绘制和交互都被阻塞在事件队列中，整个程序就失去响应了。"
+    />
+    <meta
+      property="og:description"
+      content="这学期选了一门物理实验的小课题「宇宙射线μ子探测」，于是需要给实验用到的程序写个 GUI。因为目标平台是 Windows，何宇就直接去写 WPF 了；而我本身不是 Windows 用户，当然倾向于寻找一个跨平台的解决方案，目前主流的 GUI 框架中 Qt 大概是最优雅的选择（知乎上也有对此的讨论）。 除了原生的 C++，Qt 也支持其他许多语言的绑定，譬如 PyQt、QtRuby 等等；Qt 近年新推的 Qt Quick 也改用了可以内嵌 JS 的新语言 QML。不过因为我恰好在上 C++ 的面向对象程序设计课，正想借此机会实践一下，所以我还是选择了原生的 C++。 因为实验模拟是个计算密集型的任务，整个计算函数要跑很长时间，如果直接调用它，必然会阻塞事件循环。这样一来，GUI 所有的绘制和交互都被阻塞在事件队列中，整个程序就失去响应了。"
+    />
+    <link rel="canonical" href="https://blog.yzsun.me/qt-multithreading/" />
+    <meta
+      property="og:url"
+      content="https://blog.yzsun.me/qt-multithreading/"
+    />
+    <meta property="og:site_name" content="孙耀珠的博客" />
+    <meta property="og:type" content="article" />
+    <meta
+      property="article:published_time"
+      content="2015-11-17T00:00:00+00:00"
+    />
+    <meta name="twitter:card" content="summary" />
+    <meta property="twitter:title" content="使用 Qt 多线程避免事件循环阻塞" />
+    <script type="application/ld+json">
+      {
+        "description": "这学期选了一门物理实验的小课题「宇宙射线μ子探测」，于是需要给实验用到的程序写个 GUI。因为目标平台是 Windows，何宇就直接去写 WPF 了；而我本身不是 Windows 用户，当然倾向于寻找一个跨平台的解决方案，目前主流的 GUI 框架中 Qt 大概是最优雅的选择（知乎上也有对此的讨论）。 除了原生的 C++，Qt 也支持其他许多语言的绑定，譬如 PyQt、QtRuby 等等；Qt 近年新推的 Qt Quick 也改用了可以内嵌 JS 的新语言 QML。不过因为我恰好在上 C++ 的面向对象程序设计课，正想借此机会实践一下，所以我还是选择了原生的 C++。 因为实验模拟是个计算密集型的任务，整个计算函数要跑很长时间，如果直接调用它，必然会阻塞事件循环。这样一来，GUI 所有的绘制和交互都被阻塞在事件队列中，整个程序就失去响应了。",
+        "url": "https://blog.yzsun.me/qt-multithreading/",
+        "@type": "BlogPosting",
+        "headline": "使用 Qt 多线程避免事件循环阻塞",
+        "dateModified": "2015-11-17T00:00:00+00:00",
+        "datePublished": "2015-11-17T00:00:00+00:00",
+        "mainEntityOfPage": {
+          "@type": "WebPage",
+          "@id": "https://blog.yzsun.me/qt-multithreading/"
+        },
+        "author": { "@type": "Person", "name": "孙耀珠" },
+        "@context": "https://schema.org"
+      }
+    </script>
+    <!-- End Jekyll SEO tag -->
+
+    <link
+      type="application/atom+xml"
+      rel="alternate"
+      href="https://blog.yzsun.me/feed.xml"
+      title="孙耀珠的博客"
+    />
+
+    <!--[if lt IE 9]>
+      <script src="//cdnjs.cloudflare.com/ajax/libs/html5shiv/r29/html5.min.js"></script>
+    <![endif]-->
+
+    <link rel="stylesheet" href="/style.css" />
+  </head>
+
+  <body>
+    <div class="wrapper-masthead">
+      <div class="container">
+        <header class="masthead clearfix">
+          <a href="/" class="site-avatar"
+            ><img src="/images/avatar.jpg" alt="avatar"
+          /></a>
+
+          <div class="site-info">
+            <h1 class="site-domain"><a href="/">yzsun.me</a></h1>
+            <p class="site-name">孙耀珠的博客</p>
+          </div>
+
+          <nav>
+            <a href="/">首页</a>
+            <a href="/archive/">归档</a>
+            <a href="/about/">关于</a>
+          </nav>
+        </header>
+      </div>
+    </div>
+
+    <div id="main" role="main" class="container">
+      <article class="post">
+        <h1>使用 Qt 多线程避免事件循环阻塞</h1>
+
+        <div class="info">
+          <span>
+            <i class="fa fa-calendar"></i>
+            2015-11-17
+          </span>
+          <span>
+            <i class="fa fa-user"></i>
+            孙耀珠
+          </span>
+          <span>
+            <i class="fa fa-tags"></i>
+            调库
+          </span>
+        </div>
+
+        <div class="entry">
+          <p>
+            这学期选了一门物理实验的小课题「宇宙射线μ子探测」，于是需要给实验用到的程序写个
+            GUI。因为目标平台是 Windows，何宇就直接去写 WPF 了；而我本身不是
+            Windows 用户，当然倾向于寻找一个跨平台的解决方案，目前主流的 GUI
+            框架中 Qt 大概是最优雅的选择（<a
+              href="http://www.zhihu.com/question/23480014"
+              >知乎上也有对此的讨论</a
+            >）。
+          </p>
+
+          <p>
+            除了原生的 C++，Qt 也支持其他许多语言的绑定，譬如 PyQt、QtRuby
+            等等；Qt 近年新推的 Qt Quick 也改用了可以内嵌 JS 的新语言
+            QML。不过因为我恰好在上 C++
+            的面向对象程序设计课，正想借此机会实践一下，所以我还是选择了原生的
+            C++。
+          </p>
+
+          <p>
+            因为实验模拟是个计算密集型的任务，整个计算函数要跑很长时间，如果直接调用它，必然会<strong>阻塞</strong>事件循环。这样一来，GUI
+            所有的绘制和交互都被阻塞在事件队列中，整个程序就失去响应了。
+          </p>
+
+          <!--more-->
+
+          <p>
+            对于这样的阻塞一般有两种解决办法：一是在计算任务中不停地调用静态成员函数
+            <code class="language-plaintext highlighter-rouge"
+              >QCoreApplication::processEvents()</code
+            >
+            来手动运行事件循环，它会在处理完队列中所有事件后返回。不过这样做毕竟没有从根本上解决问题，另外如果两次函数调用之间间隔的时间不够短，用户仍能明显感觉到程序卡顿。
+          </p>
+
+          <p>
+            第二种解决办法就是为任务新开一个线程，这样就能在不干扰 GUI
+            线程的情况下完成计算了。Qt
+            提供了三种控制线程的方式：QThread、QRunnable /
+            QThreadPool、QtConcurrent，其中最通用、也是最常见的是 QThread。
+          </p>
+
+          <p>
+            <strong>QRunnable</strong>
+            是一个非常轻量的抽象类，它的主体是纯虚函数
+            <code class="language-plaintext highlighter-rouge"
+              >QRunnable::run()</code
+            >，我们需要继承它并实现这个函数。使用时需要将其子类的实例放进
+            <strong>QThreadPool</strong>
+            的执行队列，线程池默认会在运行后自动删除这个实例。每个应用都有一个全局的线程池，我们可以直接使用它，这就不需要手动创建和管理线程池了。不过因为
+            QRunnable 不是 QObject
+            的子类，它没有内建与外界通信的手段，所以真正在使用时没那么实用。
+          </p>
+
+          <div class="language-cpp highlighter-rouge">
+            <div class="highlight">
+              <pre
+                class="highlight"
+              ><code><span class="k">class</span> <span class="nc">Task</span> <span class="o">:</span> <span class="k">public</span> <span class="n">QRunnable</span>
+<span class="p">{</span>
+<span class="nl">public:</span>
+    <span class="kt">void</span> <span class="n">run</span><span class="p">()</span>
+    <span class="p">{</span>
+        <span class="cm">/* Implementation */</span>
+    <span class="p">}</span>
+<span class="p">};</span>
+
+<span class="cm">/* ... */</span>
+<span class="n">QThreadPool</span><span class="o">::</span><span class="n">globalInstance</span><span class="p">()</span><span class="o">-&gt;</span><span class="n">start</span><span class="p">(</span><span class="k">new</span> <span class="n">Task</span><span class="p">);</span>
+</code></pre>
+            </div>
+          </div>
+
+          <p>
+            而
+            <strong>QtConcurrent</strong>
+            不是一个类，而是一个命名空间，内含一系列高度封装的多线程
+            API，基于前面提到的 QThreadPool。它可以并行地处理 MapReduce /
+            FilterReduce，并能根据处理器实际的核心数调整所用的线程数，在执行过程中可以通过
+            QFuture 来获取结果、查询运行状态、暂停或取消任务。另外
+            <code class="language-plaintext highlighter-rouge"
+              >QtConcurrent::run(Function function, ...)</code
+            >
+            可以启动一个新线程来运行所给的函数（可后接参数表），不过这时返回的
+            QFuture 不支持暂停和中止。使用这些 API 能完成大多数的多线程任务。
+          </p>
+
+          <p>
+            <strong>QThread</strong> 是 Qt
+            多线程调度中最核心的底层类，也是最常见的多线程实现方法。跟前面两者相比，QThread
+            的优势在于能够开启线程内的事件循环，为线程中所有 QObject
+            分发事件，以及能够设置自身的线程优先级。在 Qt 4.4 之前，QThread 跟
+            QRunnable 一样是一个抽象类，需要在子类中实现
+            <code class="language-plaintext highlighter-rouge"
+              >QThread::run()</code
+            >，再将其实例化并调用成员函数
+            <code class="language-plaintext highlighter-rouge"
+              >QThread::start()</code
+            >
+            即可运行。
+          </p>
+
+          <div class="language-cpp highlighter-rouge">
+            <div class="highlight">
+              <pre
+                class="highlight"
+              ><code><span class="k">class</span> <span class="nc">WorkerThread</span> <span class="o">:</span> <span class="k">public</span> <span class="n">QThread</span>
+<span class="p">{</span>
+<span class="nl">protected:</span>
+    <span class="kt">void</span> <span class="n">run</span><span class="p">()</span>
+    <span class="p">{</span>
+        <span class="cm">/* Implementation */</span>
+    <span class="p">}</span>
+<span class="p">};</span>
+
+<span class="cm">/* ... */</span>
+<span class="n">WorkerThread</span> <span class="o">*</span><span class="n">workerThread</span> <span class="o">=</span> <span class="k">new</span> <span class="n">WorkerThread</span><span class="p">;</span>
+<span class="n">workerThread</span><span class="o">-&gt;</span><span class="n">start</span><span class="p">();</span>
+</code></pre>
+            </div>
+          </div>
+
+          <p>
+            但现在的 Qt 版本中
+            <code class="language-plaintext highlighter-rouge"
+              >QThread::run()</code
+            >
+            不再是纯虚函数，其默认实现是调用
+            <code class="language-plaintext highlighter-rouge"
+              >QThread::exec()</code
+            >
+            开启一个事件循环。因此，继承 QThread
+            实现多线程已不再是推荐的做法，<strong>更加优雅</strong>的做法是将计算任务和线程管理分离，即由专门的对象处理计算任务，再由线程管理器用
+            <code class="language-plaintext highlighter-rouge"
+              >QObject::moveToThread()</code
+            >
+            为其分配合适的线程。
+          </p>
+
+          <div class="language-cpp highlighter-rouge">
+            <div class="highlight">
+              <pre
+                class="highlight"
+              ><code><span class="k">class</span> <span class="nc">Worker</span> <span class="o">:</span> <span class="k">public</span> <span class="n">QObject</span>
+<span class="p">{</span>
+    <span class="n">Q_OBJECT</span>
+
+<span class="k">public</span> <span class="n">slots</span><span class="o">:</span>
+    <span class="kt">void</span> <span class="n">doWork</span><span class="p">(</span><span class="k">const</span> <span class="n">QString</span> <span class="o">&amp;</span><span class="n">parameter</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="n">QString</span> <span class="n">result</span><span class="p">;</span>
+        <span class="cm">/* Blocking calculations */</span>
+        <span class="n">emit</span> <span class="n">resultReady</span><span class="p">(</span><span class="n">result</span><span class="p">);</span>
+    <span class="p">}</span>
+
+<span class="nl">signals:</span>
+    <span class="kt">void</span> <span class="n">resultReady</span><span class="p">(</span><span class="k">const</span> <span class="n">QString</span> <span class="o">&amp;</span><span class="n">result</span><span class="p">);</span>
+<span class="p">};</span>
+</code></pre>
+            </div>
+          </div>
+
+          <div class="language-cpp highlighter-rouge">
+            <div class="highlight">
+              <pre
+                class="highlight"
+              ><code><span class="k">class</span> <span class="nc">Controller</span> <span class="o">:</span> <span class="k">public</span> <span class="n">QObject</span>
+<span class="p">{</span>
+    <span class="n">Q_OBJECT</span>
+    <span class="n">QThread</span> <span class="n">workerThread</span><span class="p">;</span>
+
+<span class="nl">public:</span>
+    <span class="n">Controller</span><span class="p">()</span>
+    <span class="p">{</span>
+        <span class="n">Worker</span> <span class="o">*</span><span class="n">worker</span> <span class="o">=</span> <span class="k">new</span> <span class="n">worker</span><span class="p">;</span>
+        <span class="n">worker</span><span class="o">-&gt;</span><span class="n">moveToThread</span><span class="p">(</span><span class="o">&amp;</span><span class="n">workerThread</span><span class="p">);</span>
+        <span class="n">connect</span><span class="p">(</span><span class="k">this</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">QThread</span><span class="o">::</span><span class="n">finished</span><span class="p">,</span> <span class="n">worker</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">QObject</span><span class="o">::</span><span class="n">deleteLater</span><span class="p">);</span>
+        <span class="n">connect</span><span class="p">(</span><span class="k">this</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">Controller</span><span class="o">::</span><span class="n">operate</span><span class="p">,</span> <span class="n">worker</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">Worker</span><span class="o">::</span><span class="n">doWork</span><span class="p">);</span>
+        <span class="n">connect</span><span class="p">(</span><span class="n">worker</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">Worker</span><span class="o">::</span><span class="n">resultReady</span><span class="p">,</span> <span class="k">this</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">Worker</span><span class="o">::</span><span class="n">handleResult</span><span class="p">);</span>
+        <span class="n">workerThread</span><span class="p">.</span><span class="n">start</span><span class="p">();</span>
+    <span class="p">}</span>
+    <span class="o">~</span><span class="n">Controller</span><span class="p">()</span>
+    <span class="p">{</span>
+        <span class="n">workerThread</span><span class="p">.</span><span class="n">quit</span><span class="p">();</span>
+        <span class="n">workerThread</span><span class="p">.</span><span class="n">wait</span><span class="p">();</span>
+    <span class="p">}</span>
+
+<span class="k">public</span> <span class="n">slots</span><span class="o">:</span>
+    <span class="kt">void</span> <span class="n">handleResult</span><span class="p">(</span><span class="k">const</span> <span class="n">QString</span> <span class="o">&amp;</span><span class="n">result</span><span class="p">);</span>
+
+<span class="nl">signals:</span>
+    <span class="kt">void</span> <span class="n">operate</span><span class="p">(</span><span class="k">const</span> <span class="n">QString</span> <span class="o">&amp;</span><span class="n">parameter</span><span class="p">);</span>
+<span class="p">};</span>
+</code></pre>
+            </div>
+          </div>
+
+          <p>
+            在新线程中执行计算任务时，我们会发现这时不能再访问 UI 了，这是因为
+            QWidget
+            及其子类都不是<strong>可重入的</strong>（reentrant），只能通过主线程访问。这样的设计虽然对开发者来说有些麻烦，但避免了可能导致的死锁或是复杂的
+            UI 同步。总之若要更新 UI
+            或是做其他交互，我们需要进行跨线程的对象间通信。这一任务可以通过静态函数
+            <code class="language-plaintext highlighter-rouge"
+              >QMetaObject::invokeMethod()</code
+            >
+            来完成：
+          </p>
+
+          <div class="language-cpp highlighter-rouge">
+            <div class="highlight">
+              <pre
+                class="highlight"
+              ><code><span class="n">QMetaObject</span><span class="o">::</span><span class="n">invokeMethod</span><span class="p">(</span><span class="n">object</span><span class="p">,</span> <span class="s">"factorial"</span><span class="p">,</span>
+                          <span class="n">Qt</span><span class="o">::</span><span class="n">QueuedConnection</span><span class="p">,</span>
+                          <span class="n">Q_RETURN_ARG</span><span class="p">(</span><span class="n">QString</span><span class="p">,</span> <span class="n">retVal</span><span class="p">),</span>
+                          <span class="n">Q_ARG</span><span class="p">(</span><span class="kt">int</span><span class="p">,</span> <span class="mi">48</span><span class="p">));</span>
+</code></pre>
+            </div>
+          </div>
+
+          <p>
+            其中
+            <code class="language-plaintext highlighter-rouge"
+              >Qt::QueuedConnection</code
+            >
+            意味着向对象所属进程发送事件，进入其事件循环以待执行。而 Qt
+            惯用的信号槽机制正基于此支持了跨线程通信，<code
+              class="language-plaintext highlighter-rouge"
+              >QObject::connect()</code
+            >
+            的最后一个参数可以指定连接类型，默认值
+            <code class="language-plaintext highlighter-rouge"
+              >Qt::AutoConnection</code
+            >
+            表示如果目标线程就是当前进程则用
+            <code class="language-plaintext highlighter-rouge"
+              >Qt::DirectConnection</code
+            >，否则采用
+            <code class="language-plaintext highlighter-rouge"
+              >Qt::QueuedConnection</code
+            >
+            连接。
+          </p>
+
+          <p>
+            因为这一机制依赖 Qt
+            元对象编译器（moc）提供的内省（introspection），所以只有信号、槽和用
+            <code class="language-plaintext highlighter-rouge"
+              >Q_INVOKABLE</code
+            >
+            宏标记的函数才能从别的线程调用。另外值得注意的是，如果所调函数的参数类型不是内建数据类型、不属于
+            QVariant，会抛出错误「QObject::connect: Cannot queue arguments of
+            type
+            ‘MyClass’」，即该类型的参数无法进入信号队列。要解决这个问题，我们可以在类的声明之后加上宏
+            <code class="language-plaintext highlighter-rouge"
+              >Q_DECLARE_METATYPE(MyClass)</code
+            >、并调用
+            <code class="language-plaintext highlighter-rouge"
+              >qRegisterMetaType&lt;MyClass&gt;("MyClass")</code
+            >
+            来将其注册为元类型，不过成为元类型的前提是该类提供了公有的构造函数、拷贝构造函数和析构函数。
+          </p>
+
+          <blockquote>
+            <p>参考文档：</p>
+
+            <p>
+              <a href="http://wiki.qt.io/Threads_Events_QObjects"
+                >Threads Events QObjects - Qt Wiki</a
+              ><br />
+              <a href="http://doc.qt.io/qt-5/qthread.html"
+                >QThread Class - Qt Documentation</a
+              ><br />
+              <a href="http://doc.qt.io/qt-5/qrunnable.html"
+                >QRunnable Class - Qt Documentation</a
+              ><br />
+              <a href="http://doc.qt.io/qt-5/qthreadpool.html"
+                >QThreadPool Class - Qt Documentation</a
+              ><br />
+              <a href="http://doc.qt.io/qt-5/qtconcurrent-index.html"
+                >Qt Concurrent - Qt Documentation</a
+              >
+            </p>
+          </blockquote>
+        </div>
+
+        <div class="comments">
+          <div id="disqus_thread"></div>
+          <script>
+            var disqus_config = function () {
+              this.page.url = "https://blog.yzsun.me/qt-multithreading/";
+              this.page.identifier = "/qt-multithreading/";
+            };
+            (function () {
+              var d = document,
+                s = d.createElement("script");
+              s.src = "//yzyzsun.disqus.com/embed.js";
+              s.setAttribute("data-timestamp", +new Date());
+              (d.head || d.body).appendChild(s);
+            })();
+          </script>
+          <noscript
+            >Please enable JavaScript to view the
+            <a href="https://disqus.com/?ref_noscript"
+              >comments powered by Disqus.</a
+            ></noscript
+          >
+        </div>
+      </article>
+    </div>
+
+    <div class="wrapper-footer">
+      <div class="container">
+        <footer class="footer">
+          <a href="https://github.com/yzyzsun"
+            ><i class="svg-icon github"></i
+          ></a>
+
+          <a href="/feed.xml"><i class="svg-icon rss"></i></a>
+        </footer>
+      </div>
+    </div>
+
+    <!-- Google Analytics -->
+    <script>
+      (function (i, s, o, g, r, a, m) {
+        i["GoogleAnalyticsObject"] = r;
+        (i[r] =
+          i[r] ||
+          function () {
+            (i[r].q = i[r].q || []).push(arguments);
+          }),
+          (i[r].l = 1 * new Date());
+        (a = s.createElement(o)), (m = s.getElementsByTagName(o)[0]);
+        a.async = 1;
+        a.src = g;
+        m.parentNode.insertBefore(a, m);
+      })(
+        window,
+        document,
+        "script",
+        "//www.google-analytics.com/analytics.js",
+        "ga"
+      );
+
+      ga("create", "UA-65994616-1", "auto");
+      ga("send", "pageview", {
+        page: "/qt-multithreading/",
+        title: "使用 Qt 多线程避免事件循环阻塞",
+      });
+    </script>
+    <!-- End Google Analytics -->
+  </body>
+</html>

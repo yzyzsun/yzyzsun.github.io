@@ -1,0 +1,428 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+  <head>
+    <title>Sublime Text for Mac 使用配置 | 孙耀珠的博客</title>
+
+    <meta charset="utf-8" />
+    <meta content="text/html; charset=utf-8" http-equiv="Content-Type" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1.0, maximum-scale=1.0"
+    />
+    <meta
+      name="google-site-verification"
+      content="zYt2wigM41vmyHtpvOvLHk4Yetcfbv5Bz9pdvsTRT3Y"
+    />
+
+    <!-- Begin Jekyll SEO tag v2.7.1 -->
+    <meta name="generator" content="Jekyll v4.2.0" />
+    <meta property="og:title" content="Sublime Text for Mac 使用配置" />
+    <meta name="author" content="孙耀珠" />
+    <meta property="og:locale" content="en_US" />
+    <meta
+      name="description"
+      content="Mac OS X 从不缺乏优秀的代码编辑器，从 Vim 和 Emacs 到 Xcode、IntelliJ IDEA、Eclipse，都有着为数甚多的忠实用户。然而大多数的 IDE 是为软件工程而设计的，若只是写写算法题，那么只需要简单的命令行程序，用这些面向工程的 IDE 堪比杀鸡用牛刀了。 Sublime Text 作为一个轻量级的代码编辑器，对于单文件编程非常友好，原生支持不少主流语言的编译运行。它吸收了前辈 TextMate 的优点，并在可扩展性方面更胜一筹。通过各种插件包，我们可以定制包括主题、配色方案、编译选项在内的方方面面。 即便如此，Sublime Text 还是有一些不尽如人意的地方需要进一步配置，以下便是 C / C++、Python、Ruby、HTML 的几处配置技巧。 测试环境：Sublime Text 3 Build 3065 (OS X Yosemite 10.10)"
+    />
+    <meta
+      property="og:description"
+      content="Mac OS X 从不缺乏优秀的代码编辑器，从 Vim 和 Emacs 到 Xcode、IntelliJ IDEA、Eclipse，都有着为数甚多的忠实用户。然而大多数的 IDE 是为软件工程而设计的，若只是写写算法题，那么只需要简单的命令行程序，用这些面向工程的 IDE 堪比杀鸡用牛刀了。 Sublime Text 作为一个轻量级的代码编辑器，对于单文件编程非常友好，原生支持不少主流语言的编译运行。它吸收了前辈 TextMate 的优点，并在可扩展性方面更胜一筹。通过各种插件包，我们可以定制包括主题、配色方案、编译选项在内的方方面面。 即便如此，Sublime Text 还是有一些不尽如人意的地方需要进一步配置，以下便是 C / C++、Python、Ruby、HTML 的几处配置技巧。 测试环境：Sublime Text 3 Build 3065 (OS X Yosemite 10.10)"
+    />
+    <link rel="canonical" href="https://blog.yzsun.me/sublime-text-for-mac/" />
+    <meta
+      property="og:url"
+      content="https://blog.yzsun.me/sublime-text-for-mac/"
+    />
+    <meta property="og:site_name" content="孙耀珠的博客" />
+    <meta property="og:type" content="article" />
+    <meta
+      property="article:published_time"
+      content="2014-11-08T00:00:00+00:00"
+    />
+    <meta name="twitter:card" content="summary" />
+    <meta property="twitter:title" content="Sublime Text for Mac 使用配置" />
+    <script type="application/ld+json">
+      {
+        "description": "Mac OS X 从不缺乏优秀的代码编辑器，从 Vim 和 Emacs 到 Xcode、IntelliJ IDEA、Eclipse，都有着为数甚多的忠实用户。然而大多数的 IDE 是为软件工程而设计的，若只是写写算法题，那么只需要简单的命令行程序，用这些面向工程的 IDE 堪比杀鸡用牛刀了。 Sublime Text 作为一个轻量级的代码编辑器，对于单文件编程非常友好，原生支持不少主流语言的编译运行。它吸收了前辈 TextMate 的优点，并在可扩展性方面更胜一筹。通过各种插件包，我们可以定制包括主题、配色方案、编译选项在内的方方面面。 即便如此，Sublime Text 还是有一些不尽如人意的地方需要进一步配置，以下便是 C / C++、Python、Ruby、HTML 的几处配置技巧。 测试环境：Sublime Text 3 Build 3065 (OS X Yosemite 10.10)",
+        "url": "https://blog.yzsun.me/sublime-text-for-mac/",
+        "@type": "BlogPosting",
+        "headline": "Sublime Text for Mac 使用配置",
+        "dateModified": "2014-11-08T00:00:00+00:00",
+        "datePublished": "2014-11-08T00:00:00+00:00",
+        "mainEntityOfPage": {
+          "@type": "WebPage",
+          "@id": "https://blog.yzsun.me/sublime-text-for-mac/"
+        },
+        "author": { "@type": "Person", "name": "孙耀珠" },
+        "@context": "https://schema.org"
+      }
+    </script>
+    <!-- End Jekyll SEO tag -->
+
+    <link
+      type="application/atom+xml"
+      rel="alternate"
+      href="https://blog.yzsun.me/feed.xml"
+      title="孙耀珠的博客"
+    />
+
+    <!--[if lt IE 9]>
+      <script src="//cdnjs.cloudflare.com/ajax/libs/html5shiv/r29/html5.min.js"></script>
+    <![endif]-->
+
+    <link rel="stylesheet" href="/style.css" />
+  </head>
+
+  <body>
+    <div class="wrapper-masthead">
+      <div class="container">
+        <header class="masthead clearfix">
+          <a href="/" class="site-avatar"
+            ><img src="/images/avatar.jpg" alt="avatar"
+          /></a>
+
+          <div class="site-info">
+            <h1 class="site-domain"><a href="/">yzsun.me</a></h1>
+            <p class="site-name">孙耀珠的博客</p>
+          </div>
+
+          <nav>
+            <a href="/">首页</a>
+            <a href="/archive/">归档</a>
+            <a href="/about/">关于</a>
+          </nav>
+        </header>
+      </div>
+    </div>
+
+    <div id="main" role="main" class="container">
+      <article class="post">
+        <h1>Sublime Text for Mac 使用配置</h1>
+
+        <div class="info">
+          <span>
+            <i class="fa fa-calendar"></i>
+            2014-11-08
+          </span>
+          <span>
+            <i class="fa fa-user"></i>
+            孙耀珠
+          </span>
+          <span>
+            <i class="fa fa-tags"></i>
+            开发环境
+          </span>
+        </div>
+
+        <div class="entry">
+          <p>
+            Mac OS X 从不缺乏优秀的代码编辑器，从 Vim 和 Emacs 到
+            Xcode、IntelliJ
+            IDEA、Eclipse，都有着为数甚多的忠实用户。然而大多数的 IDE
+            是为软件工程而设计的，若只是写写算法题，那么只需要简单的命令行程序，用这些面向工程的
+            IDE 堪比杀鸡用牛刀了。
+          </p>
+
+          <p>
+            Sublime Text
+            作为一个轻量级的代码编辑器，对于单文件编程非常友好，原生支持不少主流语言的编译运行。它吸收了前辈
+            TextMate
+            的优点，并在可扩展性方面更胜一筹。通过各种插件包，我们可以定制包括主题、配色方案、编译选项在内的方方面面。
+          </p>
+
+          <p>
+            即便如此，Sublime Text
+            还是有一些不尽如人意的地方需要进一步配置，以下便是 C /
+            C++、Python、Ruby、HTML 的几处配置技巧。
+          </p>
+
+          <p>测试环境：Sublime Text 3 Build 3065 (OS X Yosemite 10.10)</p>
+
+          <!--more-->
+
+          <h2 id="c--c">C / C++</h2>
+
+          <p>
+            在 Sublime Text
+            中最头疼的地方是，下方内置的控制台竟然不能输入数据，即程序无法从
+            stdin 读入用户输入，这个问题在 TextMate 中也一直存在。其次预设的
+            Build System 只有 C++ 而没有 C，虽然没什么大碍但会弹出警告「this
+            behavior is deprecated」。
+          </p>
+
+          <p><img src="/images/sublime-text-for-mac-00.png" alt="" /></p>
+
+          <p>
+            解决这两个问题需要创建自定义 Build
+            System，设置其在运行程序时不使用内置控制台，而是直接调用终端运行。我们可以点击
+            Tools &gt; Build System &gt; New Build System…
+            新建自己的配置文件，以后选择自己的这个 Build System
+            来编译；也可以去修改 Sublime Text 内置的 Package。C++ 的包位于
+            <code class="language-plaintext highlighter-rouge"
+              >/Applications/Sublime
+              Text.app/Contents/MacOS/Packages/C++.sublime-package</code
+            >，它可以作为归档文件打开，修改其中的
+            <code class="language-plaintext highlighter-rouge"
+              >C++.sublime-build</code
+            >
+            即可。修改后的内容为：
+          </p>
+
+          <div class="language-json highlighter-rouge">
+            <div class="highlight">
+              <pre
+                class="highlight"
+              ><code><span class="p">{</span><span class="w">
+    </span><span class="nl">"shell_cmd"</span><span class="p">:</span><span class="w"> </span><span class="s2">"g++ -o </span><span class="se">\"</span><span class="s2">${file_path}/${file_base_name}</span><span class="se">\"</span><span class="s2"> </span><span class="se">\"</span><span class="s2">${file}</span><span class="se">\"</span><span class="s2">"</span><span class="p">,</span><span class="w">
+    </span><span class="nl">"file_regex"</span><span class="p">:</span><span class="w"> </span><span class="s2">"^(..[^:]*):([0-9]+):?([0-9]+)?:? (.*)$"</span><span class="p">,</span><span class="w">
+    </span><span class="nl">"working_dir"</span><span class="p">:</span><span class="w"> </span><span class="s2">"${file_path}"</span><span class="p">,</span><span class="w">
+    </span><span class="nl">"selector"</span><span class="p">:</span><span class="w"> </span><span class="s2">"source.c++"</span><span class="p">,</span><span class="w">
+
+    </span><span class="nl">"variants"</span><span class="p">:</span><span class="w">
+    </span><span class="p">[</span><span class="w">
+        </span><span class="p">{</span><span class="w">
+            </span><span class="nl">"name"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Run"</span><span class="p">,</span><span class="w">
+            </span><span class="nl">"shell_cmd"</span><span class="p">:</span><span class="w"> </span><span class="s2">"g++ -o </span><span class="se">\"</span><span class="s2">${file_path}/${file_base_name}</span><span class="se">\"</span><span class="s2"> </span><span class="se">\"</span><span class="s2">${file}</span><span class="se">\"</span><span class="s2"> &amp;&amp; open </span><span class="se">\"</span><span class="s2">${file_path}/${file_base_name}</span><span class="se">\"</span><span class="s2">"</span><span class="w">
+        </span><span class="p">}</span><span class="w">
+    </span><span class="p">]</span><span class="w">
+</span><span class="p">}</span><span class="w">
+</span></code></pre>
+            </div>
+          </div>
+
+          <p>
+            实际上这就是一个 JSON，相关资料可以参阅
+            <a
+              href="http://docs.sublimetext.info/en/latest/reference/build_systems.html"
+              >Sublime Text Unofficial Documentation</a
+            >。相应地，C 的配置文件可以新建一个
+            <code class="language-plaintext highlighter-rouge"
+              >C.sublime-build</code
+            >，将原先所有的
+            <code class="language-plaintext highlighter-rouge">g++</code> 替换为
+            <code class="language-plaintext highlighter-rouge">gcc</code>
+            即可。 
+          </p>
+
+          <h2 id="python">Python</h2>
+
+          <p>
+            Python 也存在上述的内置控制台无法输入的问题，这时有比自己重写 Build
+            System 更方便的解决方案。<a
+              href="https://github.com/wuub/SublimeREPL"
+              >GitHub</a
+            >
+            上有一个项目 <strong>SublimeREPL</strong>，支持在 Sublime
+            中运行交互式开发环境（即 REPL, Read-Eval-Print Loop）。
+          </p>
+
+          <p>
+            首先需要安装 Package Control，这是 Sublime Text
+            的插件包管理器，安装方法见
+            <a href="https://packagecontrol.io/installation"
+              >Installation - Package Control</a
+            >。接着按 ⇧⌘P 调出 Command Palette，键入「install」打开 Package
+            Control: Install Package，找到 SublimeREPL 即可安装。
+          </p>
+
+          <p><img src="/images/sublime-text-for-mac-01.png" alt="" /></p>
+
+          <p>
+            安装完成后，可以通过 Tools &gt; SublimeREPL &gt; Python &gt; Python
+            在新窗口中打开交互式开发环境，或是通过同菜单下的 Python - RUN
+            current file 运行当前文件。除此之外，也有其他简便的办法，其一是按
+            ⇧⌘P 并输入「python」，可以在列表中看到 SublimeREPL
+            的相关命令。其二是为这些命令设置快捷键，这里以 Python - RUN current
+            file 为例，设置与 Python IDLE 相同的快捷键 F5。
+          </p>
+
+          <p>
+            打开 Sublime Text &gt; Preferences &gt; Key Bindings -
+            User，在文件中输入：
+          </p>
+
+          <div class="language-json highlighter-rouge">
+            <div class="highlight">
+              <pre
+                class="highlight"
+              ><code><span class="p">[</span><span class="w">
+    </span><span class="p">{</span><span class="w">
+        </span><span class="nl">"keys"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="s2">"f5"</span><span class="p">],</span><span class="w">
+        </span><span class="nl">"caption"</span><span class="p">:</span><span class="w"> </span><span class="s2">"SublimeREPL: Python - RUN current file"</span><span class="p">,</span><span class="w">
+        </span><span class="nl">"command"</span><span class="p">:</span><span class="w"> </span><span class="s2">"run_existing_window_command"</span><span class="p">,</span><span class="w">
+        </span><span class="nl">"args"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+            </span><span class="nl">"id"</span><span class="p">:</span><span class="w"> </span><span class="s2">"repl_python_run"</span><span class="p">,</span><span class="w">
+            </span><span class="nl">"file"</span><span class="p">:</span><span class="w"> </span><span class="s2">"config/Python/Main.sublime-menu"</span><span class="w">
+        </span><span class="p">}</span><span class="w">
+    </span><span class="p">}</span><span class="w">
+</span><span class="p">]</span><span class="w">
+</span></code></pre>
+            </div>
+          </div>
+
+          <h2 id="ruby">Ruby</h2>
+
+          <p>
+            SublimeREPL 当然也支持
+            Ruby，不过非常坑的是，它不提供运行当前文件的功能，只提供交互式界面。这个交互式界面默认调用的是比
+            IRB 更优雅的 <a href="http://pryrepl.org">Pry</a>，然而它对 Pry
+            的新版本有一些兼容性问题。还好 GitHub 上已经有人提出了修复的方法：<a
+              href="https://github.com/wuub/SublimeREPL/pull/372"
+              >Fix ruby Pry helper for Pry version &gt;= 0.10.0</a
+            >，可以照着这个 pull request 修改
+            <code class="language-plaintext highlighter-rouge"
+              >~/Library/Application Support/Sublime Text
+              3/Packages/SublimeREPL/config/Ruby/pry_repl.rb</code
+            >。
+          </p>
+
+          <p>
+            至于运行单个文件的功能，还是需要自己添加。打开文件
+            <code class="language-plaintext highlighter-rouge"
+              >~/Library/Application Support/Sublime Text
+              3/Packages/SublimeREPL/config/Ruby/Main.sublime-menu</code
+            >，在与 Ruby - IRB (deprecated) 同级的位置加入以下代码：
+          </p>
+
+          <div class="language-json highlighter-rouge">
+            <div class="highlight">
+              <pre
+                class="highlight"
+              ><code><span class="p">{</span><span class="w">
+    </span><span class="nl">"command"</span><span class="p">:</span><span class="s2">"repl_open"</span><span class="p">,</span><span class="w">
+    </span><span class="nl">"caption"</span><span class="p">:</span><span class="s2">"Ruby - RUN current file"</span><span class="p">,</span><span class="w">
+    </span><span class="nl">"id"</span><span class="p">:</span><span class="s2">"repl_ruby_run"</span><span class="p">,</span><span class="w">
+    </span><span class="nl">"mnemonic"</span><span class="p">:</span><span class="s2">"r"</span><span class="p">,</span><span class="w">
+    </span><span class="nl">"args"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+        </span><span class="nl">"type"</span><span class="p">:</span><span class="s2">"subprocess"</span><span class="p">,</span><span class="w">
+        </span><span class="nl">"external_id"</span><span class="p">:</span><span class="s2">"ruby"</span><span class="p">,</span><span class="w">
+        </span><span class="nl">"encoding"</span><span class="p">:</span><span class="s2">"utf8"</span><span class="p">,</span><span class="w">
+        </span><span class="nl">"cmd"</span><span class="p">:[</span><span class="s2">"ruby"</span><span class="p">,</span><span class="w"> </span><span class="s2">"-w"</span><span class="p">,</span><span class="w"> </span><span class="s2">"$file_basename"</span><span class="p">],</span><span class="w">
+        </span><span class="nl">"soft_quit"</span><span class="p">:</span><span class="s2">"</span><span class="se">\n</span><span class="s2">exit</span><span class="se">\n</span><span class="s2">"</span><span class="p">,</span><span class="w">
+        </span><span class="nl">"cwd"</span><span class="p">:</span><span class="s2">"$file_path"</span><span class="p">,</span><span class="w">
+        </span><span class="nl">"cmd_postfix"</span><span class="p">:</span><span class="s2">"</span><span class="se">\n</span><span class="s2">"</span><span class="p">,</span><span class="w">
+        </span><span class="nl">"syntax"</span><span class="p">:</span><span class="s2">"Packages/Ruby/Ruby.tmLanguage"</span><span class="w">
+    </span><span class="p">}</span><span class="w">
+</span><span class="p">}</span><span class="w">
+</span></code></pre>
+            </div>
+          </div>
+
+          <p>同样地，可以在 Key Bindings - User 为其设置快捷键。</p>
+
+          <p><img src="/images/sublime-text-for-mac-02.png" alt="" /></p>
+
+          <h2 id="html">HTML</h2>
+
+          <p>
+            若是做前端开发，当然有
+            <a href="http://www.jetbrains.com/webstorm/">WebStorm</a>、<a
+              href="http://brackets.io"
+              >Brackets</a
+            >、<a href="http://www.panic.com/coda/">Coda</a>
+            这些更专业的选择，不过也会有用 Sublime Text 写静态网页的时候。ST
+            本身支持 HTML 代码着色、补全结束标签，通过
+            <a href="https://packagecontrol.io/packages/Emmet">Emmet</a>
+            等插件也能显著提高生产力，但它不具备预览网页的功能。同样我们仍可以照
+            C / C++ 的办法自定义 Build System，如果这样写
+            <code class="language-plaintext highlighter-rouge"
+              >HTML.sublime-build</code
+            >：
+          </p>
+
+          <div class="language-json highlighter-rouge">
+            <div class="highlight">
+              <pre
+                class="highlight"
+              ><code><span class="p">{</span><span class="w">
+    </span><span class="nl">"shell_cmd"</span><span class="p">:</span><span class="w"> </span><span class="s2">"open -a Safari.app </span><span class="se">\"</span><span class="s2">${file}</span><span class="se">\"</span><span class="s2">"</span><span class="p">,</span><span class="w">
+    </span><span class="nl">"working_dir"</span><span class="p">:</span><span class="w"> </span><span class="s2">"${file_path}"</span><span class="p">,</span><span class="w">
+    </span><span class="nl">"selector"</span><span class="p">:</span><span class="w"> </span><span class="s2">"source.html"</span><span class="p">,</span><span class="w">
+    </span><span class="nl">"variants"</span><span class="p">:</span><span class="w">
+    </span><span class="p">[</span><span class="w">
+        </span><span class="p">{</span><span class="w">
+            </span><span class="nl">"name"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Run"</span><span class="p">,</span><span class="w">
+            </span><span class="nl">"shell_cmd"</span><span class="p">:</span><span class="w"> </span><span class="s2">"open -a </span><span class="se">\"</span><span class="s2">/Applications/Google Chrome.app</span><span class="se">\"</span><span class="s2"> </span><span class="se">\"</span><span class="s2">${file}</span><span class="se">\"</span><span class="s2">"</span><span class="w">
+        </span><span class="p">}</span><span class="w">
+    </span><span class="p">]</span><span class="w">
+</span><span class="p">}</span><span class="w">
+</span></code></pre>
+            </div>
+          </div>
+
+          <p>
+            按下 ⌘B 和 ⇧⌘B 会分别在 Safari 和 Chrome 中打开当前
+            HTML，这样便可以快捷地预览设计中的页面。
+          </p>
+
+          <p>以上便是对 Sublime Text 配置的个人经验，希望对大家有所帮助。</p>
+        </div>
+
+        <div class="comments">
+          <div id="disqus_thread"></div>
+          <script>
+            var disqus_config = function () {
+              this.page.url = "https://blog.yzsun.me/sublime-text-for-mac/";
+              this.page.identifier = "/sublime-text-for-mac/";
+            };
+            (function () {
+              var d = document,
+                s = d.createElement("script");
+              s.src = "//yzyzsun.disqus.com/embed.js";
+              s.setAttribute("data-timestamp", +new Date());
+              (d.head || d.body).appendChild(s);
+            })();
+          </script>
+          <noscript
+            >Please enable JavaScript to view the
+            <a href="https://disqus.com/?ref_noscript"
+              >comments powered by Disqus.</a
+            ></noscript
+          >
+        </div>
+      </article>
+    </div>
+
+    <div class="wrapper-footer">
+      <div class="container">
+        <footer class="footer">
+          <a href="https://github.com/yzyzsun"
+            ><i class="svg-icon github"></i
+          ></a>
+
+          <a href="/feed.xml"><i class="svg-icon rss"></i></a>
+        </footer>
+      </div>
+    </div>
+
+    <!-- Google Analytics -->
+    <script>
+      (function (i, s, o, g, r, a, m) {
+        i["GoogleAnalyticsObject"] = r;
+        (i[r] =
+          i[r] ||
+          function () {
+            (i[r].q = i[r].q || []).push(arguments);
+          }),
+          (i[r].l = 1 * new Date());
+        (a = s.createElement(o)), (m = s.getElementsByTagName(o)[0]);
+        a.async = 1;
+        a.src = g;
+        m.parentNode.insertBefore(a, m);
+      })(
+        window,
+        document,
+        "script",
+        "//www.google-analytics.com/analytics.js",
+        "ga"
+      );
+
+      ga("create", "UA-65994616-1", "auto");
+      ga("send", "pageview", {
+        page: "/sublime-text-for-mac/",
+        title: "Sublime Text for Mac 使用配置",
+      });
+    </script>
+    <!-- End Google Analytics -->
+  </body>
+</html>
